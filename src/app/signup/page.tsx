@@ -2,8 +2,10 @@
 
 import Input from '@/components/Input';
 import AuthLayout from '@/components/Layout/AuthLayout';
+import { DUPLICATE_ID_ERR_CODE } from '@/constants/errorCode';
 import { PASSWORD_MIN_LENGTH_ERR, PASSWORD_NOT_EQUAL_ERR, REQUIRED_INPUT } from '@/constants/errorMsg';
 import { inputType } from '@/types/input';
+import { api } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
@@ -14,7 +16,7 @@ const INPUT_LIST: inputType[] = [
     label: '아이디',
     placeholder: '아이디를 입력해 주세요.',
     description: undefined,
-    id: 'userId',
+    id: 'user_id',
     rules: {
       required: REQUIRED_INPUT,
     },
@@ -69,30 +71,20 @@ function Signup() {
   const router = useRouter();
 
   const handleSignupSubmit = async () => {
-    const { userId, name, boj_id, password, password_check } = getValues();
+    const { user_id, name, boj_id, password, password_check } = getValues();
     if (password !== password_check) {
       setError('password_check', { message: PASSWORD_NOT_EQUAL_ERR });
       return;
     }
+    try {
+      const res = await api('POST', '/api/auth/signup', { username: user_id, password, nickname: name, boj_id });
+      if (typeof res === 'string') throw Error(res);
 
-    const request = {
-      username: userId,
-      password,
-      nickname: name,
-      boj_id,
-    };
-    const res = await (
-      await fetch('/proxy/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(request),
-      })
-    ).json();
-
-    alert(`${res.nickname}님 가입을 환영해요!`);
-    router.push('/login');
+      alert(`${res.nickname}님 가입을 환영해요!`);
+      router.push('/login');
+    } catch (error: any) {
+      if (error.message === DUPLICATE_ID_ERR_CODE) setError('user_id', { message: '이미 존재하는 아이디입니다.' }, { shouldFocus: true });
+    }
   };
 
   return (

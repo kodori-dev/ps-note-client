@@ -12,6 +12,7 @@ const config: Config = {
         primary: {
           DEFAULT: '#0090FE',
           background: '#F2F8FF',
+          hover: '#0085EB',
         },
         progress: {
           pink: '#FFCFCF',

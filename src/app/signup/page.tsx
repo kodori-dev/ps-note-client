@@ -1,12 +1,14 @@
 'use client';
 
 import Input from '@/components/Input';
+import AuthLayout from '@/components/Layout/AuthLayout';
 import { PASSWORD_MIN_LENGTH_ERR, PASSWORD_NOT_EQUAL_ERR, REQUIRED_INPUT } from '@/constants/errorMsg';
+import { inputType } from '@/types/input';
 import { useForm } from 'react-hook-form';
 
 const PASSWORD_MIN_LENGTH = 8;
-const PASSWORD_LIST = ['password', 'password_check'];
-const INPUT_LIST = [
+const PASSWORD_TYPE_LIST = ['password', 'passwordCheck'];
+const INPUT_LIST: inputType[] = [
   {
     label: '아이디',
     placeholder: '아이디를 입력해 주세요.',
@@ -74,23 +76,20 @@ function Signup() {
   };
 
   return (
-    <div className="w-[400px] mx-auto mt-16 flex flex-col gap-14">
-      <h1 className="text-40 text-center">회원가입</h1>
-      <form onSubmit={handleSubmit(handleSignupSubmit)} className="flex flex-col gap-5">
-        {INPUT_LIST.map(({ label, placeholder, description, id, rules }) => (
-          <Input
-            key={id}
-            type={PASSWORD_LIST.includes(id) ? 'password' : 'text'}
-            label={label}
-            placeholder={placeholder}
-            description={description}
-            error={errors[id]}
-            register={register(id, rules)}
-          />
-        ))}
-        <button className="mt-14 h-[54px] bg-primary text-white rounded-md hover:bg-primary-hover">회원가입</button>
-      </form>
-    </div>
+    <AuthLayout title="회원가입" submitFunc={handleSubmit(handleSignupSubmit)}>
+      {INPUT_LIST.map(({ label, placeholder, description, id, rules }) => (
+        <Input
+          key={id}
+          type={PASSWORD_TYPE_LIST.includes(id) ? 'password' : 'text'}
+          label={label}
+          placeholder={placeholder}
+          description={description}
+          error={errors[id]}
+          register={register(id, rules)}
+        />
+      ))}
+      <button className="mt-14 h-[54px] bg-primary text-white rounded-md hover:bg-primary-hover">회원가입</button>
+    </AuthLayout>
   );
 }
 

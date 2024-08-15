@@ -34,7 +34,7 @@ export const api = async <T extends endPointType>(method: methodType, url: T, bo
     return resObj;
   } catch (err: any) {
     const [code, msg] = err.message.split('/');
-    alert(`⚠️ ${msg}`);
+    if (code == 500) alert(`⚠️ ${msg}`);
     return code;
   }
 };

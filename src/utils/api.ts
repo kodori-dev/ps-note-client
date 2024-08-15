@@ -1,8 +1,12 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 
-type methodType = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-
+interface GetType {
+  '/api/me': {
+    req: null;
+    res: PostSignUpRes;
+  };
+}
 interface PostType {
   '/api/auth/login': {
     req: PostLoginReq;
@@ -14,11 +18,20 @@ interface PostType {
   };
 }
 
-type endPointType = keyof PostType;
+interface BodyType {
+  GET: GetType;
+  POST: PostType;
+}
+type methodType = keyof BodyType;
+type BodyInterfaceType<V> = V extends { res: any; req: any } ? V : never;
 
-export const api = async <T extends endPointType>(method: methodType, url: T, body?: PostType[T]['req']): Promise<PostType[T]['res']> => {
+export const api = async <M extends methodType, T extends keyof BodyType[M]>(
+  method: M,
+  url: T,
+  body?: BodyInterfaceType<BodyType[M][T]>['req']
+): Promise<BodyInterfaceType<BodyType[M][T]>['res']> => {
   try {
-    const res = await fetch(`/proxy/${url}`, {
+    const res = await fetch(`/proxy/${String(url)}`, {
       method: method,
       headers: {
         'content-type': 'application/json',
@@ -27,6 +40,7 @@ export const api = async <T extends endPointType>(method: methodType, url: T, bo
       body: body ? JSON.stringify(body) : null,
     });
     if (res.status === 500) throw Error(`500/${SERVER_ERR}`);
+    if (url == '/api/auth/login') return null;
 
     const resObj = await res.json();
     if (resObj.code) throw Error(`${resObj.code}/${resObj.message}`);

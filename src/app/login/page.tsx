@@ -4,8 +4,8 @@ import AuthLayout from '@/components/Layout/AuthLayout';
 import { LOGIN_INPUT_LIST, PASSWORD_TYPE_LIST } from '@/constants/authInput';
 import { FAIL_LOGIN_ERR_CODE } from '@/constants/errorCode';
 import { FAIL_LOGIN_ERR } from '@/constants/errorMsg';
+import { useRedirectLoginUser } from '@/hooks/useCheckLogin';
 import { api } from '@/utils/api';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 function Login() {
@@ -16,13 +16,14 @@ function Login() {
     setError,
     handleSubmit,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
-  const router = useRouter();
+  const { isLogin, setIsLogin } = useRedirectLoginUser();
 
   const handleLoginSubmit = async () => {
     const { user_id, password } = getValues();
     try {
       const res = await api('POST', '/api/auth/login', { username: user_id, password });
       if (typeof res === 'string') throw Error(res);
+      setIsLogin(true);
     } catch (error: any) {
       if (error.message === FAIL_LOGIN_ERR_CODE) {
         setError('user_id', { message: FAIL_LOGIN_ERR });

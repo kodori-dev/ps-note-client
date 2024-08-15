@@ -4,10 +4,11 @@ import Input from '@/components/Input';
 import AuthLayout from '@/components/Layout/AuthLayout';
 import { PASSWORD_MIN_LENGTH_ERR, PASSWORD_NOT_EQUAL_ERR, REQUIRED_INPUT } from '@/constants/errorMsg';
 import { inputType } from '@/types/input';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 const PASSWORD_MIN_LENGTH = 8;
-const PASSWORD_TYPE_LIST = ['password', 'passwordCheck'];
+const PASSWORD_TYPE_LIST = ['password', 'password_check'];
 const INPUT_LIST: inputType[] = [
   {
     label: '아이디',
@@ -65,14 +66,33 @@ function Signup() {
     setError,
     handleSubmit,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
+  const router = useRouter();
 
-  const handleSignupSubmit = () => {
+  const handleSignupSubmit = async () => {
     const { userId, name, boj_id, password, password_check } = getValues();
     if (password !== password_check) {
       setError('password_check', { message: PASSWORD_NOT_EQUAL_ERR });
       return;
     }
-    console.log('회원가입 로직');
+
+    const request = {
+      username: userId,
+      password,
+      nickname: name,
+      boj_id,
+    };
+    const res = await (
+      await fetch('/proxy/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      })
+    ).json();
+
+    alert(`${res.nickname}님 가입을 환영해요!`);
+    router.push('/login');
   };
 
   return (

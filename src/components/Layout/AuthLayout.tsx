@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import Button from '../Button';
 
 interface Props {
   children: ReactNode;
@@ -13,10 +14,10 @@ function AuthLayout({ children, title, submitFunc }: Props) {
       <h1 className="text-40 text-center">{title}</h1>
       <form onSubmit={submitFunc} className="flex flex-col gap-5">
         {children}
-        <button className="mt-14 h-[54px] bg-primary text-white rounded-md hover:bg-primary-hover">{title}</button>
+        <Button customStyle="mt-14">{title}</Button>
         {title === '로그인' && (
           <Link href="/signup">
-            <button className="w-full h-[54px] bg-white text-primary rounded-md hover:bg-gray-100 border border-primary">회원가입</button>
+            <Button theme="secondary">회원가입</Button>
           </Link>
         )}
       </form>

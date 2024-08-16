@@ -1,3 +1,4 @@
+import { useStore } from '@/store';
 import { api } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -5,15 +6,15 @@ import { useEffect, useState } from 'react';
 export const useCheckLogin = () => {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
+  const { setMember } = useStore((state) => ({ setMember: state.setMember }));
 
   const getMember = async () => {
     try {
       const res = await api('GET', '/api/me');
       if (typeof res === 'string') throw Error();
       setIsLogin(true);
-    } catch (error) {
-      router.push('/login');
-    }
+      setMember(res);
+    } catch (error) {}
   };
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Header from '@/components/Header';
 
 export const metadata: Metadata = {
   title: '$$합법 PS 놀이터$$',
@@ -16,7 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

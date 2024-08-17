@@ -96,3 +96,7 @@ jobs:
       - name: Deploy to GKE
         run: |
           kubectl set image --namespace ps-note deployment/ps-note-client ps-note-client=${{ steps.extract-tag.outputs.TAG }}
+
+      - name: Verify Deployment Status
+        run: |
+          kubectl rollout status --namespace ps-note deployment/ps-note-client

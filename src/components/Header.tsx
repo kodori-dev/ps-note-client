@@ -1,10 +1,13 @@
 'use client';
+
 import Link from 'next/link';
 import Button from './Button';
-import { useStore } from '@/store';
+import { useQueryClient } from '@tanstack/react-query';
+import { PostSignUpRes } from '@/types/api/auth';
 
 function Header() {
-  const { member } = useStore((state) => ({ member: state.member }));
+  const cache = useQueryClient();
+  const member = cache.getQueryData(['member']) as PostSignUpRes;
 
   return (
     <header className="flex items-center justify-between mx-6 my-4">

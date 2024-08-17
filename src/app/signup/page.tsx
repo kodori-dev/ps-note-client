@@ -5,7 +5,6 @@ import AuthLayout from '@/components/Layout/AuthLayout';
 import { PASSWORD_TYPE_LIST, SIGNUP_INPUT_LIST } from '@/constants/authInput';
 import { DUPLICATE_ID_ERR_CODE } from '@/constants/errorCode';
 import { ALREADY_USER_ERR, PASSWORD_NOT_EQUAL_ERR } from '@/constants/errorMsg';
-import { useRedirectLoginUser } from '@/hooks/useCheckLogin';
 import { api } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -19,7 +18,6 @@ function Signup() {
     handleSubmit,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
   const router = useRouter();
-  const login = useRedirectLoginUser();
 
   const handleSignupSubmit = async () => {
     const { user_id, name, boj_id, password, password_check } = getValues();

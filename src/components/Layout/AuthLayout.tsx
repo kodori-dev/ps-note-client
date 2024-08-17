@@ -17,7 +17,9 @@ function AuthLayout({ children, title, submitFunc }: Props) {
         <Button customStyle="mt-14">{title}</Button>
         {title === '로그인' && (
           <Link href="/signup">
-            <Button theme="secondary">회원가입</Button>
+            <Button theme="secondary" customStyle="w-full">
+              회원가입
+            </Button>
           </Link>
         )}
       </form>

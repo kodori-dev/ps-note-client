@@ -16,14 +16,12 @@ function Login() {
     setError,
     handleSubmit,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
-  const { isLogin, setIsLogin } = useRedirectLoginUser();
 
   const handleLoginSubmit = async () => {
     const { user_id, password } = getValues();
     try {
       const res = await api('POST', '/api/auth/login', { username: user_id, password });
       if (typeof res === 'string') throw Error(res);
-      setIsLogin(true);
     } catch (error: any) {
       if (error.message === FAIL_LOGIN_ERR_CODE) {
         setError('user_id', { message: FAIL_LOGIN_ERR });

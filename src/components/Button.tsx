@@ -23,7 +23,7 @@ function Button({ theme = 'primary', roundSize = 'md', onClickFunc, heightSize =
   const style = [STYLE[theme], HEIGHT_STYLE[heightSize], `rounded-${roundSize}`, customStyle].join(' ');
 
   return (
-    <button onClick={onClickFunc} className={`w-full ${style}`}>
+    <button onClick={onClickFunc} className={`${style}`}>
       {children}
     </button>
   );

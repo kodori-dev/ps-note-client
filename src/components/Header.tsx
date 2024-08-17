@@ -2,15 +2,13 @@
 
 import Link from 'next/link';
 import Button from './Button';
-import { useQueryClient } from '@tanstack/react-query';
-import { PostSignUpRes } from '@/types/api/auth';
+import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 
 function Header() {
-  const cache = useQueryClient();
-  const member = cache.getQueryData(['member']) as PostSignUpRes;
+  const { data: member } = useGetUserInfo();
 
   return (
-    <header className="flex items-center justify-between mx-6 my-4">
+    <header className="flex items-center justify-between px-6 h-[72px]">
       <Link href="/" className="text-14">
         $$합법 PS 놀이터$$
       </Link>
@@ -24,7 +22,7 @@ function Header() {
         </div>
       ) : (
         <Link href="/login">
-          <Button theme="secondary" heightSize="sm" customStyle="w-[117px]">
+          <Button theme="secondary" heightSize="sm" customStyle="w-[100px]">
             로그인
           </Button>
         </Link>

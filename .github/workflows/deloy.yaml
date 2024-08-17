@@ -17,7 +17,7 @@ jobs:
       GCP_REGISTRY: asia-northeast3-docker.pkg.dev/cnu-k8s
       GCP_REPOSITORY: ps-note/ps-note-client
       IMAGE_TAG: ${{ github.sha }}
-      NEXT_PUBLIC_API_BASE_URL: ps-note-server.kodori.dev
+      NEXT_PUBLIC_API_BASE_URL: ps-note-server
 
     steps:
     - name: Checkout code

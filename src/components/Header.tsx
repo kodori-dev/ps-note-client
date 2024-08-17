@@ -8,7 +8,7 @@ function Header() {
   const { data: member } = useGetUserInfo();
 
   return (
-    <header className="flex items-center justify-between px-6 h-[72px]">
+    <header className="flex items-center justify-between h-[72px]">
       <Link href="/" className="text-14">
         $$합법 PS 놀이터$$
       </Link>

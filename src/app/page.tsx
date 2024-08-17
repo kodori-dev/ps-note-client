@@ -1,12 +1,8 @@
 import ProblemCard from '@/components/Card/ProblemCard';
 import HomeSectionLayout from '@/components/Layout/HomeSectionLayout';
 import SearchBar from '@/components/SearchBar';
+import MemberSection from '@/components/Section/MemberSection';
 
-const SECTION_LIST = [
-  { title: '이런 문제를 추천해요!', children: <SearchBar /> },
-  { title: '오늘은 누가 먼저 놀았을까요?', children: <SearchBar /> },
-  { title: '놀이의 전당', children: <SearchBar /> },
-];
 const PROBLEM_MOCKUP = [
   {
     id: 1,
@@ -32,9 +28,15 @@ const PROBLEM_MOCKUP = [
   },
 ];
 
+const SECTION_LIST = [
+  { title: '이런 문제를 추천해요!', children: <SearchBar /> },
+  { title: '오늘은 누가 먼저 놀았을까요?', children: <SearchBar /> },
+  { title: '놀이의 전당', children: <MemberSection /> },
+];
+
 export default function Home() {
   return (
-    <div className="mx-6 my-8">
+    <div className="my-8">
       <SearchBar />
       {PROBLEM_MOCKUP.map(({ id, name, boj_id, is_solved, is_starred, stars }) => (
         <ProblemCard key={id} id={id} bojId={boj_id} title={name} stars={stars} isStar={is_starred} />

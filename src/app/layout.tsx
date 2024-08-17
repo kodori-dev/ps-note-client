@@ -22,8 +22,10 @@ export default function RootLayout({
       <body>
         <ReactQueryProvider>
           <AuthProvider>
-            <Header />
-            {children}
+            <div className="w-[1024px] mx-auto px-6">
+              <Header />
+              {children}
+            </div>
           </AuthProvider>
         </ReactQueryProvider>
       </body>

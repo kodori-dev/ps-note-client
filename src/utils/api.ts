@@ -1,10 +1,14 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
-import { PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 
 interface GetType {
   '/api/me': {
     req: null;
     res: PostSignUpRes;
+  };
+  '/api/members/': {
+    req: null;
+    res: GetMembersRes;
   };
 }
 interface PostType {
@@ -17,6 +21,8 @@ interface PostType {
     res: PostSignUpRes;
   };
 }
+
+const RES_BODY_NULL = ['/api/auth/login'];
 
 interface BodyType {
   GET: GetType;
@@ -31,7 +37,7 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   body?: BodyInterfaceType<BodyType[M][T]>['req']
 ): Promise<BodyInterfaceType<BodyType[M][T]>['res']> => {
   try {
-    const res = await fetch(`/proxy/${String(url)}`, {
+    const res = await fetch(`/proxy${String(url)}`, {
       method: method,
       headers: {
         'content-type': 'application/json',
@@ -39,16 +45,16 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
       credentials: 'include',
       body: body ? JSON.stringify(body) : null,
     });
-    if (res.status === 500) throw Error(`500/${SERVER_ERR}`);
-    if (url == '/api/auth/login') return null;
-
-    const resObj = await res.json();
-    if (resObj.code) throw Error(`${resObj.code}/${resObj.message}`);
-
-    return resObj;
+    if (res.status >= 500) throw Error(`500/${SERVER_ERR}`);
+    if (res.status !== 200) {
+      const resObj = await res.json();
+      throw Error(`${resObj.code}/${resObj.message}`);
+    }
+    if (RES_BODY_NULL.includes(String(url))) return null;
+    return await res.json();
   } catch (err: any) {
     const [code, msg] = err.message.split('/');
-    if (code == 500) alert(`⚠️ ${msg}`);
+    if (code == 500) alert(msg);
     return code;
   }
 };

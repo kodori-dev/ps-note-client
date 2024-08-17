@@ -23,7 +23,7 @@ const config: Config = {
         },
         chip: {
           red: '#FD9596',
-          green: '#BBDCBD',
+          green: '#ADCEAF',
         },
         red: {
           DEFAULT: '#FF0800',

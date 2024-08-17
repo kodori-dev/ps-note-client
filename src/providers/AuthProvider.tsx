@@ -1,3 +1,5 @@
+'use server';
+
 import { getUserInfo } from '@/utils/getUserInfo';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { ReactNode } from 'react';

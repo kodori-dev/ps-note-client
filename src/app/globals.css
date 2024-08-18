@@ -20,3 +20,7 @@ html {
   color: black;
   background-color: #f2f8ff;
 }
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}

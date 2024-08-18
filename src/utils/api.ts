@@ -1,5 +1,6 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetProblemsRes } from '@/types/api/problem';
 
 interface GetType {
   '/api/me': {
@@ -9,6 +10,14 @@ interface GetType {
   '/api/members/': {
     req: null;
     res: GetMembersRes;
+  };
+  '/api/problems/': {
+    req: null;
+    res: GetProblemsRes;
+    query: {
+      query?: string;
+      solved_at?: string | Date;
+    };
   };
 }
 interface PostType {
@@ -29,15 +38,20 @@ interface BodyType {
   POST: PostType;
 }
 type methodType = keyof BodyType;
-type BodyInterfaceType<V> = V extends { res: any; req: any } ? V : never;
+type BodyInterfaceType<V> = V extends { res: any; req: any; query?: any } ? V : never;
 
 export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   method: M,
   url: T,
-  body?: BodyInterfaceType<BodyType[M][T]>['req']
+  body?: BodyInterfaceType<BodyType[M][T]>['req'],
+  query?: BodyInterfaceType<BodyType[M][T]>['query']
 ): Promise<BodyInterfaceType<BodyType[M][T]>['res']> => {
   try {
-    const res = await fetch(`/proxy${String(url)}`, {
+    let queryString = '?';
+    if (query) {
+      Object.keys(query).map((key) => (query[key] ? (queryString += `${key}=${query[key]}`) : null));
+    }
+    const res = await fetch(`/proxy${String(url)}${queryString}`, {
       method: method,
       headers: {
         'content-type': 'application/json',

@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import NoStarIcon from '../../../public/icon-star-f.svg';
-import StarIcon from '../../../public/icon-star-t.svg';
 import Chip from '../Chip';
+import StarButton from '../Button/StarButton';
 
 interface Props {
   id: number;
@@ -14,11 +13,8 @@ interface Props {
 
 function ProblemCard({ id, bojId, title, state = null, stars, isStar = false }: Props) {
   return (
-    <div className="relative w-[312px] h-[177px] px-3 py-5 flex flex-col justify-between bg-white rounded-sm border border-gray-4">
-      <div className="absolute top-2 right-2 flex flex-col items-center hover:cursor-pointer">
-        {isStar ? <StarIcon /> : <NoStarIcon />}
-        <p className="text-12 text-gray-3">{stars}</p>
-      </div>
+    <div className="relative shrink-0 w-[296px] h-[177px] px-3 py-5 flex flex-col justify-between bg-white rounded-sm border border-gray-4">
+      <StarButton isStar={isStar} stars={stars} />
       <div className="flex flex-col gap-2">
         {bojId}
         <p className="text-24 font-700 truncate">{title}</p>

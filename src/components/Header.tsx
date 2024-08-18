@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Button from './Button';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
+import Button from './Button';
 
 function Header() {
   const { data: member } = useGetUserInfo();

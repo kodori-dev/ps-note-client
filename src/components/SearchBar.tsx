@@ -2,7 +2,7 @@ import SearchIcon from '../../public/icon-search.svg';
 
 function SearchBar() {
   return (
-    <form className="relative max-w-[700px] mx-auto">
+    <form className="relative max-w-[700px] mx-auto w-full">
       <SearchIcon className="absolute top-4 left-3" alt="검색 아이콘" />
       <input
         className="border border-primary rounded-md w-full placeholder:text-gray-2 pl-[42px] py-4 pr-14 focus:outline-none focus:shadow-md"

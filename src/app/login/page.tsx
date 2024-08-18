@@ -24,8 +24,8 @@ function Login() {
     const { user_id, password } = getValues();
     try {
       const res = await api('POST', '/api/auth/login', { username: user_id, password });
-      refetch();
       if (typeof res === 'string') throw Error(res);
+      refetch();
       router.push('/');
     } catch (error: any) {
       if (error.message === FAIL_LOGIN_ERR_CODE) {

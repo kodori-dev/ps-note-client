@@ -10,9 +10,17 @@
     url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-bRg.ttf) format('truetype');
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   font-family: 'NanumSquareNeo', sans-serif;
   font-size: 16px;
   color: black;
   background-color: #f2f8ff;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
 }

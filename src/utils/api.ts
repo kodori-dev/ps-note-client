@@ -1,10 +1,23 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
-import { PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetProblemsRes } from '@/types/api/problem';
 
 interface GetType {
   '/api/me': {
     req: null;
     res: PostSignUpRes;
+  };
+  '/api/members/': {
+    req: null;
+    res: GetMembersRes;
+  };
+  '/api/problems/': {
+    req: null;
+    res: GetProblemsRes;
+    query: {
+      query?: string;
+      solved_at?: string | Date;
+    };
   };
 }
 interface PostType {
@@ -18,20 +31,27 @@ interface PostType {
   };
 }
 
+const RES_BODY_NULL = ['/api/auth/login'];
+
 interface BodyType {
   GET: GetType;
   POST: PostType;
 }
 type methodType = keyof BodyType;
-type BodyInterfaceType<V> = V extends { res: any; req: any } ? V : never;
+type BodyInterfaceType<V> = V extends { res: any; req: any; query?: any } ? V : never;
 
 export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   method: M,
   url: T,
-  body?: BodyInterfaceType<BodyType[M][T]>['req']
+  body?: BodyInterfaceType<BodyType[M][T]>['req'],
+  query?: BodyInterfaceType<BodyType[M][T]>['query']
 ): Promise<BodyInterfaceType<BodyType[M][T]>['res']> => {
   try {
-    const res = await fetch(`/proxy/${String(url)}`, {
+    let queryString = '?';
+    if (query) {
+      Object.keys(query).map((key) => (query[key] ? (queryString += `${key}=${query[key]}`) : null));
+    }
+    const res = await fetch(`/proxy${String(url)}${queryString}`, {
       method: method,
       headers: {
         'content-type': 'application/json',
@@ -39,16 +59,16 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
       credentials: 'include',
       body: body ? JSON.stringify(body) : null,
     });
-    if (res.status === 500) throw Error(`500/${SERVER_ERR}`);
-    if (url == '/api/auth/login') return null;
-
-    const resObj = await res.json();
-    if (resObj.code) throw Error(`${resObj.code}/${resObj.message}`);
-
-    return resObj;
+    if (res.status >= 500) throw Error(`500/${SERVER_ERR}`);
+    if (res.status !== 200) {
+      const resObj = await res.json();
+      throw Error(`${resObj.code}/${resObj.message}`);
+    }
+    if (RES_BODY_NULL.includes(String(url))) return null;
+    return await res.json();
   } catch (err: any) {
     const [code, msg] = err.message.split('/');
-    if (code == 500) alert(`⚠️ ${msg}`);
+    if (code == 500) alert(msg);
     return code;
   }
 };

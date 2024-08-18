@@ -17,7 +17,7 @@ async function ProblemSection({ type }: Props) {
   const getProblems = async () => {
     try {
       const query = type === 'today' ? `submitted_at=${bojDay}` : `ordered_by=stars&page_size=10`;
-      const res = await fetch(`https://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?${query}`, {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?${query}`, {
         headers: { Cookie: cookie.toString() || '' },
         cache: 'no-store',
       });

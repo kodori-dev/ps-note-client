@@ -9,7 +9,7 @@ async function MemberSection() {
 
   const getMembers = async () => {
     try {
-      const res = await fetch(`https://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/members`, {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/members`, {
         headers: { Cookie: cookie.toString() || '' },
         cache: 'no-store',
       });

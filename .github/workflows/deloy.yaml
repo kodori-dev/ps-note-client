@@ -1,0 +1,197 @@
+name: Build, Push, and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  GCP_REGISTRY: asia-northeast3-docker.pkg.dev/cnu-k8s
+  GCP_REPOSITORY: ps-note/ps-note-client
+  DEPLOY_ALERT_CHANNEL: C07J1U691R6
+
+jobs:
+  notify-start:
+    runs-on: ubuntu-latest
+    outputs:
+      thread_ts: ${{ steps.send_start_notification.outputs.ts }}
+      version_name: ${{ steps.get_sha.outputs.SHA }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get short SHA
+        id: get_sha
+        run: echo "SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Send start notification
+        id: send_start_notification
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
+          payload: |
+            {
+              "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ steps.get_sha.outputs.SHA }}` 버전 배포를 시작합니다 (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|링크>)\n:loading: 빌드\n:loading: 푸시\n:loading: 배포",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ steps.get_sha.outputs.SHA }}` 버전 배포를 시작합니다 (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|링크>)\n:loading: 빌드\n:loading: 푸시\n:loading: 배포"
+                  }
+                }
+              ]
+            }
+
+  build-and-push:
+    needs: notify-start
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    env:
+      NEXT_PUBLIC_API_BASE_URL: ps-note-server
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Artifact Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.GCP_REGISTRY }}
+        username: _json_key
+        password: ${{ secrets.GCP_CREDENTIALS }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.GCP_REGISTRY }}/${{ env.GCP_REPOSITORY }}
+        tags: |
+          type=sha
+          latest
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: docker/Dockerfile
+        build-args: |
+          NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
+        push: true
+        platforms: |
+          linux/amd64
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=registry,ref=${{ env.GCP_REGISTRY }}/${{ env.GCP_REPOSITORY }}:cache
+        cache-to: type=registry,ref=${{ env.GCP_REGISTRY }}/${{ env.GCP_REPOSITORY }}:cache,mode=max
+
+    - name: Notify build success
+      uses: slackapi/slack-github-action@v1.26.0
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      with:
+        channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
+        update-ts: ${{ needs.notify-start.outputs.thread_ts }}
+        payload: |
+          {
+            "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ needs.notify-start.outputs.version_name }}` 버전 배포를 시작합니다 (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|링크>)\n:white_check_mark: 빌드\n:white_check_mark: 푸시\n:loading: 배포",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ needs.notify-start.outputs.version_name }}` 버전 배포를 시작합니다 (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|링크>)\n:white_check_mark: 빌드\n:white_check_mark: 푸시\n:loading: 배포"
+                }
+              }
+            ]
+          }
+
+  deploy:
+    needs: [build-and-push, notify-start]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: cnu-cluster
+          location: asia-northeast3
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.GCP_REGISTRY }}/${{ env.GCP_REPOSITORY }}
+          tags: |
+            type=sha
+
+      - name: Extract tag
+        id: extract-tag
+        run: echo "TAG=$(echo '${{ steps.meta.outputs.tags }}' | head -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy to GKE
+        run: |
+          kubectl set image --namespace ps-note deployment/ps-note-client ps-note-client=${{ steps.extract-tag.outputs.TAG }}
+
+      - name: Verify Deployment Status
+        run: |
+          kubectl rollout status --namespace ps-note deployment/ps-note-client
+
+      - name: Notify deploy success
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
+          update-ts: ${{ needs.notify-start.outputs.thread_ts }}
+          payload: |
+            {
+              "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ needs.notify-start.outputs.version_name }}` 버전 배포를 시작합니다 (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|링크>)\n:white_check_mark: 빌드\n:white_check_mark: 푸시\n:white_check_mark: 배포",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ needs.notify-start.outputs.version_name }}` 버전 배포를 시작합니다 (<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|링크>)\n:white_check_mark: 빌드\n:white_check_mark: 푸시\n:white_check_mark: 배포"
+                  }
+                }
+              ]
+            }
+
+      - name: Notify deployment success
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        with:
+          channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
+          payload: |
+            {
+              "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ needs.notify-start.outputs.version_name }}` 버전이 k8s에 배포되었습니다",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":rocket: <https://github.com/${{ github.repository }}|${{ github.repository }}> `${{ needs.notify-start.outputs.version_name }}` 버전이 k8s에 배포되었습니다"
+                  }
+                }
+              ]
+            }

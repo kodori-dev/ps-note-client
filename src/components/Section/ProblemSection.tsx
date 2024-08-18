@@ -4,19 +4,23 @@ import HomeLock from '../Lock/HomeLock';
 import ProblemCard from '../Card/ProblemCard';
 import { GetProblemsRes, Problem } from '@/types/api/problem';
 
-async function TodaySection() {
+interface Props {
+  type: 'today' | 'recommended';
+}
+
+async function ProblemSection({ type }: Props) {
   let today = new Date();
   today.setHours(today.getHours() - 6);
   let bojDay = dayjs(today).format('YYYY-MM-DD');
   const cookie = cookies();
 
-  const getTodayProblems = async () => {
+  const getProblems = async () => {
     try {
-      const res = await fetch(`https://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?submitted_at=${bojDay}`, {
+      const query = type === 'today' ? `submitted_at=${bojDay}` : `ordered_by=stars&page_size=10`;
+      const res = await fetch(`https://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?${query}`, {
         headers: { Cookie: cookie.toString() || '' },
         cache: 'no-store',
       });
-      console.log(res);
       if (res.ok) return await res.json();
       else throw Error();
     } catch (err) {
@@ -24,7 +28,7 @@ async function TodaySection() {
     }
   };
 
-  const problems = (await getTodayProblems()) as GetProblemsRes | null;
+  const problems = (await getProblems()) as GetProblemsRes | null;
 
   return (
     <>
@@ -45,4 +49,4 @@ async function TodaySection() {
   );
 }
 
-export default TodaySection;
+export default ProblemSection;

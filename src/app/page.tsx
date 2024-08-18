@@ -1,11 +1,11 @@
 import HomeSectionLayout from '@/components/Layout/HomeSectionLayout';
 import SearchBar from '@/components/SearchBar';
 import MemberSection from '@/components/Section/MemberSection';
-import TodaySection from '@/components/Section/TodaySection';
+import ProblemSection from '@/components/Section/ProblemSection';
 
 const SECTION_LIST = [
-  { title: '이런 문제를 추천해요!', children: <SearchBar /> },
-  { title: '오늘은 누가 먼저 놀았을까요?', children: <TodaySection /> },
+  { title: '이런 문제를 추천해요!', children: <ProblemSection type="recommended" /> },
+  { title: '오늘은 누가 먼저 놀았을까요?', children: <ProblemSection type="today" /> },
   { title: '놀이의 전당', children: <MemberSection /> },
 ];
 

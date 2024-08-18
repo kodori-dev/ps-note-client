@@ -14,7 +14,8 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
   font-family: 'NanumSquareNeo', sans-serif;
   font-size: 16px;
   color: black;

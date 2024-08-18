@@ -48,7 +48,16 @@ export const SIGNUP_INPUT_LIST: inputType[] = [
       required: REQUIRED_INPUT,
     },
   },
-  pw,
+  {
+    label: '비밀번호',
+    placeholder: '비밀번호를 입력해 주세요.',
+    description: `${PASSWORD_MIN_LENGTH}자 이상`,
+    id: 'password',
+    rules: {
+      required: REQUIRED_INPUT,
+      minLength: { value: PASSWORD_MIN_LENGTH, message: PASSWORD_MIN_LENGTH_ERR },
+    },
+  },
   {
     label: '비밀번호 확인',
     placeholder: '비밀번호를 다시 입력해 주세요.',

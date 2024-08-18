@@ -13,15 +13,12 @@ export default async function Home() {
         headers: { Cookie: cookie.toString() || '' },
         cache: 'no-store',
       });
-      console.log('멤버fetch');
       if (res.ok) return await res.json();
       else throw Error();
     } catch (err) {
       return null;
     }
   };
-
-  console.log('홈페이지 렌더링');
 
   const members = await getMembers();
 

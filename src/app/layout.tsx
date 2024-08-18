@@ -3,6 +3,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import AuthProvider from '@/providers/AuthProvider';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
+import { ChakraProvider } from '@chakra-ui/react';
 
 export const metadata: Metadata = {
   title: '$$합법 PS 놀이터$$',
@@ -20,14 +21,16 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <ReactQueryProvider>
-          <AuthProvider>
-            <div className="w-[1024px] mx-auto px-6">
-              <Header />
-              {children}
-            </div>
-          </AuthProvider>
-        </ReactQueryProvider>
+        <ChakraProvider disableGlobalStyle>
+          <ReactQueryProvider>
+            <AuthProvider>
+              <div className="w-[1024px] mx-auto px-6">
+                <Header />
+                {children}
+              </div>
+            </AuthProvider>
+          </ReactQueryProvider>
+        </ChakraProvider>
       </body>
     </html>
   );

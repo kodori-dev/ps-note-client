@@ -37,8 +37,8 @@ async function ProblemSection({ type }: Props) {
           <div className="h-[177px] flex items-center justify-center">오늘 풀어진 문제가 없어요😓</div>
         ) : (
           <div className="flex flex-nowrap overflow-x-scroll gap-3 scroll-hidden">
-            {problems.results.map(({ boj_id, id, is_starred, name, stars }: Problem) => (
-              <ProblemCard key={id} id={id} bojId={boj_id} stars={stars} title={name} isStar={is_starred} />
+            {problems.results.map(({ boj_id, id, is_starred, name, stars, is_solved }: Problem) => (
+              <ProblemCard key={id} id={id} bojId={boj_id} stars={stars} title={name} isStar={is_starred} state={is_solved} />
             ))}
           </div>
         )

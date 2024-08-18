@@ -8,7 +8,7 @@ export const LOGIN_INPUT_LIST: inputType[] = [
   {
     label: '아이디',
     placeholder: '아이디를 입력해 주세요.',
-    description: undefined,
+    description: '4~15자',
     id: 'user_id',
     rules: {
       required: REQUIRED_INPUT,

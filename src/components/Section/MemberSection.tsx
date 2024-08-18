@@ -1,13 +1,26 @@
-'use client';
 import MemberCard from '../Card/MemberCard';
 import { GetMembersRes } from '@/types/api/auth';
 import HomeLock from '../Lock/HomeLock';
+import { cookies } from 'next/headers';
 
-interface Props {
-  members: GetMembersRes | null;
-}
+async function MemberSection() {
+  const cookie = cookies();
 
-function MemberSection({ members }: Props) {
+  const getMembers = async () => {
+    try {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/members`, {
+        headers: { Cookie: cookie.toString() || '' },
+        cache: 'no-store',
+      });
+      if (res.ok) return await res.json();
+      else throw Error();
+    } catch (err) {
+      return null;
+    }
+  };
+
+  const members = (await getMembers()) as GetMembersRes | null;
+
   return (
     <>
       {members ? (

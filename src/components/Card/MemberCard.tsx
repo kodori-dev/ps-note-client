@@ -1,3 +1,4 @@
+'use client';
 interface Props {
   id: number;
   name: string;

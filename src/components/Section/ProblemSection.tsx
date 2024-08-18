@@ -11,7 +11,7 @@ interface Props {
 async function ProblemSection({ type }: Props) {
   let today = new Date();
   today.setHours(today.getHours() - 6);
-  let bojDay = dayjs(today).format('YYYY-MM-DD');
+  const bojDay = dayjs(today).format('YYYY-MM-DD');
   const cookie = cookies();
 
   const getProblems = async () => {

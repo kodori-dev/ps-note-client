@@ -1,7 +1,6 @@
 'use client';
 import Input from '@/components/Input';
 import AuthLayout from '@/components/Layout/AuthLayout';
-import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { LOGIN_INPUT_LIST, PASSWORD_TYPE_LIST } from '@/constants/authInput';
 import { FAIL_LOGIN_ERR_CODE } from '@/constants/errorCode';
 import { FAIL_LOGIN_ERR } from '@/constants/errorMsg';
@@ -37,7 +36,7 @@ function Login() {
   };
 
   return (
-    <AuthLayout title="로그인" submitFunc={handleSubmit(handleLoginSubmit)}>
+    <AuthLayout title="로그인" submitFunc={handleSubmit(handleLoginSubmit)} isLoading={isLoading}>
       {LOGIN_INPUT_LIST.map(({ label, placeholder, id }) => (
         <Input
           key={id}
@@ -48,7 +47,6 @@ function Login() {
           register={register(id)}
         />
       ))}
-      {isLoading && <ScreenLoading />}
     </AuthLayout>
   );
 }

@@ -58,7 +58,9 @@ function SolutionSection() {
           </MenuButton>
           <MenuList>
             {LANGUAGE.map((lang) => (
-              <MenuItem onClick={() => setValue('source_lang', lang)}>{lang}</MenuItem>
+              <MenuItem key={lang} onClick={() => setValue('source_lang', lang)}>
+                {lang}
+              </MenuItem>
             ))}
           </MenuList>
         </Menu>

@@ -1,6 +1,7 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { GetProblemsRes } from '@/types/api/problem';
+import { PostSolReq, PostSolRes } from '@/types/api/solution';
 
 interface GetType {
   '/api/me': {
@@ -11,10 +12,13 @@ interface GetType {
     req: null;
     res: GetMembersRes;
   };
-  '/api/problems/': {
+  '/api/problems': {
     req: null;
     res: GetProblemsRes;
     query: {
+      order_by?: 'id' | '-id' | 'stars' | '-stars';
+      page?: number;
+      page_size?: number;
       query?: string;
       solved_at?: string | Date;
     };
@@ -28,6 +32,10 @@ interface PostType {
   '/api/auth/signup': {
     req: PostSignUpReq;
     res: PostSignUpRes;
+  };
+  '/api/solutions': {
+    req: PostSolReq;
+    res: PostSolRes;
   };
 }
 
@@ -49,7 +57,7 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   try {
     let queryString = '?';
     if (query) {
-      Object.keys(query).map((key) => (query[key] ? (queryString += `${key}=${query[key]}`) : null));
+      Object.keys(query).map((key) => (query[key] ? (queryString += `${key}=${query[key]}&`) : null));
     }
     const res = await fetch(`/proxy${String(url)}${queryString}`, {
       method: method,
@@ -58,6 +66,7 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
       },
       credentials: 'include',
       body: body ? JSON.stringify(body) : null,
+      cache: 'no-cache',
     });
     if (res.status >= 500) throw Error(`500/${SERVER_ERR}`);
     if (res.status !== 200) {

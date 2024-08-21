@@ -15,7 +15,9 @@ function Header() {
       {member ? (
         <div className="flex gap-12">
           <button className="hover:text-gray-2">면제 티켓</button>
-          <button className="hover:text-gray-2">체크인</button>
+          <Link href={'/post'}>
+            <button className="hover:text-gray-2">체크인</button>
+          </Link>
           <p>
             <span className="font-700">{member.nickname}</span> 님
           </p>

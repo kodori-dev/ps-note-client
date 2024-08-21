@@ -17,9 +17,12 @@ import { useFormContext } from 'react-hook-form';
 function SolutionSection() {
   const { register, setValue, watch } = useFormContext();
   const { source_lang, source_code } = watch();
-  const handleCodeChange = useCallback((val: string, viewUpdate: any) => {
-    setValue('source_code', val);
-  }, []);
+  const handleCodeChange = useCallback(
+    (val: string, viewUpdate: any) => {
+      setValue('source_code', val);
+    },
+    [setValue]
+  );
 
   const matchLangTheme = (lang: string) => {
     switch (lang) {

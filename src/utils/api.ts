@@ -21,6 +21,7 @@ interface GetType {
       page_size?: number;
       query?: string;
       solved_at?: string | Date;
+      boj_id?: string;
     };
   };
 }

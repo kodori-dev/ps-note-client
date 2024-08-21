@@ -18,39 +18,29 @@ const DEFAULT_INPUT = {
   isStar: false,
   source_lang: '풀이 언어를 선택하세요.',
   source_code: '',
+  pid: '',
 };
 
 function Post() {
   const methods = useForm({ mode: 'onSubmit', defaultValues: DEFAULT_INPUT });
   const editorRef = useRef<Editor>(null);
   const { watch, getValues, handleSubmit } = methods;
-  const { boj_id, is_correct_answer, source_lang, source_code } = watch();
-  const isSave = boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
+  const { pid, boj_id, is_correct_answer, source_lang, source_code } = watch();
+  const isSave = pid && boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
   const { data: user } = useGetUserInfo();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckIn = async () => {
     setIsLoading(true);
-    const { boj_id, isStar, is_correct_answer, source_code, source_lang } = getValues();
+    const { pid, isStar, is_correct_answer, source_code, source_lang } = getValues();
     const instance = editorRef.current?.getInstance();
     const comment = instance.getHTML();
 
     try {
-      const problems = await api('GET', '/api/problems', null, { query: `${boj_id}`, order_by: 'id' });
-      if (typeof problems === 'string') throw Error();
-
-      let serverId;
-      for (let problem of problems.results) {
-        if (problem.boj_id == boj_id) {
-          serverId = problem.id;
-          break;
-        }
-      }
-
       const date = new Date();
       const body = {
         member: user?.id,
-        problem: serverId,
+        problem: Number(pid),
         comment,
         source_lang,
         source_code,
@@ -61,6 +51,7 @@ function Post() {
 
       const res = await api('POST', '/api/solutions', body);
       if (typeof res === 'string') throw Error();
+      alert('solution이 정상적으로 등록되었습니다.');
       window.location.href = `/solution/${res.id}`;
     } catch (err) {
       alert('solution을 등록하는 데 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.');
@@ -80,7 +71,7 @@ function Post() {
         <SolutionSection />
         <CommentSection forwardRef={editorRef} />
         <div className="flex justify-end">
-          <Button customStyle="w-[120px]" disabled={!Boolean(isSave)}>
+          <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
             Save
           </Button>
         </div>

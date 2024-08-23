@@ -47,7 +47,7 @@ function ProblemSection() {
       <div className="flex flex-col gap-5 w-[373px]">
         <div className="relative">
           <Input label="백준 번호*" placeholder="번호 또는 이름 검색" register={register('boj_id', { required: REQUIRED_INPUT })} />
-          {isOpen && (
+          {isOpen && searchList && (
             <div className="w-full absolute top-[91px] bg-white rounded-md shadow-xl p-4 z-menu">
               <div className="h-[500px] flex flex-col overflow-y-scroll">
                 {searchList.length > 0

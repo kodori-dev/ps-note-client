@@ -4,8 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ProblemSection from './_components/ProblemSection';
 import SolutionSection from './_components/SolutionSection';
 import CommentSection from './_components/CommentSection';
-import { useRef, useState } from 'react';
-import { Editor } from '@toast-ui/react-editor';
+import { useState } from 'react';
 import Button from '@/components/Button';
 import { api } from '@/utils/api';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
@@ -19,11 +18,11 @@ const DEFAULT_INPUT = {
   source_lang: '풀이 언어를 선택하세요.',
   source_code: '',
   pid: '',
+  comment: '',
 };
 
 function Post() {
   const methods = useForm({ mode: 'onSubmit', defaultValues: DEFAULT_INPUT });
-  const editorRef = useRef<Editor>(null);
   const { watch, getValues, handleSubmit } = methods;
   const { pid, boj_id, is_correct_answer, source_lang, source_code } = watch();
   const isSave = pid && boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
@@ -32,9 +31,7 @@ function Post() {
 
   const handleCheckIn = async () => {
     setIsLoading(true);
-    const { pid, isStar, is_correct_answer, source_code, source_lang } = getValues();
-    const instance = editorRef.current?.getInstance();
-    const comment = instance.getHTML();
+    const { pid, isStar, is_correct_answer, source_code, source_lang, comment } = getValues();
 
     try {
       const date = new Date();
@@ -69,7 +66,7 @@ function Post() {
         </div>
         <ProblemSection />
         <SolutionSection />
-        <CommentSection forwardRef={editorRef} />
+        <CommentSection />
         <div className="flex justify-end">
           <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
             Save

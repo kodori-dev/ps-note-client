@@ -7,7 +7,7 @@ export interface Problem {
   updated_at: string;
   is_solved: boolean;
   is_starred: boolean;
-  stars: 0;
+  stars: number;
 }
 
 export interface GetProblemsRes {

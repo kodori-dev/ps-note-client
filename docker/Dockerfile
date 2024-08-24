@@ -22,6 +22,9 @@ FROM base AS builder
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 
+ARG RELEASE
+ENV RELEASE=${RELEASE}
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

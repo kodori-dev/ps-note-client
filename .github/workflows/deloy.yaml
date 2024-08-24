@@ -85,6 +85,7 @@ jobs:
           context: .
           file: docker/Dockerfile
           build-args: |
+            RELEASE=${{ needs.notify-start.outputs.version_name }}
             NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
           push: true
           platforms: |

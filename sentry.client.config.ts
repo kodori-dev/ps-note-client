@@ -4,26 +4,52 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-Sentry.init({
-  dsn: "https://e44e2ce601badd83ac35efea8cb29576@o4507556578852864.ingest.us.sentry.io/4507831593271296",
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: "https://e44e2ce601badd83ac35efea8cb29576@o4507556578852864.ingest.us.sentry.io/4507831593271296",
 
-  // Adjust this value in production, or use tracesSampler for greater control
-  tracesSampleRate: 1,
+    release: process.env.RELEASE,
 
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
-  replaysOnErrorSampleRate: 1.0,
+    // Adjust this value in production, or use tracesSampler for greater control
+    tracesSampler: ({name}) => {
+      if (name.includes("/health")) {
+        return 0;
+      }
 
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
+      if (name.includes("/favicon.ico")) {
+        return 0;
+      }
 
-  // You can remove this option if you're not planning to use the Sentry Session Replay feature:
-  integrations: [
-    Sentry.replayIntegration({
-      // Additional Replay configuration goes in here, for example:
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
-});
+      return 0.1;
+    },
+
+    profilesSampler({transactionContext: {name}}) {
+      if (name.includes("/health")) {
+        return 0;
+      }
+
+      if (name.includes("/favicon.ico")) {
+        return 0;
+      }
+
+      return 0.1;
+    },
+
+    // Setting this option to true will print useful information to the console while you're setting up Sentry.
+    debug: false,
+    replaysOnErrorSampleRate: 1.0,
+
+    // This sets the sample rate to be 10%. You may want this to be 100% while
+    // in development and sample at a lower rate in production
+    replaysSessionSampleRate: 0.1,
+
+    // You can remove this option if you're not planning to use the Sentry Session Replay feature:
+    integrations: [
+      Sentry.replayIntegration({
+        // Additional Replay configuration goes in here, for example:
+        maskAllText: true,
+        blockAllMedia: true,
+      }),
+    ],
+  });
+}

@@ -9,6 +9,7 @@ env:
   GCP_REGISTRY: asia-northeast3-docker.pkg.dev/cnu-k8s
   GCP_REPOSITORY: ps-note/ps-note-client
   DEPLOY_ALERT_CHANNEL: C07J1U691R6
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 jobs:
   notify-start:

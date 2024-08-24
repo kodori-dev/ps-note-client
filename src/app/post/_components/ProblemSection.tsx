@@ -2,19 +2,18 @@
 
 import Input from '@/components/Input';
 import PostSectionLayout from '@/components/Layout/PostSectionLayout';
+import SearchPreview from '@/components/Search/SearchPreview';
 import Tag from '@/components/Tag';
 import { REQUIRED_INPUT } from '@/constants/errorMsg';
-import { Problem } from '@/types/api/problem';
-import { api } from '@/utils/api';
+import { useDebouncingSearch } from '@/hooks/useDebouncingSearch';
 import { Checkbox } from '@chakra-ui/react';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 function ProblemSection() {
   const { register, setValue, watch } = useFormContext();
   const { boj_id, is_correct_answer, isStar } = watch();
-  const [searchList, setSearchList] = useState<Problem[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const { data, isLoading, isSuccess, isOpen, setIsOpen } = useDebouncingSearch(boj_id, boj_id && boj_id.split('-').length < 2);
 
   const handleTagClick = (state: 'WA' | 'AC') => {
     setValue('is_correct_answer', state === is_correct_answer ? '' : state);
@@ -23,18 +22,6 @@ function ProblemSection() {
   const handleStarCheck = (e: ChangeEvent<HTMLInputElement>) => {
     setValue('isStar', e.target.checked);
   };
-
-  useEffect(() => {
-    const debounceTimer = setTimeout(async () => {
-      if (boj_id && boj_id.split('-').length < 2) {
-        const res = await api('GET', '/api/problems', null, { query: boj_id });
-        setSearchList(res.results);
-        setIsOpen(true);
-      }
-    }, 1000);
-
-    return () => clearTimeout(debounceTimer);
-  }, [boj_id]);
 
   const handleListClick = (id: number, bojId: string, name: string) => {
     setValue('boj_id', `${bojId} - ${name}`);
@@ -47,44 +34,7 @@ function ProblemSection() {
       <div className="flex flex-col gap-5 w-[373px]">
         <div className="relative">
           <Input label="백준 번호*" placeholder="번호 또는 이름 검색" register={register('boj_id', { required: REQUIRED_INPUT })} />
-          {isOpen && searchList && (
-            <div className="w-full absolute top-[91px] bg-white rounded-md shadow-xl p-4 z-menu">
-              <div className="h-[500px] flex flex-col overflow-y-scroll">
-                {searchList.length > 0
-                  ? searchList.map(({ id, boj_id: bojId, name }) => (
-                      <div
-                        onClick={() => handleListClick(id, bojId, name)}
-                        key={id}
-                        className="flex gap-5 border-b text-gray-1 border-gray-4 text-14 p-3 hover:bg-primary-background hover:text-black cursor-pointer"
-                      >
-                        <p className="w-20">
-                          {bojId.includes(boj_id) ? (
-                            <>
-                              {bojId.slice(0, bojId.indexOf(boj_id))}
-                              <span className="text-primary">{bojId.slice(bojId.indexOf(boj_id), bojId.indexOf(boj_id) + boj_id.length)}</span>
-                              {bojId.slice(bojId.indexOf(boj_id) + boj_id.length)}
-                            </>
-                          ) : (
-                            bojId
-                          )}
-                        </p>
-                        <p>
-                          {name.includes(boj_id) ? (
-                            <>
-                              {name.slice(0, name.indexOf(boj_id))}
-                              <span className="text-primary">{name.slice(name.indexOf(boj_id), name.indexOf(boj_id) + boj_id.length)}</span>
-                              {name.slice(name.indexOf(boj_id) + boj_id.length)}
-                            </>
-                          ) : (
-                            name
-                          )}
-                        </p>
-                      </div>
-                    ))
-                  : `검색 결과가 없습니다.`}
-              </div>
-            </div>
-          )}
+          {isOpen && <SearchPreview query={boj_id} isLoading={isLoading} isSuccess={isSuccess} data={data} handleListClick={handleListClick} />}
         </div>
         <div className="flex flex-col gap-2 text-14 font-700">
           채점 결과*

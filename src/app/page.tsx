@@ -1,5 +1,5 @@
 import HomeSectionLayout from '@/components/Layout/HomeSectionLayout';
-import SearchBar from '@/components/SearchBar';
+import SearchBar from '@/components/Search/SearchBar';
 import MemberSection from '@/components/Section/MemberSection';
 import ProblemSection from '@/components/Section/ProblemSection';
 

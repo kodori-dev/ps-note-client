@@ -4,6 +4,7 @@ import Input from '@/components/Input';
 import PostSectionLayout from '@/components/Layout/PostSectionLayout';
 import Tag from '@/components/Tag';
 import { REQUIRED_INPUT } from '@/constants/errorMsg';
+import { useDebouncingSearch } from '@/hooks/useDebouncingSearch';
 import { api } from '@/utils/api';
 import { Checkbox, Spinner } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
@@ -13,12 +14,7 @@ import { useFormContext } from 'react-hook-form';
 function ProblemSection() {
   const { register, setValue, watch } = useFormContext();
   const { boj_id, is_correct_answer, isStar } = watch();
-  const [isOpen, setIsOpen] = useState(false);
-  const { data, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: ['search', boj_id],
-    queryFn: async () => await api('GET', '/api/problems', null, { query: boj_id }),
-    enabled: false,
-  });
+  const { data, isLoading, isSuccess, isOpen, setIsOpen } = useDebouncingSearch(boj_id, boj_id && boj_id.split('-').length < 2);
 
   const handleTagClick = (state: 'WA' | 'AC') => {
     setValue('is_correct_answer', state === is_correct_answer ? '' : state);
@@ -27,18 +23,6 @@ function ProblemSection() {
   const handleStarCheck = (e: ChangeEvent<HTMLInputElement>) => {
     setValue('isStar', e.target.checked);
   };
-
-  useEffect(() => {
-    if (boj_id === '') setIsOpen(false);
-    const debounceTimer = setTimeout(async () => {
-      if (boj_id && boj_id.split('-').length < 2) {
-        refetch();
-        setIsOpen(true);
-      }
-    }, 1000);
-
-    return () => clearTimeout(debounceTimer);
-  }, [boj_id]);
 
   const handleListClick = (id: number, bojId: string, name: string) => {
     setValue('boj_id', `${bojId} - ${name}`);

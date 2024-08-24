@@ -1,4 +1,4 @@
-import SearchBar from '@/components/SearchBar';
+import SearchBar from '@/components/Search/SearchBar';
 import { PROBLEMS } from '@/constants/mockup';
 import { cookies, headers } from 'next/headers';
 import CardList from './_components/CardList';

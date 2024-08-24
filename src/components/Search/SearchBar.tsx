@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect } from 'react';
-import SearchIcon from '../../public/icon-search.svg';
+import SearchIcon from '../../../public/icon-search.svg';
 import { useForm } from 'react-hook-form';
 
 interface Props {

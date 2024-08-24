@@ -1,3 +1,5 @@
+import { User } from './auth';
+
 export type LanguageType = 'c' | 'c++' | 'python' | 'java' | 'javascript' | 'kotlin' | 'rust';
 
 export interface PostSolReq {
@@ -24,7 +26,7 @@ export interface PostSolRes {
 
 export interface SolutionType {
   id: number;
-  member: number;
+  member: User;
   problem: number;
   comment: string;
   source_lang: LanguageType;

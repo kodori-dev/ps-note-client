@@ -34,7 +34,7 @@ function SolutionList({ solutions }: Props) {
             <div className="grid grid-cols-5 items-center gap-1">
               <Chip type={solution.is_correct_answer ? 'AC' : 'WA'} />
               <p>{solution.source_lang}</p>
-              <p>{solution.member}</p>
+              <p>{solution.member.nickname}</p>
               <p className="flex items-center">
                 <input className="w-4 h-4" type="checkbox" defaultChecked={solution.is_boj_verified} disabled />
               </p>

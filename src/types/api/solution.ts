@@ -40,3 +40,10 @@ export interface SolutionType {
   updated_at: string;
   deleted_at: string | null;
 }
+
+export interface GetSolsRes {
+  count: number;
+  next: null | string;
+  previous: null | string;
+  results: SolutionType[];
+}

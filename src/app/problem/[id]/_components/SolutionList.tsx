@@ -8,6 +8,7 @@ import { Fragment, useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import MDEditor from '@uiw/react-md-editor';
 import { LANGUAGE_FOR_MD } from '@/constants/language';
+import { useGetUserName } from '@/hooks/useGetUserName';
 
 interface Props {
   solutions: SolutionType[];
@@ -38,7 +39,6 @@ function SolutionList({ solutions }: Props) {
                 <input className="w-4 h-4" type="checkbox" defaultChecked={solution.is_boj_verified} disabled />
               </p>
               <button className="flex items-center" onClick={() => setSelected(selected > 0 && selected === solution.id ? -1 : solution.id)}>
-                {/* <LinkIcon fill="#0090FE" /> */}
                 {selected > 0 && selected === solution.id ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
               </button>
             </div>

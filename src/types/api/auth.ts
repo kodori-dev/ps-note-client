@@ -23,3 +23,5 @@ export interface PostLoginReq {
 }
 
 export type GetMembersRes = User[];
+
+export interface GetMemberForIdRes extends User {}

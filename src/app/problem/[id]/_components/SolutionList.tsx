@@ -54,7 +54,9 @@ function SolutionList({ solutions }: Props) {
                   <CommentIcon fill="#0090FE" />
                   <h1 className="text-primary text-40 font-700">Comment</h1>
                 </div>
-                <MDEditor.Markdown source={solution.comment} style={{ whiteSpace: 'pre-wrap' }} />
+                <div data-color-mode="light">
+                  <MDEditor.Markdown source={solution.comment} style={{ whiteSpace: 'pre-wrap' }} />
+                </div>
                 <div className="flex gap-1 mt-12 mb-3">
                   <CodeIcon fill="#0090FE" />
                   <h1 className="text-primary text-40 font-700">Code</h1>

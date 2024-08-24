@@ -19,7 +19,7 @@ function SearchBar({ initialValue }: Props) {
     window.location.href = `/search?keyword=${searchBar}&page=1`;
   };
   const { searchBar } = watch();
-  const { isLoading, isSuccess, data, isOpen, setIsOpen } = useDebouncingSearch(searchBar, searchBar);
+  const { isLoading, isSuccess, data, isOpen, setIsOpen } = useDebouncingSearch(searchBar, searchBar && searchBar !== initialValue);
 
   useEffect(() => {
     if (initialValue) setValue('searchBar', initialValue);

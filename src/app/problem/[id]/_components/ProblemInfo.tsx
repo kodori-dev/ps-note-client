@@ -17,7 +17,7 @@ interface Props {
 
 function ProblemInfo({ number, isSolved = null, title, level, isStar = false, stars }: Props) {
   const INFO_GRID = [
-    { icon: <GoodIcon fill="#ACACAC" />, head: '이 문제를 추천한 사람', body: <p>{stars}</p> },
+    { icon: <GoodIcon fill="#ACACAC" />, head: '이 문제를 추천한 사람', body: <p className="text-20">{stars}</p> },
     {
       icon: <LevelIcon fill="#ACACAC" />,
       head: '난이도',
@@ -49,7 +49,7 @@ function ProblemInfo({ number, isSolved = null, title, level, isStar = false, st
       <h1 className="text-40 font-700 mt-2 mb-8">{title}</h1>
       <div className="grid grid-cols-3">
         {INFO_GRID.map(({ icon, head, body }) => (
-          <div className="flex flex-col gap-2 items-center">
+          <div key={head} className="flex flex-col gap-2 items-center">
             {icon}
             <p className="text-gray-3">{head}</p>
             {body}

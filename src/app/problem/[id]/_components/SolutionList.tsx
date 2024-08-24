@@ -39,7 +39,7 @@ function SolutionList({ solutions }: Props) {
                 {solution.member.nickname}
               </Link>
               <Link href={`https://www.acmicpc.net/source/${solution.boj_solution_id}`} className="group relative flex items-center z-star">
-                <input className="w-4 h-4" type="checkbox" defaultChecked={solution.is_boj_verified} readOnly />
+                <input className="w-4 h-4 cursor-pointer" type="checkbox" defaultChecked={solution.is_boj_verified} readOnly />
                 <span className="hidden group-hover:inline-block text-12 absolute whitespace-nowrap -right-11 top-0 px-2 py-[2px] bg-black/30 text-white rounded-md">
                   클릭하면 풀이 내역으로 이동해요
                 </span>

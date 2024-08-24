@@ -20,7 +20,7 @@ async function Problem({ params: { id } }: { params: { id: string } }) {
   };
 
   const problem = (await getData(`/api/problems/${id}`)) as GetProblemRes | null;
-  const solutions = (await getData(`/api/solutions?problem_id=${id}`)) as GetSolsRes | null;
+  const solutions = (await getData(`/api/solutions?order_by=-submitted_at&problem_id=${id}`)) as GetSolsRes | null;
 
   return (
     <div className="flex flex-col gap-16">

@@ -3,7 +3,7 @@ export const PROBLEMS = [
     id: 0,
     name: '쿠키의 신체 측정',
     boj_id: '20125',
-    level: '',
+    level: 'ruby_1',
     created_at: '',
     updated_at: '',
     is_solved: true,

@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
-import Chip from '../Chip';
 import StarButton from '../Button/StarButton';
+import Chip from '../Chip';
 
 interface Props {
   id: number;

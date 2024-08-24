@@ -24,6 +24,12 @@ const config: Config = {
         chip: {
           red: '#FD9596',
           green: '#ADCEAF',
+          bronze: '#AD5600',
+          silver: '#435F7A',
+          gold: '#EC9A00',
+          platinum: '#27E2A4',
+          diamond: '#00B4FC',
+          ruby: '#FF0062',
         },
         red: {
           DEFAULT: '#FF0800',

@@ -1,3 +1,5 @@
+export type LevelType = 'unrated' | 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'ruby';
+
 export interface Problem {
   id: number;
   name: string;

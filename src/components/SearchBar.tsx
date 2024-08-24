@@ -13,7 +13,7 @@ function SearchBar({ initialValue }: Props) {
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
     const { searchBar } = getValues();
-    window.location.href = `/search?keyword=${searchBar}`;
+    window.location.href = `/search?keyword=${searchBar}&page=1`;
   };
 
   useEffect(() => {

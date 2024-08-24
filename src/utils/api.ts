@@ -3,14 +3,18 @@ import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/typ
 import { GetProblemsRes } from '@/types/api/problem';
 import { PostSolReq, PostSolRes } from '@/types/api/solution';
 
-interface GetType {
+type GetType = {
   '/api/me': {
     req: null;
     res: PostSignUpRes;
   };
-  '/api/members/': {
+  '/api/members': {
     req: null;
     res: GetMembersRes;
+  };
+  [key: `/api/members/${string}`]: {
+    req: null;
+    res: PostSignUpRes;
   };
   '/api/problems': {
     req: null;
@@ -24,7 +28,7 @@ interface GetType {
       boj_id?: string;
     };
   };
-}
+};
 interface PostType {
   '/api/auth/login': {
     req: PostLoginReq;

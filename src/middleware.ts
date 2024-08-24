@@ -10,6 +10,7 @@ export function middleware(req: NextRequest) {
   if (path === '/search') {
     const reqHeaders = new Headers(req.headers);
     const keyword = req.nextUrl.searchParams.get('keyword') || '';
+    const page = req.nextUrl.searchParams.get('page') || '';
     const encodedKeyword = encodeURIComponent(keyword);
     const res = NextResponse.next({
       request: {
@@ -17,6 +18,7 @@ export function middleware(req: NextRequest) {
       },
     });
     res.headers.set('x-query-keyword', encodedKeyword);
+    res.headers.set('x-query-page', page);
     return res;
   }
 

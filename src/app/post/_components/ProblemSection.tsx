@@ -4,17 +4,21 @@ import Input from '@/components/Input';
 import PostSectionLayout from '@/components/Layout/PostSectionLayout';
 import Tag from '@/components/Tag';
 import { REQUIRED_INPUT } from '@/constants/errorMsg';
-import { Problem } from '@/types/api/problem';
 import { api } from '@/utils/api';
-import { Checkbox } from '@chakra-ui/react';
+import { Checkbox, Spinner } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 function ProblemSection() {
   const { register, setValue, watch } = useFormContext();
   const { boj_id, is_correct_answer, isStar } = watch();
-  const [searchList, setSearchList] = useState<Problem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const { data, isLoading, isSuccess, refetch } = useQuery({
+    queryKey: ['search', boj_id],
+    queryFn: async () => await api('GET', '/api/problems', null, { query: boj_id }),
+    enabled: false,
+  });
 
   const handleTagClick = (state: 'WA' | 'AC') => {
     setValue('is_correct_answer', state === is_correct_answer ? '' : state);
@@ -25,10 +29,10 @@ function ProblemSection() {
   };
 
   useEffect(() => {
+    if (boj_id === '') setIsOpen(false);
     const debounceTimer = setTimeout(async () => {
       if (boj_id && boj_id.split('-').length < 2) {
-        const res = await api('GET', '/api/problems', null, { query: boj_id });
-        setSearchList(res.results);
+        refetch();
         setIsOpen(true);
       }
     }, 1000);
@@ -47,41 +51,45 @@ function ProblemSection() {
       <div className="flex flex-col gap-5 w-[373px]">
         <div className="relative">
           <Input label="백준 번호*" placeholder="번호 또는 이름 검색" register={register('boj_id', { required: REQUIRED_INPUT })} />
-          {isOpen && searchList && (
+          {isOpen && data && (
             <div className="w-full absolute top-[91px] bg-white rounded-md shadow-xl p-4 z-menu">
-              <div className="h-[500px] flex flex-col overflow-y-scroll">
-                {searchList.length > 0
-                  ? searchList.map(({ id, boj_id: bojId, name }) => (
-                      <div
-                        onClick={() => handleListClick(id, bojId, name)}
-                        key={id}
-                        className="flex gap-5 border-b text-gray-1 border-gray-4 text-14 p-3 hover:bg-primary-background hover:text-black cursor-pointer"
-                      >
-                        <p className="w-20">
-                          {bojId.includes(boj_id) ? (
-                            <>
-                              {bojId.slice(0, bojId.indexOf(boj_id))}
-                              <span className="text-primary">{bojId.slice(bojId.indexOf(boj_id), bojId.indexOf(boj_id) + boj_id.length)}</span>
-                              {bojId.slice(bojId.indexOf(boj_id) + boj_id.length)}
-                            </>
-                          ) : (
-                            bojId
-                          )}
-                        </p>
-                        <p>
-                          {name.includes(boj_id) ? (
-                            <>
-                              {name.slice(0, name.indexOf(boj_id))}
-                              <span className="text-primary">{name.slice(name.indexOf(boj_id), name.indexOf(boj_id) + boj_id.length)}</span>
-                              {name.slice(name.indexOf(boj_id) + boj_id.length)}
-                            </>
-                          ) : (
-                            name
-                          )}
-                        </p>
-                      </div>
-                    ))
-                  : `검색 결과가 없습니다.`}
+              <div className="h-[380px] flex flex-col items-center overflow-y-scroll">
+                {isLoading ? (
+                  <Spinner color="blue.500" />
+                ) : isSuccess && data.count > 0 ? (
+                  data?.results.map(({ id, boj_id: bojId, name }) => (
+                    <div
+                      onClick={() => handleListClick(id, bojId, name)}
+                      key={id}
+                      className="w-full flex gap-5 border-b text-gray-1 border-gray-4 text-14 p-3 hover:bg-primary-background hover:text-black cursor-pointer"
+                    >
+                      <p className="w-20">
+                        {bojId.includes(boj_id) ? (
+                          <>
+                            {bojId.slice(0, bojId.indexOf(boj_id))}
+                            <span className="text-primary">{bojId.slice(bojId.indexOf(boj_id), bojId.indexOf(boj_id) + boj_id.length)}</span>
+                            {bojId.slice(bojId.indexOf(boj_id) + boj_id.length)}
+                          </>
+                        ) : (
+                          bojId
+                        )}
+                      </p>
+                      <p>
+                        {name.includes(boj_id) ? (
+                          <>
+                            {name.slice(0, name.indexOf(boj_id))}
+                            <span className="text-primary">{name.slice(name.indexOf(boj_id), name.indexOf(boj_id) + boj_id.length)}</span>
+                            {name.slice(name.indexOf(boj_id) + boj_id.length)}
+                          </>
+                        ) : (
+                          name
+                        )}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  `검색 결과가 없습니다.`
+                )}
               </div>
             </div>
           )}

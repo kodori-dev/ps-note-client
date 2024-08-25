@@ -2,9 +2,12 @@ import MemberCard from '../Card/MemberCard';
 import { GetMembersRes } from '@/types/api/auth';
 import HomeLock from '../Lock/HomeLock';
 import { cookies } from 'next/headers';
+import { findThisWeek } from '@/utils/findThisWeek';
+import dayjs from 'dayjs';
 
 async function MemberSection() {
   const cookie = cookies();
+  const { mon, fri } = findThisWeek();
 
   const getMembers = async () => {
     try {
@@ -21,13 +24,40 @@ async function MemberSection() {
 
   const members = (await getMembers()) as GetMembersRes | null;
 
+  const getTodayProblem = async () => {};
+
+  const getPenalty = async (member: number) => {
+    const res = await fetch(
+      `http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/penalties?start_date=${dayjs(mon).format('YYYY-MM-DD')}&end_date=${dayjs(fri).format(
+        'YYYY-MM-DD'
+      )}&member_id=${member}`,
+      {
+        headers: { Cookie: cookie.toString() || '' },
+        cache: 'no-store',
+      }
+    );
+    if (res.ok) {
+      const penaltyArr = await res.json();
+      let penalty = 0;
+      let solveNum = 0;
+      for (let item of penaltyArr) {
+        penalty += Number(item.amount);
+        if (item.amount == 0) solveNum++;
+      }
+      return { penalty, solveNum };
+    }
+    return { penalty: -1, solveNum: 0 };
+  };
+
   return (
     <>
       {members ? (
         <div className="flex gap-7 flex-wrap">
-          {members.map(({ id, nickname, boj_id }) => (
-            <MemberCard key={id} id={id} name={nickname} bojId={boj_id} />
-          ))}
+          {members.map(async ({ id, nickname, boj_id }) => {
+            const { penalty, solveNum } = await getPenalty(id);
+
+            return <MemberCard key={id} id={id} name={nickname} bojId={boj_id} fine={penalty} weekSolved={solveNum} />;
+          })}
         </div>
       ) : (
         <HomeLock type="member" />

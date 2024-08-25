@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import StarButton from '../Button/StarButton';
 import Chip from '../Chip';
+import { Tooltip } from '@chakra-ui/react';
 
 interface Props {
   id: number;
@@ -22,7 +23,7 @@ function ProblemCard({ id, bojId, title, state = false, stars, isStar = false, c
       }
     >
       <Link href={`/problem/${id}`} className="absolute inset-0 z-menu" />
-      <StarButton isStar={isStar} stars={stars} />
+      <StarButton problemId={id} isStar={isStar} stars={stars} isSolve={state} />
       <div className="flex flex-col gap-2">
         <p className="text-black">{bojId}</p>
         <p className="text-24 font-700 truncate group-hover:text-primary">{title}</p>

@@ -10,6 +10,7 @@ import { api } from '@/utils/api';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { PostSolReq } from '@/types/api/solution';
+import dayjs from 'dayjs';
 
 const DEFAULT_INPUT = {
   boj_id: '',
@@ -41,7 +42,7 @@ function Post() {
         comment,
         source_lang,
         source_code,
-        submitted_at: String(date),
+        submitted_at: dayjs(date).format('YYYY-MM-DD'),
         star: isStar,
         is_correct_answer: is_correct_answer == 'AC',
       } as PostSolReq;

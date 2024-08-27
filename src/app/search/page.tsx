@@ -15,7 +15,7 @@ async function Search() {
 
   const getSearchData = async () => {
     try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?page=${page}&page_size=${PAGE_SIZE}&query=${keyword}`, {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems/search?page=${page}&page_size=${PAGE_SIZE}&query=${keyword}`, {
         headers: { Cookie: cookie.toString() || '' },
       });
       if (res.ok) return await res.json();

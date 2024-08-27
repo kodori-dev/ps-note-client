@@ -21,12 +21,27 @@ type GetType = {
     req: null;
     res: GetProblemsRes;
     query: {
-      order_by?: 'id' | '-id' | 'stars' | '-stars';
+      boj_id?: string;
+      order_by?: 'id' | '-id' | 'stars' | '-stars' | 'solutions' | '-solutions';
+      page?: number;
+      page_size?: number;
+      submitted_at?: string;
+      submitted_at__end?: string;
+      submitted_at__start?: string;
+    };
+  };
+  '/api/problems/search': {
+    req: null;
+    res: GetProblemsRes;
+    query: {
+      boj_id?: string;
+      order_by?: 'id' | '-id' | 'stars' | '-stars' | 'solutions' | '-solutions';
       page?: number;
       page_size?: number;
       query?: string;
-      solved_at?: string | Date;
-      boj_id?: string;
+      submitted_at?: string;
+      submitted_at__end?: string;
+      submitted_at__start?: string;
     };
   };
   '/api/problem-stars': {

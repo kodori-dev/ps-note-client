@@ -11,7 +11,7 @@ export const useDebouncingSearch = (query: string, trigger: boolean) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ['search', query],
-    queryFn: async () => await api('GET', '/api/problems', null, { query }),
+    queryFn: async () => await api('GET', '/api/problems/search', null, { query }),
     enabled: false,
   });
 

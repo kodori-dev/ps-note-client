@@ -1,20 +1,52 @@
-'use client';
 import Link from 'next/link';
 import StarButton from '../Button/StarButton';
 import Chip from '../Chip';
-import { Tooltip } from '@chakra-ui/react';
+import SolutionIcon from '../../../public/icon-card-sol.svg';
+import LanguageIcon from '../../../public/icon-card-lang.svg';
+import { LanguageType } from '@/types/api/solution';
 
 interface Props {
-  id: number;
+  type?: 'problem' | 'solution';
+  problemId: number;
   bojId: string;
   title: string;
-  state?: boolean;
+  isSolved: boolean;
   stars: number;
   isStar?: boolean;
+  solNum?: number;
+  solLang?: LanguageType;
   customStyle?: string;
+  resultLabel?: 'AC' | 'WA' | string;
 }
 
-function ProblemCard({ id, bojId, title, state = false, stars, isStar = false, customStyle }: Props) {
+function ProblemCard({
+  type = 'problem',
+  solNum = 0,
+  problemId,
+  bojId,
+  title,
+  isSolved = false,
+  stars,
+  isStar = false,
+  customStyle,
+  solLang = 'c++',
+  resultLabel = '',
+}: Props) {
+  const DETAIL_INFO = {
+    problem: (
+      <>
+        <SolutionIcon fill="#ACACAC" />
+        {solNum > 999 ? '999+' : solNum}
+      </>
+    ),
+    solution: (
+      <>
+        <LanguageIcon fill="#ACACAC" />
+        {solLang}
+      </>
+    ),
+  };
+
   return (
     <div
       className={
@@ -22,12 +54,16 @@ function ProblemCard({ id, bojId, title, state = false, stars, isStar = false, c
         customStyle
       }
     >
-      <Link href={`/problem/${id}`} className="absolute inset-0 z-menu" />
-      <StarButton problemId={id} isStar={isStar} stars={stars} isSolve={state} />
+      <Link href={`/problem/${problemId}`} className="absolute inset-0 z-menu" />
+      <StarButton problemId={problemId} isStar={isStar} stars={stars} isSolve={isSolved} />
       <div className="flex flex-col gap-2">
-        <p className="text-black">{bojId}</p>
+        <div className="text-black flex gap-2 items-center">
+          {bojId}
+          {type === 'problem' && isSolved && <Chip type={'AC'} />}
+          {type === 'solution' && <Chip type={['AC', 'WA'].includes(resultLabel) ? (resultLabel as 'AC' | 'WA') : 'ETC'}>{resultLabel}</Chip>}
+        </div>
         <p className="text-24 font-700 truncate group-hover:text-primary">{title}</p>
-        {state && <Chip type={'AC'} />}
+        <div className="flex gap-1 items-center text-12 text-gray-3">{DETAIL_INFO[type]}</div>
       </div>
       <Link href={`https://www.acmicpc.net/problem/${bojId}`} className="text-12 text-gray-3 text-right hover:text-gray-1 z-10">
         BOJ 바로가기

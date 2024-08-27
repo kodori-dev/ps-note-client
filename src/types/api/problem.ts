@@ -16,8 +16,9 @@ export interface ProblemType {
   is_starred: boolean;
   stars: number;
   tags: TagType[];
-  lebel: string;
+  label: string;
   url: string;
+  solutions: number;
 }
 
 export interface GetProblemsRes {

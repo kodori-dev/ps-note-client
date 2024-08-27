@@ -1,9 +1,9 @@
 import ProblemCard from '@/components/Card/ProblemCard';
-import { Problem } from '@/types/api/problem';
+import { ProblemType } from '@/types/api/problem';
 import React from 'react';
 
 interface Props {
-  data: Problem[];
+  data: ProblemType[];
 }
 
 function CardList({ data }: Props) {

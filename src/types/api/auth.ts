@@ -1,4 +1,4 @@
-export interface User {
+export interface UserType {
   id: number;
   username: string;
   nickname: string;
@@ -15,13 +15,13 @@ export interface PostSignUpReq {
   boj_id: string;
 }
 
-export interface PostSignUpRes extends User {}
+export interface PostSignUpRes extends UserType {}
 
 export interface PostLoginReq {
   username: string;
   password: string;
 }
 
-export type GetMembersRes = User[];
+export type GetMembersRes = UserType[];
 
-export interface GetMemberForIdRes extends User {}
+export interface GetMemberForIdRes extends UserType {}

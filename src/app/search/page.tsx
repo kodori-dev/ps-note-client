@@ -2,7 +2,7 @@ import SearchBar from '@/components/Search/SearchBar';
 import { PROBLEMS } from '@/constants/mockup';
 import { cookies, headers } from 'next/headers';
 import CardList from './_components/CardList';
-import { GetProblemsRes, Problem } from '@/types/api/problem';
+import { GetProblemsRes, ProblemType } from '@/types/api/problem';
 import Button from '@/components/Button';
 import Link from 'next/link';
 

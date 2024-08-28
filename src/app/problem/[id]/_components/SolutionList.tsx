@@ -26,7 +26,7 @@ function SolutionList({ solutions }: Props) {
           <Fragment key={solution.id}>
             <div className="grid grid-cols-6 items-center gap-1">
               <p className="text-gray-2 text-14">{solution.submitted_at}</p>
-              <Chip type={solution.is_correct_answer ? 'AC' : 'WA'}>{solution.score_label || solution.status_label}</Chip>
+              <Chip type={solution.is_correct_answer ? 'AC' : 'WA'}>{solution.score_label}</Chip>
               <p>{solution.source_lang}</p>
               <Link passHref href={`https://www.acmicpc.net/user/${solution.member.boj_id}`}>
                 {solution.member.nickname}

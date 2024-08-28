@@ -47,8 +47,10 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
             <RandomSection randomNum={12345 % ALL_BOJ_PROBLEM} />
           </div>
         </section>
+        <section>
+          <WeekSection />
+        </section>
       </div>
-      {/* <WeekSection /> */}
     </>
   );
 }

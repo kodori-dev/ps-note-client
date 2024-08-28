@@ -4,6 +4,7 @@ import HomeLock from '../Lock/HomeLock';
 import { cookies } from 'next/headers';
 import { findThisWeek } from '@/utils/findThisWeek';
 import dayjs from 'dayjs';
+import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
 
 async function MemberSection() {
   const cookie = cookies();
@@ -38,12 +39,7 @@ async function MemberSection() {
     );
     if (res.ok) {
       const penaltyArr = await res.json();
-      let penalty = 0;
-      let solveNum = 0;
-      for (let item of penaltyArr) {
-        penalty += Number(item.amount);
-        if (item.amount == 0) solveNum++;
-      }
+      const { penalty, solveNum } = calcSimplePenalty(penaltyArr);
       return { penalty, solveNum };
     }
     return { penalty: -1, solveNum: 0 };
@@ -55,7 +51,6 @@ async function MemberSection() {
         <div className="flex gap-7 flex-wrap">
           {members.map(async ({ id, nickname, boj_id }) => {
             const { penalty, solveNum } = await getPenalty(id);
-
             return <MemberCard key={id} id={id} name={nickname} bojId={boj_id} fine={penalty} weekSolved={solveNum} />;
           })}
         </div>

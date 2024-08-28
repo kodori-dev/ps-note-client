@@ -26,13 +26,13 @@ function AllTodaySection({ today, all, todayAttendNum, attend, nickname, isCoupo
   return (
     <article className="w-[386px] bg-white rounded-md py-6 px-5 shadow-lg flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h3 className="text-32 leading-tight">
+        <h3 className="text-24 leading-tight">
           <span className="font-700">오늘의 출석 현황</span>을<br /> 한 눈에 확인하세요!
         </h3>
         <p className="text-12 text-gray-4 text-end">기준: {today}</p>
       </div>
       <div className="flex justify-center">
-        <CircularProgress color="#0090fe" value={(todayAttendNum / all) * 100} size="230px" boxSize={230} thickness="15px">
+        <CircularProgress color="#0090fe" value={(todayAttendNum / all) * 100} size="216px" boxSize={216} thickness="14px">
           <CircularProgressLabel>
             <div className="text-gray-4 text-16">
               <span className="text-40 font-700 text-primary">{todayAttendNum}</span>/{all}

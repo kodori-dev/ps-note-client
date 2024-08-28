@@ -7,7 +7,7 @@ interface Props {
 
 function TodaySection({ data }: Props) {
   return (
-    <article className="flex flex-col gap-4  w-[559px]">
+    <article className="flex flex-col gap-3 w-[559px]">
       <h2 className="text-32">
         <span className="font-700">오늘 제출</span>한 솔루션
       </h2>

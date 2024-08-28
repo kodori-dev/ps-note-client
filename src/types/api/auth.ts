@@ -1,11 +1,11 @@
 export interface UserType {
   id: number;
-  username: string;
+  username: string | null;
   nickname: string;
   boj_id: string;
   created_at: string;
   updated_at: string;
-  deleted_at?: string;
+  deleted_at: string | null;
 }
 
 export interface PostSignUpReq {

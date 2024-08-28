@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 interface Props {
-  type: 'AC' | 'WA' | 'ETC';
+  type: 'AC' | 'WA';
   children?: ReactNode;
 }
 
@@ -10,8 +10,8 @@ interface Props {
  */
 function Chip({ type, children = 'Solved' }: Props) {
   const style =
-    'px-3 h-[17px] text-gray-2 rounded-sm text-12 bg-opacity-30 flex justify-center' +
-    ` ${type === 'AC' ? 'bg-chip-green' : type === 'WA' ? 'bg-chip-red' : 'bg-chip-yellow'}`;
+    'px-3 h-[17px] text-gray-2 rounded-sm text-12 bg-opacity-30 flex justify-center w-fit min-w-[46px]' +
+    ` ${type === 'AC' ? 'bg-chip-green' : 'bg-chip-red'}`;
 
   return <span className={style}>{children}</span>;
 }

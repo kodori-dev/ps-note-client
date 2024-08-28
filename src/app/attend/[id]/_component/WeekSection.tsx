@@ -1,15 +1,14 @@
 'use client';
+
 import DateCard from '@/components/Card/DateCard';
 import Input from '@/components/Input';
 import { findThisWeek } from '@/utils/findThisWeek';
-import { getUserInfo } from '@/utils/getUserInfo';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-function Attend() {
+function WeekSection() {
   const [dateArr, setDateArr] = useState<Date[]>([]);
-  // const user = await getUserInfo();
   const today = new Date();
   const { register, watch } = useForm({ defaultValues: { selectedWeek: dayjs(today).format('YYYY-MM-DD') } });
   const { selectedWeek } = watch();
@@ -28,22 +27,17 @@ function Attend() {
   }, [selectedWeek]);
 
   return (
-    <>
-      <div className="text-48 flex flex-col gap-2 border-b border-gray-4 py-9 px-5">
-        <p>
-          <span className="font-700">안희원</span> 님의 출석 현황 조회
-        </p>
-        <div className="w-[270px]">
+    <div className="flex flex-col gap-4">
+      <h2 className="text-32">주차별 출석 세부 조회</h2>
+      <div className="flex gap-8">
+        <div className="w-[386px]">
           <Input label="출석 조회 날짜 선택" description="해당 날짜가 포함된 1주 단위로 조회됩니다." register={register('selectedWeek')} type="date" />
         </div>
-        <p className="text-end">
-          <span className="font-700">4</span> 문제
-        </p>
-        <p className="text-end">
-          <span className="font-700">{fine.toLocaleString('kr')}</span> 원
-        </p>
+        <div>
+          출석카드
+          <p className="text-16 text-gray-2 my-4">조회 기간: {`${dayjs(dateArr[0]).format('YYYY-MM-DD')} ~ ${dayjs(dateArr[4]).format('YYYY-MM-DD')}`}</p>
+        </div>
       </div>
-      <p className="text-16 text-gray-2 my-4">조회 기간: {`${dayjs(dateArr[0]).format('YYYY-MM-DD')} ~ ${dayjs(dateArr[4]).format('YYYY-MM-DD')}`}</p>
       <div className="flex flex-col gap-6">
         {dateArr.map((day) => (
           <DateCard
@@ -54,8 +48,8 @@ function Attend() {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
-export default Attend;
+export default WeekSection;

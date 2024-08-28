@@ -1,10 +1,10 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { GetProblemsRes } from '@/types/api/problem';
-import { PostSolReq, PostSolRes } from '@/types/api/solution';
+import { PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
 import { GetStarsRes, PostStarReq } from '@/types/api/star';
 
-type GetType = {
+export type GetType = {
   '/api/me': {
     req: null;
     res: PostSignUpRes;
@@ -21,12 +21,27 @@ type GetType = {
     req: null;
     res: GetProblemsRes;
     query: {
-      order_by?: 'id' | '-id' | 'stars' | '-stars';
+      boj_id?: string;
+      order_by?: 'id' | '-id' | 'stars' | '-stars' | 'solutions' | '-solutions';
+      page?: number;
+      page_size?: number;
+      submitted_at?: string;
+      submitted_at__end?: string;
+      submitted_at__start?: string;
+    };
+  };
+  '/api/problems/search': {
+    req: null;
+    res: GetProblemsRes;
+    query: {
+      boj_id?: string;
+      order_by?: 'id' | '-id' | 'stars' | '-stars' | 'solutions' | '-solutions';
       page?: number;
       page_size?: number;
       query?: string;
-      solved_at?: string | Date;
-      boj_id?: string;
+      submitted_at?: string;
+      submitted_at__end?: string;
+      submitted_at__start?: string;
     };
   };
   '/api/problem-stars': {
@@ -36,6 +51,10 @@ type GetType = {
       member_id: number;
       problem_id?: number;
     };
+  };
+  [key: `/api/solutions/${string}`]: {
+    req: null;
+    res: SolutionType;
   };
 };
 interface PostType {
@@ -72,7 +91,7 @@ interface BodyType {
   DELETE: DeleteType;
 }
 type methodType = keyof BodyType;
-type BodyInterfaceType<V> = V extends { res: any; req: any; query?: any } ? V : never;
+export type BodyInterfaceType<V> = V extends { res: any; req: any; query?: any } ? V : never;
 
 export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   method: M,

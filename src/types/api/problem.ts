@@ -5,7 +5,7 @@ export interface TagType {
   name: string;
   boj_tag_id: string;
 }
-export interface Problem {
+export interface ProblemType {
   id: number;
   name: string;
   boj_id: string;
@@ -16,13 +16,16 @@ export interface Problem {
   is_starred: boolean;
   stars: number;
   tags: TagType[];
+  label: string;
+  url: string;
+  solutions: number;
 }
 
 export interface GetProblemsRes {
   count: number;
   next: string;
   previous: string;
-  results: Problem[];
+  results: ProblemType[];
 }
 
-export interface GetProblemRes extends Problem {}
+export interface GetProblemRes extends ProblemType {}

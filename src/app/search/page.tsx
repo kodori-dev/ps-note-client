@@ -2,7 +2,7 @@ import SearchBar from '@/components/Search/SearchBar';
 import { PROBLEMS } from '@/constants/mockup';
 import { cookies, headers } from 'next/headers';
 import CardList from './_components/CardList';
-import { GetProblemsRes, Problem } from '@/types/api/problem';
+import { GetProblemsRes, ProblemType } from '@/types/api/problem';
 import Button from '@/components/Button';
 import Link from 'next/link';
 
@@ -15,7 +15,7 @@ async function Search() {
 
   const getSearchData = async () => {
     try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?page=${page}&page_size=${PAGE_SIZE}&query=${keyword}`, {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems/search?page=${page}&page_size=${PAGE_SIZE}&query=${keyword}`, {
         headers: { Cookie: cookie.toString() || '' },
       });
       if (res.ok) return await res.json();

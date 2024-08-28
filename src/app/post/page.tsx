@@ -42,7 +42,7 @@ function Post() {
         comment,
         source_lang,
         source_code,
-        submitted_at: dayjs(date).format('YYYY-MM-DD'),
+        submitted_at: date.toISOString(),
         star: isStar,
         is_correct_answer: is_correct_answer == 'AC',
       } as PostSolReq;

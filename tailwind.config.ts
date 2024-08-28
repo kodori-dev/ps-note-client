@@ -71,6 +71,7 @@ const config: Config = {
         20: '1.25rem',
         24: '1.5rem',
         32: '2rem',
+        36: '2.25rem',
         40: '2.5rem',
         48: '3rem',
       },

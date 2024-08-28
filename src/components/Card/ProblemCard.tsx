@@ -69,9 +69,11 @@ function ProblemCard({
         <p className="text-24 font-700 truncate group-hover:text-primary">{title}</p>
         <div className="flex gap-1 items-center text-12 text-gray-3">{DETAIL_INFO[type]}</div>
       </div>
-      <Link href={`https://www.acmicpc.net/problem/${bojId}`} className="text-12 text-gray-3 text-right hover:text-gray-1 z-10">
-        BOJ 바로가기
-      </Link>
+      {type === 'problem' && (
+        <Link href={`https://www.acmicpc.net/problem/${bojId}`} className="text-12 text-gray-3 text-right hover:text-gray-1 z-10">
+          BOJ 바로가기
+        </Link>
+      )}
     </div>
   );
 }

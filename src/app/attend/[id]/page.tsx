@@ -1,7 +1,7 @@
 import { getServerData } from '@/utils/getServerData';
 import TodaySection from './_component/TodaySection';
 import WeekSection from './_component/WeekSection';
-import { TODAY_PENALTY } from '@/constants/mockup';
+import { HOLIDAY, TODAY_PENALTY } from '@/constants/mockup';
 import { GetPenaltiesRes, PenaltyType } from '@/types/api/penalty';
 import AllTodaySection from './_component/AllTodaySection';
 import RandomSection from './_component/RandomSection';
@@ -48,7 +48,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
           </div>
         </section>
         <section>
-          <WeekSection />
+          <WeekSection holidayData={HOLIDAY} />
         </section>
       </div>
     </>

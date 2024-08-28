@@ -1,17 +1,24 @@
 'use client';
 
 import DateCard from '@/components/Card/DateCard';
+import ProblemCard from '@/components/Card/ProblemCard';
 import Input from '@/components/Input';
 import ProgressBar from '@/components/ProgressBar';
-import { WEEK_PENALTY } from '@/constants/mockup';
+import { HOLIDAY, WEEK_PENALTY } from '@/constants/mockup';
+import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
+import { SolutionType } from '@/types/api/solution';
 import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
 import { findThisWeek } from '@/utils/findThisWeek';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-function WeekSection() {
+interface Props {
+  holidayData: GetHolidayRes;
+}
+
+function WeekSection({ holidayData }: Props) {
   const [dateArr, setDateArr] = useState<Date[]>([]);
   const today = new Date();
   const { register, watch } = useForm({ defaultValues: { selectedWeek: dayjs(today).format('YYYY-MM-DD') } });
@@ -30,6 +37,12 @@ function WeekSection() {
     }
     setDateArr(week);
   }, [selectedWeek]);
+
+  const ATTEND_CARD = {
+    holiday: '공휴일',
+    coupon: '🎟️ 면제 티켓 사용',
+    noSolve: '문제를 풀지 않았어요.',
+  };
 
   return (
     <article className="flex flex-col gap-4">
@@ -65,14 +78,60 @@ function WeekSection() {
         </div>
       </div>
       <div className="flex flex-col gap-6">
-        {dateArr.map((day) => (
-          <DateCard
-            key={day.getDay()}
-            date={day.getDate()}
-            day={day.getDay()}
-            isToday={dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD')}
-          />
-        ))}
+        {dateArr.map((day) => {
+          let type = 'attend';
+
+          //공휴일
+          for (let holiday of holidayData) {
+            if (holiday.date === dayjs(day).format('YYYY-MM-DD')) {
+              type = 'holiday';
+              break;
+            }
+          }
+
+          const penaltyArr = data.filter(({ day: dataDay }) => dataDay == dayjs(day).format('YYYY-MM-DD'));
+          const penalty = penaltyArr.length === 0 ? null : penaltyArr[0];
+          if (!penalty) type = 'noSolve';
+
+          let daySolutions = [] as SolutionType[];
+          if (penalty) {
+            daySolutions = penalty.admitted_solutions.concat(penalty.not_admitted_solutions);
+            if (penalty.coupons.length > 0) type = 'coupon';
+          }
+
+          if (daySolutions.length === 0) type = 'noSolve';
+
+          console.log(type);
+
+          return (
+            <div key={day.getDay()} className="flex gap-20">
+              <DateCard date={day.getDate()} day={day.getDay()} isToday={dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD')} />
+              {type === 'attend' ? (
+                <div className="flex flex-nowrap w-full overflow-x-scroll">
+                  {daySolutions.map(({ id, source_lang, is_correct_answer, score_label, problem }) => (
+                    <ProblemCard
+                      key={id}
+                      type="solution"
+                      bojId={problem.boj_id}
+                      problemId={problem.id}
+                      isSolved
+                      title={problem.name}
+                      stars={problem.stars}
+                      isStar={problem.is_starred}
+                      solLang={source_lang}
+                      isCorrectAnswer={is_correct_answer}
+                      resultLabel={score_label}
+                      solutionId={id}
+                      customStyle=" w-full h-[122px]"
+                    />
+                  ))}
+                </div>
+              ) : (
+                ATTEND_CARD[type as 'holiday' | 'coupon' | 'noSolve']
+              )}
+            </div>
+          );
+        })}
       </div>
     </article>
   );

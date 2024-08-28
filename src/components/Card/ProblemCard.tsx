@@ -16,7 +16,8 @@ interface Props {
   solNum?: number;
   solLang?: LanguageType;
   customStyle?: string;
-  resultLabel?: 'AC' | 'WA' | string;
+  isCorrectAnswer?: boolean;
+  resultLabel: string;
 }
 
 function ProblemCard({
@@ -30,7 +31,8 @@ function ProblemCard({
   isStar = false,
   customStyle,
   solLang = 'c++',
-  resultLabel = '',
+  isCorrectAnswer = false,
+  resultLabel,
 }: Props) {
   const DETAIL_INFO = {
     problem: (
@@ -60,7 +62,7 @@ function ProblemCard({
         <div className="text-black flex gap-2 items-center">
           {bojId}
           {type === 'problem' && isSolved && <Chip type={'AC'} />}
-          {type === 'solution' && <Chip type={['AC', 'WA'].includes(resultLabel) ? (resultLabel as 'AC' | 'WA') : 'ETC'}>{resultLabel}</Chip>}
+          {type === 'solution' && <Chip type={isCorrectAnswer ? 'AC' : 'WA'}>{resultLabel}</Chip>}
         </div>
         <p className="text-24 font-700 truncate group-hover:text-primary">{title}</p>
         <div className="flex gap-1 items-center text-12 text-gray-3">{DETAIL_INFO[type]}</div>

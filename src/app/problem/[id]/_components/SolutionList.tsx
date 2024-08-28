@@ -1,20 +1,17 @@
 'use client';
-
 import Chip from '@/components/Chip';
 import { SolutionType } from '@/types/api/solution';
-import { Fragment, useState } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { Fragment } from 'react';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 
 interface Props {
   solutions: SolutionType[];
 }
 
-const CATEGORY = ['날짜', '풀이 결과', '언어', '사람', '백준 연동 여부', '풀이 보기'];
+const CATEGORY = ['제출일', '채점 결과', '언어', '사람', '백준 연동 여부', '풀이 보기'];
 
 function SolutionList({ solutions }: Props) {
-  const [selected, setSelected] = useState(-1);
-
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-6 gap-1 border-b border-gray-3 pb-1">
@@ -40,9 +37,9 @@ function SolutionList({ solutions }: Props) {
                   클릭하면 풀이 내역으로 이동해요
                 </span>
               </Link>
-              <button className="flex items-center" onClick={() => setSelected(selected > 0 && selected === solution.id ? -1 : solution.id)}>
-                {selected > 0 && selected === solution.id ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
-              </button>
+              <Link href={`/solution/${solution.id}`} className="flex items-center">
+                <ChevronRightIcon boxSize={6} />
+              </Link>
             </div>
           </Fragment>
         ))}

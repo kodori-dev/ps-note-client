@@ -1,10 +1,10 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { GetProblemsRes } from '@/types/api/problem';
-import { PostSolReq, PostSolRes } from '@/types/api/solution';
+import { PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
 import { GetStarsRes, PostStarReq } from '@/types/api/star';
 
-type GetType = {
+export type GetType = {
   '/api/me': {
     req: null;
     res: PostSignUpRes;
@@ -52,6 +52,10 @@ type GetType = {
       problem_id?: number;
     };
   };
+  [key: `/api/solutions/${string}`]: {
+    req: null;
+    res: SolutionType;
+  };
 };
 interface PostType {
   '/api/auth/login': {
@@ -87,7 +91,7 @@ interface BodyType {
   DELETE: DeleteType;
 }
 type methodType = keyof BodyType;
-type BodyInterfaceType<V> = V extends { res: any; req: any; query?: any } ? V : never;
+export type BodyInterfaceType<V> = V extends { res: any; req: any; query?: any } ? V : never;
 
 export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   method: M,

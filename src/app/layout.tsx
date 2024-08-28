@@ -24,7 +24,7 @@ export default function RootLayout({
         <ChakraProvider disableGlobalStyle>
           <ReactQueryProvider>
             <AuthProvider>
-              <div className="w-[1024px] mx-auto px-6">
+              <div className="w-[1024px] mx-auto px-6 mb-24">
                 <Header />
                 {children}
               </div>

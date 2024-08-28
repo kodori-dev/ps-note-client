@@ -1,13 +1,14 @@
-import { SOLUTIONS } from '@/constants/mockup';
 import ProblemSection from './_components/ProblemSection';
 import InfoSection from './_components/InfoSection';
 import { SolutionType } from '@/types/api/solution';
 import BodySection from './_components/BodySection';
+import { getServerData } from '@/utils/getServerData';
 
-function Solution({ params: { id } }: { params: { id: string } }) {
-  const data = SOLUTIONS[1] as SolutionType;
+async function Solution({ params: { id } }: { params: { id: string } }) {
+  const data = (await getServerData(`/api/solutions/${id}`)) as SolutionType;
+
   return (
-    <main className="flex flex-col gap-8">
+    <main className="flex flex-col gap-9">
       <ProblemSection
         problemId={data.problem.id}
         title={data.problem.name}

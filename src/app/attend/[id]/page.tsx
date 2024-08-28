@@ -4,6 +4,9 @@ import WeekSection from './_component/WeekSection';
 import { TODAY_PENALTY } from '@/constants/mockup';
 import { GetPenaltiesRes, PenaltyType } from '@/types/api/penalty';
 import AllTodaySection from './_component/AllTodaySection';
+import RandomSection from './_component/RandomSection';
+
+const ALL_BOJ_PROBLEM = 31200;
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
   /**
@@ -31,7 +34,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
         <h1 className="text-48">
           <span className="font-700">{todayMemberData.member.nickname}</span> 님의 출석 현황
         </h1>
-        <div className="flex gap-8">
+        <section className="flex gap-8">
           <AllTodaySection
             today={todayMemberData.day}
             all={todayPenaltyData.length}
@@ -39,8 +42,11 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
             attend={todayMemberData.coupons.length > 0 ? 'coupon' : todayMemberData.is_penalty ? 'notYet' : 'already'}
             nickname={todayMemberData.member.nickname}
           />
-          <TodaySection data={todayMemberData.admitted_solutions.concat(todayMemberData.not_admitted_solutions)} />
-        </div>
+          <div className="flex flex-col justify-between">
+            <TodaySection data={todayMemberData.admitted_solutions.concat(todayMemberData.not_admitted_solutions)} />
+            <RandomSection randomNum={12345 % ALL_BOJ_PROBLEM} />
+          </div>
+        </section>
       </div>
       {/* <WeekSection /> */}
     </>

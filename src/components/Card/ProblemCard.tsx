@@ -8,6 +8,7 @@ import { LanguageType } from '@/types/api/solution';
 interface Props {
   type?: 'problem' | 'solution';
   problemId: number;
+  solutionId?: number;
   bojId: string;
   title: string;
   isSolved: boolean;
@@ -33,6 +34,7 @@ function ProblemCard({
   solLang = 'c++',
   isCorrectAnswer = false,
   resultLabel,
+  solutionId,
 }: Props) {
   const DETAIL_INFO = {
     problem: (
@@ -56,7 +58,7 @@ function ProblemCard({
         customStyle
       }
     >
-      <Link href={`/problem/${problemId}`} className="absolute inset-0 z-menu" />
+      <Link href={type === 'problem' ? `/problem/${problemId}` : `/solution/${solutionId}`} className="absolute inset-0 z-menu" />
       <StarButton problemId={problemId} isStar={isStar} stars={stars} isSolve={isSolved} />
       <div className="flex flex-col gap-2">
         <div className="text-black flex gap-2 items-center">

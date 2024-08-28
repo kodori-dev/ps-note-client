@@ -17,7 +17,7 @@ interface Props {
   solLang?: LanguageType;
   customStyle?: string;
   isCorrectAnswer?: boolean;
-  resultLabel: string;
+  resultLabel?: string;
 }
 
 function ProblemCard({

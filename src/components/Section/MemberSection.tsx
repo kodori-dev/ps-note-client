@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { findThisWeek } from '@/utils/findThisWeek';
 import dayjs from 'dayjs';
 import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
+import { GetPenaltiesRes } from '@/types/api/penalty';
 
 async function MemberSection() {
   const cookie = cookies();
@@ -22,11 +23,7 @@ async function MemberSection() {
       return null;
     }
   };
-
   const members = (await getMembers()) as GetMembersRes | null;
-
-  const getTodayProblem = async () => {};
-
   const getPenalty = async (member: number) => {
     const res = await fetch(
       `http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/penalties?start_date=${dayjs(mon).format('YYYY-MM-DD')}&end_date=${dayjs(fri).format(
@@ -38,20 +35,38 @@ async function MemberSection() {
       }
     );
     if (res.ok) {
-      const penaltyArr = await res.json();
+      const penaltyArr = (await res.json()) as GetPenaltiesRes;
       const { penalty, solveNum } = calcSimplePenalty(penaltyArr);
-      return { penalty, solveNum };
+      return { penalty, solveNum, penaltyArr };
     }
-    return { penalty: -1, solveNum: 0 };
+    return { penalty: -1, solveNum: 0, penaltyArr: null };
   };
 
   return (
     <>
       {members ? (
         <div className="flex gap-7 flex-wrap">
-          {members.map(async ({ id, nickname, boj_id }) => {
-            const { penalty, solveNum } = await getPenalty(id);
-            return <MemberCard key={id} id={id} name={nickname} bojId={boj_id} fine={penalty} weekSolved={solveNum} />;
+          {members.map(async ({ id, nickname, boj_id, is_active }) => {
+            const { penalty, solveNum, penaltyArr } = await getPenalty(id);
+            if (!penaltyArr) return <div>오류가 발생했습니다.</div>;
+            const today = new Date();
+            let todayPenalty = null;
+            for (const item of penaltyArr) {
+              if (item.day === dayjs(today).format('YYYY-MM-DD')) todayPenalty = item;
+            }
+            return (
+              <MemberCard
+                key={id}
+                id={id}
+                name={nickname}
+                bojId={boj_id}
+                fine={penalty}
+                weekSolved={solveNum}
+                isActive={is_active}
+                isCoupon={todayPenalty ? todayPenalty?.coupons.length > 0 : false}
+                todaySolve={todayPenalty?.admitted_solutions}
+              />
+            );
           })}
         </div>
       ) : (

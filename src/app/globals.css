@@ -25,3 +25,12 @@ body {
 .scroll-hidden::-webkit-scrollbar {
   display: none;
 }
+
+.up-card:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+  -ms-transform: translateY(-5px);
+  box-shadow: 4px 12px 20px 6px rgba(0, 0, 0, 0.14);
+}

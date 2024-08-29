@@ -22,6 +22,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
         isVerified={data.is_boj_verified}
         solutionId={data.boj_solution_id}
         submittedAt={data.submitted_at}
+        createdAt={data.created_at}
       />
       <BodySection language={data.source_lang} code={data.source_code} comment={data.comment} />
     </main>

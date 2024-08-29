@@ -1,19 +1,21 @@
 import { LanguageType } from '@/types/api/solution';
+import { CircularProgress, Spinner } from '@chakra-ui/react';
 import Link from 'next/link';
 
 interface Props {
   nickname: string;
   sourceLang: LanguageType;
-  solutionId: string;
-  isVerified: boolean;
+  solutionId: string | null;
+  isVerified: boolean | null;
   submittedAt: string;
+  createdAt: string;
 }
 
-function InfoSection({ nickname, sourceLang, solutionId, isVerified, submittedAt }: Props) {
+function InfoSection({ nickname, sourceLang, solutionId, isVerified, submittedAt, createdAt }: Props) {
   const SOLUTION_INFO_LIST = [
     { icon: null, label: '사람', value: nickname, type: 'string' },
     { icon: null, label: '풀이 언어', value: sourceLang, type: 'string' },
-    { icon: null, label: 'BOJ 제출 URL', value: `https://www.acmicpc.net/source/${solutionId}`, type: 'link' },
+    { icon: null, label: 'BOJ 제출 URL', value: solutionId === null ? '/' : `https://www.acmicpc.net/source/${solutionId}`, type: 'link' },
     { icon: null, label: 'BOJ 연동 여부', value: isVerified, type: 'checkbox' },
     { icon: null, label: '제출일', value: submittedAt, type: 'string' },
   ];
@@ -39,7 +41,7 @@ function InfoSection({ nickname, sourceLang, solutionId, isVerified, submittedAt
         <li key={label} className="flex gap-9 items-center">
           {icon}
           <p className="w-[102px] text-gray-3">{label}</p>
-          {childrenForType(type, value)}
+          {label.slice(0, 3) === 'BOJ' && isVerified === null ? <Spinner color="blue.200" size="md" thickness="3px" /> : childrenForType(type, value)}
         </li>
       ))}
     </ul>

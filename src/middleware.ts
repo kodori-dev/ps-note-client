@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 export function middleware(req: NextRequest) {
   const isLogin = req.cookies.has('sessionid');
 
-  if (!isLogin) NextResponse.redirect(new URL('/login', req.url));
+  if (!isLogin) return NextResponse.redirect(new URL('/login', req.url));
 
   const path = req.nextUrl.pathname;
   if (path === '/search') {

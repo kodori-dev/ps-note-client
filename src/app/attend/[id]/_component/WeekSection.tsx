@@ -14,6 +14,7 @@ import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
 import { findThisWeek } from '@/utils/findThisWeek';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -122,15 +123,13 @@ function WeekSection({ holidayData, memberId }: Props) {
             }
             const penaltyArr = data?.penalties.filter(({ day: dataDay }) => dataDay == dayjs(day).format('YYYY-MM-DD'));
             const penalty = penaltyArr.length === 0 ? null : penaltyArr[0];
-            if (!penalty) type = 'noSolve';
+            if (!penalty || penalty.is_penalty) type = 'noSolve';
 
             let daySolutions = [] as SolutionType[];
             if (penalty) {
               daySolutions = penalty.admitted_solutions.concat(penalty.not_admitted_solutions);
               if (penalty.coupons.length > 0) type = 'coupon';
             }
-
-            if (daySolutions.length === 0) type = 'noSolve';
 
             return (
               <div key={day.getDay()} className="flex gap-20">
@@ -148,7 +147,7 @@ function WeekSection({ holidayData, memberId }: Props) {
                         type="solution"
                         bojId={problem.boj_id}
                         problemId={problem.id}
-                        isSolved
+                        isSolved={problem.is_solved}
                         title={problem.name}
                         stars={problem.stars}
                         isStar={problem.is_starred}
@@ -160,8 +159,13 @@ function WeekSection({ holidayData, memberId }: Props) {
                     ))}
                   </div>
                 ) : (
-                  <p className="h-[177px] w-full flex items-center justify-center rounded-sm border border-gray-4 bg-white/30">
+                  <p className="h-[177px] w-full flex flex-col gap-2 items-center justify-center rounded-sm border border-gray-4 bg-white/30">
                     {ATTEND_CARD[type as 'holiday' | 'coupon' | 'noSolve']}
+                    {dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD') && type === 'noSolve' && (
+                      <Link href={'/post'} className="text-12 text-primary border-b border-primary">
+                        지금 바로 체크인하기
+                      </Link>
+                    )}
                   </p>
                 )}
               </div>

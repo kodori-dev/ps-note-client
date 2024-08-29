@@ -14,7 +14,8 @@ const ProgressBar = ({ sols }: Props) => {
   const style = PROGRESS_SIZE[sols] + ' h-4 rounded-full bg-primary';
 
   return (
-    <div className="h-4 w-full rounded-full bg-gray-5">
+    <div className="relative h-4 w-full rounded-full bg-gray-5">
+      <p className={['absolute -top-5 text-14 text-primary text-end', PROGRESS_SIZE[sols]].join(' ')}>{sols}</p>
       <div className={style} />
     </div>
   );

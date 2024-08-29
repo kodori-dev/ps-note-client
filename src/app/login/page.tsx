@@ -5,6 +5,7 @@ import { LOGIN_INPUT_LIST, PASSWORD_TYPE_LIST } from '@/constants/authInput';
 import { FAIL_LOGIN_ERR_CODE } from '@/constants/errorCode';
 import { FAIL_LOGIN_ERR } from '@/constants/errorMsg';
 import { api } from '@/utils/api';
+import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -17,6 +18,7 @@ function Login() {
     handleSubmit,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const handleLoginSubmit = async () => {
     setIsLoading(true);
@@ -24,8 +26,20 @@ function Login() {
     try {
       const res = await api('POST', '/api/auth/login', { username: user_id, password });
       if (typeof res === 'string') throw Error(res);
+      const member = await api('GET', '/api/me');
+      toast({
+        title: `${member.nickname}님 환영해요!`,
+        description: '문제 풀고 부자되세요😎',
+        status: 'success',
+      });
       window.location.href = '/';
     } catch (error: any) {
+      toast({
+        title: '로그인 실패!',
+        description: '다시 시도해 주세요😥',
+        status: 'error',
+        isClosable: true,
+      });
       if (error.message === FAIL_LOGIN_ERR_CODE) {
         setError('user_id', { message: FAIL_LOGIN_ERR });
         setError('password', { message: FAIL_LOGIN_ERR });

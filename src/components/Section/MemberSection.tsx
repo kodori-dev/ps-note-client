@@ -48,7 +48,7 @@ async function MemberSection() {
         <div className="flex gap-7 flex-wrap">
           {members.map(async ({ id, nickname, boj_id, is_active }) => {
             const { penalty, solveNum, penaltyArr } = await getPenalty(id);
-            if (!penaltyArr) return <div>오류가 발생했습니다.</div>;
+            if (!penaltyArr) return <div key={id}>오류가 발생했습니다.</div>;
             let today = new Date();
             today.setHours(today.getHours() - 6);
 

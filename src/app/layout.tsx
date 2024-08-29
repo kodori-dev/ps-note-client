@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <ChakraProvider disableGlobalStyle>
+        <ChakraProvider disableGlobalStyle toastOptions={{ defaultOptions: { position: 'top' } }}>
           <ReactQueryProvider>
             <AuthProvider>
               <div className="w-[1024px] mx-auto px-6 mb-24">

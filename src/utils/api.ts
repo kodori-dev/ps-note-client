@@ -1,5 +1,6 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { CouponType, GetCouponsRes, PatchCouponReq } from '@/types/api/coupon';
 import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
 import { GetProblemsRes } from '@/types/api/problem';
@@ -75,6 +76,15 @@ export type GetType = {
       year: number;
     };
   };
+  '/api/coupons': {
+    req: null;
+    res: GetCouponsRes;
+    query: {
+      date?: string;
+      member_id?: number;
+      used_at?: boolean;
+    };
+  };
 };
 interface PostType {
   '/api/auth/login': {
@@ -95,6 +105,13 @@ interface PostType {
   };
 }
 
+interface PatchType {
+  [key: `/api/coupons/${string}`]: {
+    req: PatchCouponReq;
+    res: CouponType;
+  };
+}
+
 interface DeleteType {
   [key: `/api/problem-stars/${string}`]: {
     req: null;
@@ -107,6 +124,7 @@ const RES_BODY_NULL = ['/api/auth/login'];
 interface BodyType {
   GET: GetType;
   POST: PostType;
+  PATCH: PatchType;
   DELETE: DeleteType;
 }
 type methodType = keyof BodyType;

@@ -140,7 +140,7 @@ function WeekSection({ holidayData, memberId }: Props) {
                   isToday={dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD')}
                 />
                 {type === 'attend' ? (
-                  <div className="flex flex-nowrap w-full overflow-x-scroll scroll-hidden">
+                  <div className="flex flex-nowrap gap-4 w-full overflow-x-scroll scroll-hidden">
                     {daySolutions.map(({ id, source_lang, is_correct_answer, score_label, problem }) => (
                       <ProblemCard
                         key={id}

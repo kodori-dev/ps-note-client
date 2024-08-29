@@ -4,6 +4,8 @@ import Header from '@/components/Header';
 import AuthProvider from '@/providers/AuthProvider';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Suspense } from 'react';
+import ScreenLoading from '@/components/Loading/ScreenLoading';
 
 export const metadata: Metadata = {
   title: '$$합법 PS 놀이터$$',
@@ -25,8 +27,10 @@ export default function RootLayout({
           <ReactQueryProvider>
             <AuthProvider>
               <div className="w-[1024px] mx-auto px-6 mb-24">
-                <Header />
-                {children}
+                <Suspense fallback={<ScreenLoading />}>
+                  <Header />
+                  {children}
+                </Suspense>
               </div>
             </AuthProvider>
           </ReactQueryProvider>

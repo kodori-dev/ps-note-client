@@ -5,20 +5,17 @@ import { HOLIDAY, TODAY_PENALTY } from '@/constants/mockup';
 import { GetPenaltiesRes, PenaltyType } from '@/types/api/penalty';
 import AllTodaySection from './_component/AllTodaySection';
 import RandomSection from './_component/RandomSection';
+import { UserType } from '@/types/api/auth';
+import { GetHolidayRes } from '@/types/api/holiday';
 
 const ALL_BOJ_PROBLEM = 31200;
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
-  /**
-   * 필요 데이터
-   * - 전 멤버 & 오늘 페널티 (server)
-   * - 특정 멤버 & 오늘 페널티 (server)
-   * - 특정 멤버 & 선택 주 페널티 (client)
-   */
-
-  // const todayPenalty = await getServerData('/api/penalties', {})
-  const todayMemberData = TODAY_PENALTY[10] as PenaltyType; //특정 멤버 & 오늘
-  const todayPenaltyData = TODAY_PENALTY as GetPenaltiesRes; //전 멤버 & 오늘
+  const today = new Date();
+  const member = (await getServerData(`/api/members/${id}`)) as UserType;
+  const holidays = (await getServerData('/api/holidays', { year: today.getFullYear() })) as GetHolidayRes;
+  // const todayMemberData = TODAY_PENALTY[10] as PenaltyType; //특정 멤버 & 오늘
+  // const todayPenaltyData = TODAY_PENALTY as GetPenaltiesRes; //전 멤버 & 오늘
   const calcPassMemCnt = (data: PenaltyType[]) => {
     let attendCnt = 0;
     for (const mem of data) {
@@ -32,9 +29,9 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
     <>
       <div className="flex flex-col gap-9">
         <h1 className="text-48">
-          <span className="font-700">{todayMemberData.member.nickname}</span> 님의 출석 현황
+          <span className="font-700">{member.nickname}</span> 님의 출석 현황
         </h1>
-        <section className="flex gap-8">
+        {/* <section className="flex gap-8">
           <AllTodaySection
             today={todayMemberData.day}
             all={todayPenaltyData.length}
@@ -46,9 +43,9 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
             <TodaySection data={todayMemberData.admitted_solutions.concat(todayMemberData.not_admitted_solutions)} />
             <RandomSection randomNum={12345 % ALL_BOJ_PROBLEM} />
           </div>
-        </section>
+        </section> */}
         <section>
-          <WeekSection holidayData={HOLIDAY} />
+          <WeekSection holidayData={holidays} memberId={Number(id)} />
         </section>
       </div>
     </>

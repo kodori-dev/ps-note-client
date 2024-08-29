@@ -3,6 +3,7 @@ interface Props {
   date: number;
   isHoliday?: boolean;
   isToday?: boolean;
+  holidayName?: string;
 }
 
 const DAY_STRING = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -13,11 +14,12 @@ const DATE_STYLE = {
   defaultDay: 'text-gray-3',
 };
 
-function DateCard({ day, date, isHoliday = false, isToday = false }: Props) {
+function DateCard({ day, date, isHoliday = false, isToday = false, holidayName }: Props) {
   return (
-    <div className="w-[172px] h-[100px] flex-shrink flex gap-4 items-center rounded-md hover:shadow-lg px-4 py-7">
+    <div className="relative w-[172px] h-[100px] shrink-0 flex gap-4 items-center rounded-md px-4 py-7">
       <p className={['text-20 font-700', DATE_STYLE[isHoliday ? 'holiday' : isToday ? 'today' : 'default']].join(' ')}>{date}</p>
       <p className={['text-40 font-700 text-center', DATE_STYLE[isHoliday ? 'holiday' : isToday ? 'today' : 'defaultDay']].join(' ')}>{DAY_STRING[day]}</p>
+      {(isHoliday || isToday) && <p className="absolute text-gray-3 left-4 bottom-2 text-center">{isToday ? 'today✨' : holidayName}</p>}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
 import { GetProblemsRes } from '@/types/api/problem';
 import { PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
@@ -65,6 +66,13 @@ export type GetType = {
       member_id?: number;
       order_by?: '-day' | '-id' | '-member' | 'day' | 'id' | 'member';
       start_date: string;
+    };
+  };
+  '/api/holidays': {
+    req: null;
+    res: GetHolidayRes;
+    query: {
+      year: number;
     };
   };
 };

@@ -49,7 +49,9 @@ async function MemberSection() {
           {members.map(async ({ id, nickname, boj_id, is_active }) => {
             const { penalty, solveNum, penaltyArr } = await getPenalty(id);
             if (!penaltyArr) return <div>오류가 발생했습니다.</div>;
-            const today = new Date();
+            let today = new Date();
+            today.setHours(today.getHours() - 6);
+
             let todayPenalty = null;
             for (const item of penaltyArr) {
               if (item.day === dayjs(today).format('YYYY-MM-DD')) todayPenalty = item;

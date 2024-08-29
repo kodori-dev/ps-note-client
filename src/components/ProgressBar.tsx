@@ -1,4 +1,5 @@
 const PROGRESS_SIZE = {
+  0: 'w-0',
   1: 'w-1/5',
   2: 'w-2/5',
   3: 'w-3/5',
@@ -6,7 +7,7 @@ const PROGRESS_SIZE = {
   5: 'w-full',
 };
 interface Props {
-  sols: '1' | '2' | '3' | '4' | '5';
+  sols: '0' | '1' | '2' | '3' | '4' | '5';
 }
 
 const ProgressBar = ({ sols }: Props) => {

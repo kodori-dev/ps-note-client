@@ -21,7 +21,7 @@ function BodySection({ comment, code, language }: Props) {
           <h2 className="text-primary text-36 font-700">이렇게 풀었어요</h2>
         </div>
         <div data-color-mode="light">
-          <MDEditor.Markdown source={comment} style={{ whiteSpace: 'pre-wrap' }} />
+          <MDEditor.Markdown source={comment} />
         </div>
       </article>
       <article>

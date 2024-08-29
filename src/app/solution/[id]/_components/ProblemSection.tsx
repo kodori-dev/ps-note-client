@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import LinkIcon from '../../../../../public/icon-link-arrow.svg';
 import Chip from '@/components/Chip';
 
 interface Props {
@@ -18,8 +17,7 @@ function ProblemSection({ number, title, problemId, isCorrectAnswer, answerLabel
         <Chip type={isCorrectAnswer ? 'AC' : 'WA'}>{answerLabel}</Chip>
       </div>
       <Link href={`/problem/${problemId}`} className="group relative w-fit hover:text-primary">
-        <h1 className="text-40 font-700 border-b border-gray-3">{title}</h1>
-        <LinkIcon fill="#ACACAC" className="absolute top-3 -right-3" />
+        <h1 className="text-40 font-700">{title}</h1>
       </Link>
     </section>
   );

@@ -1,5 +1,7 @@
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetHolidayRes } from '@/types/api/holiday';
+import { GetPenaltiesRes } from '@/types/api/penalty';
 import { GetProblemsRes } from '@/types/api/problem';
 import { PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
 import { GetStarsRes, PostStarReq } from '@/types/api/star';
@@ -55,6 +57,23 @@ export type GetType = {
   [key: `/api/solutions/${string}`]: {
     req: null;
     res: SolutionType;
+  };
+  '/api/penalties': {
+    req: null;
+    res: GetPenaltiesRes;
+    query: {
+      end_date: string;
+      member_id?: number;
+      order_by?: '-day' | '-id' | '-member' | 'day' | 'id' | 'member';
+      start_date: string;
+    };
+  };
+  '/api/holidays': {
+    req: null;
+    res: GetHolidayRes;
+    query: {
+      year: number;
+    };
   };
 };
 interface PostType {

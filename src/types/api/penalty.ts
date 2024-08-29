@@ -2,7 +2,7 @@ import { UserType } from './auth';
 import { CouponType } from './coupon';
 import { SolutionType } from './solution';
 
-export interface GetPenaltiesRes {
+export interface PenaltyType {
   day: string;
   member: UserType;
   amount: string;
@@ -12,3 +12,5 @@ export interface GetPenaltiesRes {
   is_penalty: boolean;
   manually_edited: boolean;
 }
+
+export type GetPenaltiesRes = PenaltyType[];

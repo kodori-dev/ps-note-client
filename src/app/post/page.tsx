@@ -40,7 +40,7 @@ function Post() {
         member: user?.id,
         problem: Number(pid),
         comment,
-        source_lang,
+        source_lang: source_lang.toLowerCase(),
         source_code,
         submitted_at: date.toISOString(),
         star: isStar,

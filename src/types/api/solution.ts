@@ -15,8 +15,8 @@ export interface SolutionType {
   imported_from_notion: boolean;
   is_fully_parsed: boolean;
   notion_page_id: string;
-  is_boj_verified: boolean;
-  boj_solution_id: string;
+  is_boj_verified: boolean | null;
+  boj_solution_id: string | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;

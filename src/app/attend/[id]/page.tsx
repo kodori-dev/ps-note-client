@@ -7,6 +7,7 @@ import AllTodaySection from './_component/AllTodaySection';
 import RandomSection from './_component/RandomSection';
 import { UserType } from '@/types/api/auth';
 import { GetHolidayRes } from '@/types/api/holiday';
+import MetaTag from '@/components/MetaTag';
 
 const ALL_BOJ_PROBLEM = 31200;
 
@@ -27,6 +28,10 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
 
   return (
     <>
+      <MetaTag
+        title={`${member.nickname} 출석 현황`}
+        description={`${member.nickname}님의 출석 세부 현황을 확인할 수 있는 페이지입니다. 일주일 간 등록한 솔루션 목록을 조회할 수 있어요.`}
+      />
       <div className="flex flex-col gap-9">
         <h1 className="text-48">
           <span className="font-700">{member.nickname}</span> 님의 출석 현황

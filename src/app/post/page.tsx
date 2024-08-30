@@ -11,6 +11,7 @@ import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { PostSolReq } from '@/types/api/solution';
 import dayjs from 'dayjs';
+import MetaTag from '@/components/MetaTag';
 
 const DEFAULT_INPUT = {
   boj_id: '',
@@ -59,23 +60,26 @@ function Post() {
   };
 
   return (
-    <FormProvider {...methods}>
-      <form className="flex flex-col gap-16 mb-24" onSubmit={handleSubmit(handleCheckIn)}>
-        <div className="flex flex-col gap-1">
-          <h1 className="text-48 font-700 text-primary">{`Today's Check-In✏️`}</h1>
-          <p className="text-12 text-gray-3">* 출석 날짜는 BOJ 기준(06시 초기화)에 맞춰 자동 반영됩니다.</p>
-        </div>
-        <ProblemSection />
-        <SolutionSection />
-        <CommentSection />
-        <div className="flex justify-end">
-          <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
-            Save
-          </Button>
-        </div>
-      </form>
-      {isLoading && <ScreenLoading />}
-    </FormProvider>
+    <>
+      <MetaTag title="체크인" description="오늘 푼 문제의 솔루션을 등록하세요. 아이디어 섹션을 통해 자유롭게 문제 풀이 방법을 기록해 보세요." />
+      <FormProvider {...methods}>
+        <form className="flex flex-col gap-16 mb-24" onSubmit={handleSubmit(handleCheckIn)}>
+          <div className="flex flex-col gap-1">
+            <h1 className="text-48 font-700 text-primary">{`Today's Check-In✏️`}</h1>
+            <p className="text-12 text-gray-3">* 출석 날짜는 BOJ 기준(06시 초기화)에 맞춰 자동 반영됩니다.</p>
+          </div>
+          <ProblemSection />
+          <SolutionSection />
+          <CommentSection />
+          <div className="flex justify-end">
+            <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
+              Save
+            </Button>
+          </div>
+        </form>
+        {isLoading && <ScreenLoading />}
+      </FormProvider>
+    </>
   );
 }
 

@@ -7,9 +7,14 @@ import { ChakraProvider } from '@chakra-ui/react';
 
 export const metadata: Metadata = {
   title: '$$합법 PS 놀이터$$',
-  description: '주 4회 이상 PS 스터디',
+  description: '"주 4회 PS 스터디를 했을 뿐인데 부자가 되어 있는? 사이트"',
   icons: {
     icon: '/logo.svg',
+  },
+  openGraph: {
+    title: '$$합법 PS 놀이터$$',
+    description: '"주 4회 PS 스터디를 했을 뿐인데 부자가 되어 있는? 사이트"',
+    images: '/thumbnail.png',
   },
 };
 

@@ -82,7 +82,7 @@ export type GetType = {
     query: {
       date?: string;
       member_id?: number;
-      used_at?: boolean;
+      usable?: boolean;
     };
   };
 };

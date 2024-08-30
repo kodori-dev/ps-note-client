@@ -12,6 +12,7 @@ interface Props {
   fine: number;
   isActive?: boolean;
   isCoupon?: boolean;
+  isRest?: boolean;
 }
 
 const PROGRESS_COLOR = ['bg-progress-blue', 'bg-progress-pink', 'bg-progress-yellow', 'bg-progress-purple', 'bg-progress-green'];
@@ -27,13 +28,13 @@ const PROGRESS_SIZE = {
  * @param weekSolved 이번 주 등록한 solution 수
  * @param todaySolve 오늘 등록한 solution의 title || 면제 티켓 || noSolve
  */
-function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActive = true, isCoupon = false }: Props) {
+function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActive = true, isCoupon = false, isRest = false }: Props) {
   const progressStyle = [PROGRESS_COLOR[id % 5], weekSolved >= 5 ? `w-full` : PROGRESS_SIZE[weekSolved as 0 | 1 | 2 | 3 | 4]].join(' ');
 
   return (
     <div
       className={[
-        'up-card hover:cursor-pointer relative overflow-hidden w-[276px] h-[276px] shrink-0 bg-white border border-gray-4 rounded-lg flex flex-col justify-between pt-6 px-6',
+        'up-card hover:cursor-pointer relative overflow-hidden w-[298px] h-[298px] shrink-0 bg-white border border-gray-4 rounded-lg flex flex-col justify-between pt-6 px-6',
         isActive ? '' : 'opacity-20',
       ].join(' ')}
       tabIndex={0}
@@ -44,14 +45,15 @@ function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActi
         <Link href={`https://www.acmicpc.net/user/${bojId}`} className="text-gray-3 hover:border-b hover:text-gray-1 border-gray-1 w-fit">
           @{bojId}
         </Link>
+        {isRest && <p className="text-12 text-gray-1 mt-1 bg-black/10 rounded-md px-2 w-fit">잠시 쉬어 가는 중..💤</p>}
       </div>
-      <div className="absolute left-0 bottom-0 w-[276px] h-[76px] bg-gray-100">
-        <div className={'absolute left-0 bottom-0 z-star h-[76px] ' + progressStyle}></div>
+      <div className="absolute left-0 bottom-0 w-[298px] h-[88px] bg-gray-100">
+        <div className={'absolute left-0 bottom-0 z-star h-[88px] ' + progressStyle}></div>
         <div className="absolute top-3 left-2 text-14 z-menu flex gap-[2px] items-center">
           {todaySolve.length > 0 ? (
             <>
               <Link
-                className="font-700 hover:border-b border-b-black max-w-[180px] truncate inline-block"
+                className="font-700 hover:border-b border-b-black max-w-[190px] truncate inline-block"
                 href={`/problem/${todaySolve[0].problem.id}`}
                 onClick={(e) => e.stopPropagation()}
               >

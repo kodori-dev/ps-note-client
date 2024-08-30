@@ -25,7 +25,7 @@ function Header() {
       let today = new Date();
       today.setHours(today.getHours() - 6);
       if (!member) return false;
-      const res = await api('GET', '/api/coupons', null, { date: dayjs(today).format('YYYY-MM-DD'), member_id: member.id, used_at: true });
+      const res = await api('GET', '/api/coupons', null, { date: dayjs(today).format('YYYY-MM-DD'), member_id: member.id, usable: true });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },

@@ -10,8 +10,11 @@ import { useEffect, useState } from 'react';
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import ScreenLoading from './Loading/ScreenLoading';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
 
 function Header() {
+  const [isDropdown, setIsDropDown] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { data: member } = useGetUserInfo();
@@ -58,8 +61,22 @@ function Header() {
     if (member) refetch();
   }, [member]);
 
+  const logout = () => {
+    var today = new Date();
+    today.setTime(today.getTime() - 1 * 24 * 60 * 60 * 1000);
+
+    document.cookie = 'csrftoken=; path=/; expires=' + today.toUTCString() + ';';
+
+    window.location.href = '/login';
+  };
+
+  const DROPDOWN_BTN = [
+    { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${member?.id}`) },
+    { type: '로그아웃', onClick: logout },
+  ];
+
   return (
-    <header className="flex items-center justify-between h-[72px]">
+    <header className="relative flex items-center justify-between h-[72px]">
       {isLoading && <ScreenLoading />}
       <Link href="/" className="text-14">
         $$합법 PS 놀이터$$
@@ -74,9 +91,9 @@ function Header() {
           <Link href={'/post'}>
             <button className="hover:text-gray-2">체크인</button>
           </Link>
-          <p>
-            <span className="font-700">{member.nickname}</span> 님
-          </p>
+          <button onClick={() => setIsDropDown((prev) => !prev)}>
+            <span className="font-700">{member.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
+          </button>
         </div>
       ) : (
         <Link href="/login">
@@ -84,6 +101,23 @@ function Header() {
             로그인
           </Button>
         </Link>
+      )}
+      {isDropdown && (
+        <div className="absolute z-modal -bottom-[84px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
+          {DROPDOWN_BTN.map(({ onClick, type }) => (
+            <button
+              key={type}
+              disabled={type == '로그아웃'}
+              onClick={() => {
+                onClick();
+                setIsDropDown(false);
+              }}
+              className="enabled:hover:text-primary enabled:hover:bg-primary/10 py-3 px-6 disabled:opacity-20 disabled:cursor-not-allowed"
+            >
+              {type}
+            </button>
+          ))}
+        </div>
       )}
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />

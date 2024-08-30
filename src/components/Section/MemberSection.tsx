@@ -25,8 +25,6 @@ function MemberSection() {
             let today = new Date();
             today.setHours(today.getHours() - 6);
 
-            // console.log(nickname, solveNum);
-
             let todayPenalty = null;
             for (const item of penaltyArr) {
               if (item.day === dayjs(today).format('YYYY-MM-DD')) todayPenalty = item;
@@ -38,7 +36,7 @@ function MemberSection() {
                 name={nickname}
                 bojId={boj_id}
                 fine={penalty}
-                weekSolved={solveNum}
+                weekSolved={solveNum - 2}
                 isActive={is_active}
                 isCoupon={todayPenalty ? todayPenalty?.coupons.length > 0 : false}
                 todaySolve={todayPenalty?.admitted_solutions}

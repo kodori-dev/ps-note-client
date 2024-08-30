@@ -2,6 +2,7 @@
 
 import Input from '@/components/Input';
 import AuthLayout from '@/components/Layout/AuthLayout';
+import MetaTag from '@/components/MetaTag';
 import { PASSWORD_TYPE_LIST, SIGNUP_INPUT_LIST } from '@/constants/authInput';
 import { DUPLICATE_ID_ERR_CODE } from '@/constants/errorCode';
 import { ALREADY_USER_ERR, PASSWORD_NOT_EQUAL_ERR } from '@/constants/errorMsg';
@@ -42,19 +43,22 @@ function Signup() {
   };
 
   return (
-    <AuthLayout title="회원가입" submitFunc={handleSubmit(handleSignupSubmit)} isLoading={isLoading}>
-      {SIGNUP_INPUT_LIST.map(({ label, placeholder, description, id, rules }) => (
-        <Input
-          key={id}
-          type={PASSWORD_TYPE_LIST.includes(id) ? 'password' : 'text'}
-          label={label}
-          placeholder={placeholder}
-          description={description}
-          error={errors[id]}
-          register={register(id, rules)}
-        />
-      ))}
-    </AuthLayout>
+    <>
+      <MetaTag title="회원가입" description="회원가입 후, 모든 기능들을 이용하세요." />
+      <AuthLayout title="회원가입" submitFunc={handleSubmit(handleSignupSubmit)} isLoading={isLoading}>
+        {SIGNUP_INPUT_LIST.map(({ label, placeholder, description, id, rules }) => (
+          <Input
+            key={id}
+            type={PASSWORD_TYPE_LIST.includes(id) ? 'password' : 'text'}
+            label={label}
+            placeholder={placeholder}
+            description={description}
+            error={errors[id]}
+            register={register(id, rules)}
+          />
+        ))}
+      </AuthLayout>
+    </>
   );
 }
 

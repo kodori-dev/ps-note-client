@@ -7,6 +7,7 @@ export interface UserType {
   updated_at: string;
   deleted_at: string | null;
   is_active: boolean;
+  is_off: boolean;
 }
 
 export interface PostSignUpReq {

@@ -13,7 +13,7 @@ function MemberSection() {
     <>
       {members ? (
         <div className="flex gap-7 flex-wrap">
-          {members.map(({ id, nickname, boj_id, is_active }) => {
+          {members.map(({ id, nickname, boj_id, is_active, is_off }) => {
             const penaltyArr = penalty_map[id.toString()];
             const { penalty, solveNum } = calcSimplePenalty(penaltyArr);
             if (!penaltyArr)
@@ -40,6 +40,7 @@ function MemberSection() {
                 isActive={is_active}
                 isCoupon={todayPenalty ? todayPenalty?.coupons.length > 0 : false}
                 todaySolve={todayPenalty?.admitted_solutions}
+                isRest={is_off}
               />
             );
           })}

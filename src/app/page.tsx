@@ -6,7 +6,7 @@ import { getUserInfo } from '@/utils/getUserInfo';
 
 export default async function Home() {
   const meRes = await getUserInfo();
-  const memberId = meRes.id;
+  const memberId = meRes?.id;
 
   let today = new Date();
   today.setHours(today.getHours() - 6);

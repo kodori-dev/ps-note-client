@@ -7,7 +7,7 @@ export const calcSimplePenalty = (penalties: GetPenaltiesRes) => {
   for (let item of penalties) {
     if (item.coupons.length > 0) isUsedCoupon = true;
     penalty += Number(item.amount);
-    if (Number(item.amount) == 0) solveNum++;
+    if (!item.is_penalty) solveNum++;
   }
   return { penalty, solveNum, isUsedCoupon };
 };

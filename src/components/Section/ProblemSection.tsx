@@ -1,43 +1,27 @@
-import dayjs from 'dayjs';
-import { cookies } from 'next/headers';
+'use client';
+
 import HomeLock from '../Lock/HomeLock';
 import ProblemCard from '../Card/ProblemCard';
-import { GetProblemsRes, ProblemType } from '@/types/api/problem';
+import { ProblemType } from '@/types/api/problem';
+import { useHomePageContext } from '@/contexts/HomePageContext';
 
 interface Props {
   type: 'today' | 'recommended';
 }
 
 async function ProblemSection({ type }: Props) {
-  let today = new Date();
-  today.setHours(today.getHours() - 6);
-  const bojDay = dayjs(today).format('YYYY-MM-DD');
-  const cookie = cookies();
+  const { today_problems, current_week_starred_problems } = useHomePageContext();
 
-  const getProblems = async () => {
-    try {
-      const query = type === 'today' ? `submitted_at=${bojDay}` : `order_by=-stars&page_size=10`;
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/problems?${query}`, {
-        headers: { Cookie: cookie.toString() || '' },
-        cache: 'no-store',
-      });
-      if (res.ok) return await res.json();
-      else throw Error();
-    } catch (err) {
-      return null;
-    }
-  };
-
-  const problems = (await getProblems()) as GetProblemsRes | null;
+  const problems = type === 'today' ? today_problems : current_week_starred_problems;
 
   return (
     <>
       {problems ? (
-        problems.count === 0 ? (
+        problems.length === 0 ? (
           <div className="h-[177px] flex items-center justify-center">오늘 풀어진 문제가 없어요😓</div>
         ) : (
           <div className="flex flex-nowrap overflow-x-scroll gap-3 scroll-hidden">
-            {problems.results.map(({ boj_id, id, is_starred, name, stars, is_solved, solutions }: ProblemType) => (
+            {problems.map(({ boj_id, id, is_starred, name, stars, is_solved, solutions }: ProblemType) => (
               <ProblemCard key={id} problemId={id} bojId={boj_id} stars={stars} title={name} isStar={is_starred} isSolved={is_solved} solNum={solutions} />
             ))}
           </div>

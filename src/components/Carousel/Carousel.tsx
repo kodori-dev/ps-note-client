@@ -17,10 +17,10 @@ function Carousel({ children, options }: Props) {
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
 
   return (
-    <section className="embla flex items-center">
+    <section className="embla flex items-center w-full">
       <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-      <div className="embla__viewport mx-1" ref={emblaRef}>
-        <div className="embla__container gap-3">{children}</div>
+      <div className="embla__viewport" ref={emblaRef}>
+        <div className="embla__container gap-2 w-[910px]">{children}</div>
       </div>
       <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
     </section>

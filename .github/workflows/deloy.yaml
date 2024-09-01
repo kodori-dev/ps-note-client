@@ -3,8 +3,7 @@ name: Build, Push, and Deploy to GKE
 on:
   push:
     branches:
-      - develop
-      - feature/eks
+      - main
 
 env:
   DEPLOY_ALERT_CHANNEL: C07J1U691R6

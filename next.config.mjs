@@ -67,4 +67,6 @@ export default withSentryConfig(nextConfig, {
 
     // Hides source maps from generated client bundles
     hideSourceMaps: true,
+
+    authToken: process.env.SENTRY_AUTH_TOKEN,
 });

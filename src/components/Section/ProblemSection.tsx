@@ -5,15 +5,13 @@ import ProblemCard from '../Card/ProblemCard';
 import { ProblemType } from '@/types/api/problem';
 import { useHomePageContext } from '@/contexts/HomePageContext';
 import EmblaCarousel from '../Carousel/Carousel';
+import { useEffect, useState } from 'react';
 
 interface Props {
-  type: 'today' | 'recommended';
+  problems: ProblemType[];
 }
 
-function ProblemSection({ type }: Props) {
-  const { today_problems, current_week_starred_problems } = useHomePageContext();
-  const problems = type === 'today' ? today_problems : current_week_starred_problems;
-
+function ProblemSection({ problems }: Props) {
   return (
     <>
       {problems ? (

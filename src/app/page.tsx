@@ -1,8 +1,11 @@
 import SearchBar from '@/components/Search/SearchBar';
 import dayjs from 'dayjs';
 import { HomePageRes } from '@/types/api/home-page';
-import HomeSection from '@/components/Section/HomeSection';
 import { getUserInfo } from '@/utils/getUserInfo';
+import HomeSectionLayout from '@/components/Layout/HomeSectionLayout';
+import ProblemSection from '@/components/Section/ProblemSection';
+import MemberSection from '@/components/Section/MemberSection';
+import Link from 'next/link';
 
 export default async function Home() {
   const meRes = await getUserInfo();
@@ -26,10 +29,31 @@ export default async function Home() {
 
   const homePage = (await getHomePage()) as HomePageRes;
 
+  if (!homePage) {
+    return (
+      <div className="w-full h-36 flex flex-col gap-4 justify-center items-center">
+        모든 서비스는 로그인 후에 이용할 수 있어요.
+        <Link href="/login" className="text-primary underline">
+          로그인하기
+        </Link>
+      </div>
+    );
+  }
+
+  const SECTION_LIST = [
+    { title: '이런 문제를 추천해요!', children: <ProblemSection problems={homePage.current_week_starred_problems} /> },
+    { title: '오늘은 누가 먼저 놀았을까요?', children: <ProblemSection problems={homePage.today_problems} /> },
+    { title: '놀이의 전당', children: <MemberSection members={homePage.members} penalty_map={homePage.penalty_map} /> },
+  ];
+
   return (
     <div className="my-8 flex flex-col gap-12">
       <SearchBar />
-      <HomeSection homePage={homePage} />
+      {SECTION_LIST.map(({ title, children }) => (
+        <HomeSectionLayout key={title} title={title}>
+          {children}
+        </HomeSectionLayout>
+      ))}
     </div>
   );
 }

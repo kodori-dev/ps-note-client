@@ -4,7 +4,7 @@
  */
 export const findThisWeek = (initialDay?: string) => {
   let today = initialDay ? new Date(initialDay) : new Date();
-  const diffFromMon = 1 - today.getDay();
+  const diffFromMon = today.getDay() - 6;
   const mon = new Date(today.setDate(today.getDate() + diffFromMon));
   const fri = new Date(today.setDate(mon.getDate() + 4));
 

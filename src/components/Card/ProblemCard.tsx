@@ -4,6 +4,8 @@ import Chip from '../Chip';
 import SolutionIcon from '../../../public/icon-card-sol.svg';
 import LanguageIcon from '../../../public/icon-card-lang.svg';
 import { LanguageType } from '@/types/api/solution';
+import LevelChip from '../Chip/LevelChip';
+import { LevelType } from '@/types/api/problem';
 
 interface Props {
   type?: 'problem' | 'solution';
@@ -19,6 +21,7 @@ interface Props {
   customStyle?: string;
   isCorrectAnswer?: boolean;
   resultLabel?: string;
+  level: string;
 }
 
 function ProblemCard({
@@ -27,6 +30,7 @@ function ProblemCard({
   problemId,
   bojId,
   title,
+  level,
   isSolved = false,
   stars,
   isStar = false,
@@ -68,6 +72,7 @@ function ProblemCard({
         </div>
         <p className="text-24 font-700 truncate group-hover:text-primary">{title}</p>
         <div className="flex gap-1 items-center text-12 text-gray-3">{DETAIL_INFO[type]}</div>
+        <LevelChip style="mini" type={level.split('_')[0] as LevelType} step={Number(level.split('_')[1]) as 1 | 2 | 3 | 4 | 5} />
       </div>
       {type === 'problem' && (
         <Link href={`https://www.acmicpc.net/problem/${bojId}`} className="text-12 text-gray-3 text-right hover:text-gray-1 z-10">

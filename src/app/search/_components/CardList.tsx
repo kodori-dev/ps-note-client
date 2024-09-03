@@ -9,7 +9,7 @@ interface Props {
 function CardList({ data }: Props) {
   return (
     <div className="grid grid-cols-3 gap-5">
-      {data.map(({ boj_id, id, is_solved, is_starred, name, stars, solutions }) => (
+      {data.map(({ boj_id, id, is_solved, is_starred, name, stars, solutions, level }) => (
         <ProblemCard
           customStyle=" w-[312px]"
           bojId={boj_id}
@@ -20,6 +20,7 @@ function CardList({ data }: Props) {
           key={id}
           isSolved={is_solved}
           solNum={solutions}
+          level={level}
         />
       ))}
     </div>

@@ -4,6 +4,7 @@ import { LevelType } from '@/types/api/problem';
 interface Props {
   type: LevelType;
   step?: 1 | 2 | 3 | 4 | 5;
+  style?: 'mini' | 'default';
 }
 
 const STYLE = {
@@ -16,9 +17,9 @@ const STYLE = {
   ruby: 'bg-chip-ruby/25 text-chip-ruby',
 };
 
-function LevelChip({ type, step }: Props) {
+function LevelChip({ type, step, style = 'default' }: Props) {
   return (
-    <span className={'py-1 px-2 rounded-sm ' + STYLE[type]}>
+    <span className={'py-1 px-2 rounded-sm ' + STYLE[type] + (style === 'mini' ? ' text-12 py-0 w-fit' : '')}>
       {type.charAt(0).toUpperCase()}
       {type.slice(1)} {step && STEP[step]}
     </span>

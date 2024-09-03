@@ -20,8 +20,18 @@ function ProblemSection({ problems }: Props) {
         ) : (
           <EmblaCarousel options={{ slidesToScroll: 'auto' }}>
             <>
-              {problems.map(({ boj_id, id, is_starred, name, stars, is_solved, solutions }: ProblemType) => (
-                <ProblemCard key={id} problemId={id} bojId={boj_id} stars={stars} title={name} isStar={is_starred} isSolved={is_solved} solNum={solutions} />
+              {problems.map(({ boj_id, id, is_starred, level, name, stars, is_solved, solutions }: ProblemType) => (
+                <ProblemCard
+                  key={id}
+                  level={level}
+                  problemId={id}
+                  bojId={boj_id}
+                  stars={stars}
+                  title={name}
+                  isStar={is_starred}
+                  isSolved={is_solved}
+                  solNum={solutions}
+                />
               ))}
             </>
           </EmblaCarousel>

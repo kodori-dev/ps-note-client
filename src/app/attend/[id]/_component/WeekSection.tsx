@@ -151,6 +151,7 @@ function WeekSection({ holidayData, memberId }: Props) {
                         isCorrectAnswer={is_correct_answer}
                         resultLabel={score_label}
                         solutionId={id}
+                        level={problem.level}
                       />
                     ))}
                   </div>

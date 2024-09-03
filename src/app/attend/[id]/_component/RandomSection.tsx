@@ -13,6 +13,7 @@ function RandomSection({ randomNum }: Props) {
         <span className="font-700">오늘의 추천</span> 문제
       </h2>
       <ProblemCard
+        level={data.level}
         bojId={data.boj_id}
         isSolved={data.is_solved}
         problemId={data.id}

@@ -1,19 +1,18 @@
 import SearchBar from '@/components/Search/SearchBar';
-import dayjs from 'dayjs';
 import { HomePageRes } from '@/types/api/home-page';
 import { getUserInfo } from '@/utils/getUserInfo';
 import HomeSectionLayout from '@/components/Layout/HomeSectionLayout';
 import ProblemSection from '@/components/Section/ProblemSection';
 import MemberSection from '@/components/Section/MemberSection';
 import Link from 'next/link';
+import { getBojTime } from '@/utils/getBojTime';
 
 export default async function Home() {
   const meRes = await getUserInfo();
   const memberId = meRes?.id;
 
-  let today = new Date();
-  today.setHours(today.getHours() - 6);
-  const bojDay = dayjs(today).format('YYYY-MM-DD');
+  const bojDay = getBojTime();
+
   const getHomePage = async () => {
     try {
       const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api-internal/home-page?day=${bojDay}`, {

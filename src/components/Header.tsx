@@ -12,6 +12,7 @@ import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseBu
 import ScreenLoading from './Loading/ScreenLoading';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
+import { getBojTime } from '@/utils/getBojTime';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
@@ -25,10 +26,9 @@ function Header() {
   } = useQuery({
     queryKey: ['coupon', member?.id],
     queryFn: async () => {
-      let today = new Date();
-      today.setHours(today.getHours() - 6);
+      const today = getBojTime();
       if (!member) return false;
-      const res = await api('GET', '/api/coupons', null, { date: dayjs(today).format('YYYY-MM-DD'), member_id: member.id, usable: true });
+      const res = await api('GET', '/api/coupons', null, { date: today, member_id: member.id, usable: true });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },

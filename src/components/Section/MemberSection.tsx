@@ -8,6 +8,7 @@ import { useHomePageContext } from '@/contexts/HomePageContext';
 import { useState } from 'react';
 import { UserType } from '@/types/api/auth';
 import { PenaltyType } from '@/types/api/penalty';
+import { getBojTime } from '@/utils/getBojTime';
 
 interface Props {
   members: UserType[];
@@ -30,12 +31,11 @@ function MemberSection({ members, penalty_map }: Props) {
                   오류가 발생했습니다.
                 </div>
               );
-            let today = new Date();
-            today.setHours(today.getHours() - 6);
+            const today = getBojTime();
 
             let todayPenalty = null;
             for (const item of penaltyArr) {
-              if (item.day === dayjs(today).format('YYYY-MM-DD')) todayPenalty = item;
+              if (item.day === today) todayPenalty = item;
             }
             return (
               <MemberCard

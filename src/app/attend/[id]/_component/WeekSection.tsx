@@ -5,13 +5,12 @@ import ProblemCard from '@/components/Card/ProblemCard';
 import Input from '@/components/Input';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import ProgressBar from '@/components/ProgressBar';
-import { HOLIDAY, WEEK_PENALTY } from '@/constants/mockup';
 import { GetHolidayRes } from '@/types/api/holiday';
-import { GetPenaltiesRes } from '@/types/api/penalty';
 import { SolutionType } from '@/types/api/solution';
 import { api } from '@/utils/api';
 import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
 import { findThisWeek } from '@/utils/findThisWeek';
+import { getBojTime } from '@/utils/getBojTime';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Link from 'next/link';
@@ -25,9 +24,8 @@ interface Props {
 
 function WeekSection({ holidayData, memberId }: Props) {
   const [dateArr, setDateArr] = useState<Date[]>([]);
-  let today = new Date();
-  today.setHours(today.getHours() - 6);
-  const { register, watch } = useForm({ defaultValues: { selectedWeek: dayjs(today).format('YYYY-MM-DD') } });
+  const today = getBojTime();
+  const { register, watch } = useForm({ defaultValues: { selectedWeek: today } });
   const { selectedWeek } = watch();
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ['checkin', memberId, dateArr[0], dateArr[1]],
@@ -102,25 +100,28 @@ function WeekSection({ holidayData, memberId }: Props) {
             let type = 'attend';
 
             //공휴일
-            for (let holiday of holidayData) {
-              if (holiday.date === dayjs(day).format('YYYY-MM-DD')) {
-                type = 'holiday';
-                return (
-                  <div key={day.getDay()} className="flex gap-20">
-                    <DateCard
-                      isHoliday
-                      holidayName={holiday.name}
-                      date={day.getDate()}
-                      day={day.getDay()}
-                      isToday={dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD')}
-                    />
-                    <p className="text-red h-[177px] w-full flex items-center justify-center rounded-sm border border-gray-4 bg-white/30">
-                      {ATTEND_CARD['holiday']}
-                    </p>
-                  </div>
-                );
+            if (holidayData && holidayData.length > 0) {
+              for (let holiday of holidayData) {
+                if (holiday.date === dayjs(day).format('YYYY-MM-DD')) {
+                  type = 'holiday';
+                  return (
+                    <div key={day.getDay()} className="flex gap-20">
+                      <DateCard
+                        isHoliday
+                        holidayName={holiday.name}
+                        date={day.getDate()}
+                        day={day.getDay()}
+                        isToday={dayjs(day).format('YYYY-MM-DD') === today}
+                      />
+                      <p className="text-red h-[177px] w-full flex items-center justify-center rounded-sm border border-gray-4 bg-white/30">
+                        {ATTEND_CARD['holiday']}
+                      </p>
+                    </div>
+                  );
+                }
               }
             }
+
             const penaltyArr = data?.penalties.filter(({ day: dataDay }) => dataDay == dayjs(day).format('YYYY-MM-DD'));
             const penalty = penaltyArr.length === 0 ? null : penaltyArr[0];
             if (!penalty || penalty.is_penalty) type = 'noSolve';
@@ -133,12 +134,7 @@ function WeekSection({ holidayData, memberId }: Props) {
 
             return (
               <div key={day.getDay()} className="flex gap-20">
-                <DateCard
-                  isHoliday={type === 'holiday'}
-                  date={day.getDate()}
-                  day={day.getDay()}
-                  isToday={dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD')}
-                />
+                <DateCard isHoliday={type === 'holiday'} date={day.getDate()} day={day.getDay()} isToday={dayjs(day).format('YYYY-MM-DD') === today} />
                 {type === 'attend' ? (
                   <div className="flex flex-nowrap gap-4 w-full overflow-x-scroll scroll-hidden">
                     {daySolutions.map(({ id, source_lang, is_correct_answer, score_label, problem }) => (
@@ -155,13 +151,14 @@ function WeekSection({ holidayData, memberId }: Props) {
                         isCorrectAnswer={is_correct_answer}
                         resultLabel={score_label}
                         solutionId={id}
+                        level={problem.level}
                       />
                     ))}
                   </div>
                 ) : (
                   <p className="h-[177px] w-full flex flex-col gap-2 items-center justify-center rounded-sm border border-gray-4 bg-white/30">
                     {ATTEND_CARD[type as 'holiday' | 'coupon' | 'noSolve']}
-                    {dayjs(day).format('YYYY-MM-DD') === dayjs(today).format('YYYY-MM-DD') && type === 'noSolve' && (
+                    {dayjs(day).format('YYYY-MM-DD') === today && type === 'noSolve' && (
                       <Link href={'/post'} className="text-12 text-primary border-b border-primary">
                         지금 바로 체크인하기
                       </Link>

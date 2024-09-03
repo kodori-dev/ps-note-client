@@ -33,10 +33,12 @@ function Admin() {
       </div>
       <div className="grid grid-cols-8">
         {CATEGORY.map((item) => (
-          <p className="text-gray-3">{item}</p>
+          <p className="text-gray-3" key={item}>
+            {item}
+          </p>
         ))}
       </div>
     </div>
   );
-
+}
 export default Admin;

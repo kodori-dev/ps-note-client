@@ -39,7 +39,7 @@ function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, typ
                   bojId
                 )}
               </p>
-              <p>
+              <p className="truncate min-w-[223px]">
                 {name.includes(query) ? (
                   <>
                     {name.slice(0, name.indexOf(query))}

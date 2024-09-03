@@ -27,6 +27,7 @@ function TodaySection({ data }: Props) {
               resultLabel={score_label}
               isSolved
               solLang={source_lang}
+              level={problem.level}
             />
           ))}
         </div>

@@ -36,14 +36,12 @@ function Post() {
     const { pid, isStar, is_correct_answer, source_code, source_lang, comment } = getValues();
 
     try {
-      const date = new Date();
       const body = {
         member: user?.id,
         problem: Number(pid),
         comment,
         source_lang: source_lang.toLowerCase(),
         source_code,
-        submitted_at: date.toISOString(),
         star: isStar,
         is_correct_answer: is_correct_answer == 'AC',
       } as PostSolReq;

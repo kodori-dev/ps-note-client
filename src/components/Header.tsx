@@ -49,6 +49,7 @@ function Header() {
         valid_from: coupon.valid_from,
       });
       if (typeof res == 'string') throw Error();
+      setIsDropDown(false);
       toast({ title: '면제 티켓 사용 성공!', description: '내일은 더 열심히~!', status: 'success' });
     } catch (err) {
       toast({ title: '면제 티켓 사용 실패!', description: '잠시 후 다시 시도해 주세요.', status: 'error' });

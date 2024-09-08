@@ -8,19 +8,19 @@ import { PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
 import { GetStarsRes, PostStarReq } from '@/types/api/star';
 
 export type GetType = {
-  '/api/me': {
+  '/me': {
     req: null;
     res: PostSignUpRes;
   };
-  '/api/members': {
+  '/members': {
     req: null;
     res: GetMembersRes;
   };
-  [key: `/api/members/${string}`]: {
+  [key: `/members/${string}`]: {
     req: null;
     res: PostSignUpRes;
   };
-  '/api/problems': {
+  '/problems': {
     req: null;
     res: GetProblemsRes;
     query: {
@@ -33,7 +33,7 @@ export type GetType = {
       submitted_at__start?: string;
     };
   };
-  '/api/problems/search': {
+  '/problems/search': {
     req: null;
     res: GetProblemsRes;
     query: {
@@ -47,7 +47,7 @@ export type GetType = {
       submitted_at__start?: string;
     };
   };
-  '/api/problem-stars': {
+  '/problem-stars': {
     req: null;
     res: GetStarsRes;
     query: {
@@ -55,11 +55,11 @@ export type GetType = {
       problem_id?: number;
     };
   };
-  [key: `/api/solutions/${string}`]: {
+  [key: `/solutions/${string}`]: {
     req: null;
     res: SolutionType;
   };
-  '/api/penalties': {
+  '/penalties': {
     req: null;
     res: GetPenaltiesRes;
     query: {
@@ -69,14 +69,14 @@ export type GetType = {
       start_date: string;
     };
   };
-  '/api/holidays': {
+  '/holidays': {
     req: null;
     res: GetHolidayRes;
     query: {
       year: number;
     };
   };
-  '/api/coupons': {
+  '/coupons': {
     req: null;
     res: GetCouponsRes;
     query: {
@@ -87,39 +87,39 @@ export type GetType = {
   };
 };
 interface PostType {
-  '/api/auth/login': {
+  '/auth/login': {
     req: PostLoginReq;
     res: null;
   };
-  '/api/auth/signup': {
+  '/auth/signup': {
     req: PostSignUpReq;
     res: PostSignUpRes;
   };
-  '/api/solutions': {
+  '/solutions': {
     req: PostSolReq;
     res: PostSolRes;
   };
-  '/api/problem-stars': {
+  '/problem-stars': {
     req: PostStarReq;
     res: PostStarReq;
   };
 }
 
 interface PatchType {
-  [key: `/api/coupons/${string}`]: {
+  [key: `/coupons/${string}`]: {
     req: PatchCouponReq;
     res: CouponType;
   };
 }
 
 interface DeleteType {
-  [key: `/api/problem-stars/${string}`]: {
+  [key: `/problem-stars/${string}`]: {
     req: null;
     res: null;
   };
 }
 
-const RES_BODY_NULL = ['/api/auth/login'];
+const RES_BODY_NULL = ['/auth/login'];
 
 interface BodyType {
   GET: GetType;

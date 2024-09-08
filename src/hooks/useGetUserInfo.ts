@@ -5,7 +5,7 @@ export const useGetUserInfo = () => {
   const obj = useQuery({
     queryKey: ['member'],
     queryFn: async () => {
-      const res = await api('GET', '/api/me');
+      const res = await api('GET', '/me');
       if (res?.nickname) return res;
       return null;
     },

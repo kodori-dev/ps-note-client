@@ -30,7 +30,7 @@ function Signup() {
       return;
     }
     try {
-      const res = await api('POST', '/api/auth/signup', { username: user_id, password, nickname: name, boj_id });
+      const res = await api('POST', '/auth/signup', { username: user_id, password, nickname: name, boj_id });
       if (typeof res === 'string') throw Error(res);
 
       alert(`${res.nickname}님 가입을 환영해요!`);

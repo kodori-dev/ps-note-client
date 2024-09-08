@@ -1,7 +1,6 @@
 'use server';
 
 import { getUserInfo } from '@/utils/getUserInfo';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 
 interface Props {
@@ -9,16 +8,10 @@ interface Props {
 }
 
 async function AuthProvider({ children }: Props) {
-  const queryClient = new QueryClient();
+  const member = await getUserInfo();
+  if (member) await fetch('http://localhost:3000/api/session', { method: 'POST', body: JSON.stringify({ userId: member.id, nickname: member.nickname }) });
 
-  await queryClient.prefetchQuery({
-    queryKey: ['member'],
-    queryFn: getUserInfo,
-    staleTime: 1000 * 60 * 60 * 24,
-    gcTime: 1000 * 60 * 60 * 24,
-  });
-
-  return <HydrationBoundary state={dehydrate(queryClient)}>{children}</HydrationBoundary>;
+  return <>{children}</>;
 }
 
 export default AuthProvider;

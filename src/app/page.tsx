@@ -6,8 +6,14 @@ import ProblemSection from '@/components/Section/ProblemSection';
 import MemberSection from '@/components/Section/MemberSection';
 import Link from 'next/link';
 import { getBojTime } from '@/utils/getBojTime';
+import { GetServerSidePropsContext } from 'next';
+import { cookies, headers } from 'next/headers';
+import { getUserSession } from '@/utils/getUserSession';
 
 export default async function Home() {
+  const session = await getUserSession();
+  console.log(session);
+
   const meRes = await getUserInfo();
   const memberId = meRes?.id;
 

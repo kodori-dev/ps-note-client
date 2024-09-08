@@ -6,7 +6,7 @@ import { getServerData } from '@/utils/getServerData';
 import MetaTag from '@/components/MetaTag';
 
 async function Solution({ params: { id } }: { params: { id: string } }) {
-  const data = (await getServerData(`/api/solutions/${id}`)) as SolutionType;
+  const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
 
   return (
     <>

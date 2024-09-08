@@ -30,7 +30,7 @@ function WeekSection({ holidayData, memberId }: Props) {
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ['checkin', memberId, dateArr[0], dateArr[1]],
     queryFn: async () => {
-      const penalties = await api('GET', '/api/penalties', null, {
+      const penalties = await api('GET', '/penalties', null, {
         start_date: dayjs(dateArr[0]).format('YYYY-MM-DD'),
         end_date: dayjs(dateArr[4]).format('YYYY-MM-DD'),
         member_id: memberId,

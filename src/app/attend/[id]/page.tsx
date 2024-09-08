@@ -9,8 +9,8 @@ const ALL_BOJ_PROBLEM = 31200;
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
   const today = new Date();
-  const member = (await getServerData(`/api/members/${id}`)) as UserType | null;
-  const holidays = (await getServerData('/api/holidays', { year: today.getFullYear() })) as GetHolidayRes;
+  const member = (await getServerData(`/members/${id}`)) as UserType | null;
+  const holidays = (await getServerData('/holidays', { year: today.getFullYear() })) as GetHolidayRes;
   const calcPassMemCnt = (data: PenaltyType[]) => {
     let attendCnt = 0;
     for (const mem of data) {

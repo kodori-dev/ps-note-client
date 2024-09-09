@@ -1,21 +1,15 @@
 import SearchBar from '@/components/Search/SearchBar';
 import { HomePageRes } from '@/types/api/home-page';
-import { getUserInfo } from '@/utils/getUserInfo';
 import HomeSectionLayout from '@/components/Layout/HomeSectionLayout';
 import ProblemSection from '@/components/Section/ProblemSection';
 import MemberSection from '@/components/Section/MemberSection';
 import Link from 'next/link';
 import { getBojTime } from '@/utils/getBojTime';
-import { GetServerSidePropsContext } from 'next';
-import { cookies, headers } from 'next/headers';
 import { getUserSession } from '@/utils/getUserSession';
 
 export default async function Home() {
   const session = await getUserSession();
-  console.log(session);
-
-  const meRes = await getUserInfo();
-  const memberId = meRes?.id;
+  const memberId = session.isLogin ? session.userId : undefined;
 
   const bojDay = getBojTime();
   const getHomePage = async () => {

@@ -6,8 +6,9 @@ import { LOGIN_INPUT_LIST, PASSWORD_TYPE_LIST } from '@/constants/authInput';
 import { FAIL_LOGIN_ERR_CODE } from '@/constants/errorCode';
 import { FAIL_LOGIN_ERR } from '@/constants/errorMsg';
 import { api } from '@/utils/api';
+import { logout } from '@/utils/logout';
 import { useToast } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function Login() {
@@ -19,9 +20,11 @@ function Login() {
     handleSubmit,
   } = useForm({ mode: 'onBlur', shouldFocusError: true });
   const [isLoading, setIsLoading] = useState(false);
+  const [isLogout, setIsLogout] = useState(true);
   const toast = useToast();
 
   const handleLoginSubmit = async () => {
+    setIsLogout(false);
     setIsLoading(true);
     const { user_id, password } = getValues();
     try {
@@ -33,6 +36,12 @@ function Login() {
         description: '문제 풀고 부자되세요😎',
         status: 'success',
       });
+
+      await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/session`, {
+        method: 'POST',
+        body: JSON.stringify({ userId: member.id, nickname: member.nickname }),
+      });
+
       window.location.href = '/';
     } catch (error: any) {
       toast({
@@ -49,6 +58,10 @@ function Login() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isLogout) logout();
+  }, [isLogout]);
 
   return (
     <>

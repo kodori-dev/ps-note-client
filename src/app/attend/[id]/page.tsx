@@ -4,6 +4,7 @@ import { GetPenaltiesRes, PenaltyType } from '@/types/api/penalty';
 import { UserType } from '@/types/api/auth';
 import { GetHolidayRes } from '@/types/api/holiday';
 import MetaTag from '@/components/MetaTag';
+import { getUserSession } from '@/utils/getUserSession';
 
 const ALL_BOJ_PROBLEM = 31200;
 

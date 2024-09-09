@@ -1,12 +1,23 @@
+import { sessionOptions } from '@/constants/userSession';
 import { UserSessionType } from '@/types/userSession';
-import { sessionOptions } from '@/utils/getUserSession';
+import { getUserSession } from '@/utils/getUserSession';
 import { getIronSession } from 'iron-session';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {}
+export async function GET() {
+  const session = await getUserSession();
+  return NextResponse.json(session);
+}
+
+export async function DELETE() {
+  const session = await getUserSession();
+  session.destroy();
+  revalidatePath('/', 'layout');
+
+  return NextResponse.json({ ok: true });
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -20,5 +31,5 @@ export async function POST(req: NextRequest) {
   await session.save();
   revalidatePath('/', 'layout');
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, cookies: session });
 }

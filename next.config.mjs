@@ -2,14 +2,16 @@ import {withSentryConfig} from '@sentry/nextjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false,
-    serverRuntimeConfig: {
-        NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    },
-    publicRuntimeConfig: {
-        NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    },
-    output: 'standalone',
+  reactStrictMode: false,
+  serverRuntimeConfig: {
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL
+  },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL
+  },
+  output: "standalone",
     webpack: (config) => {
         config.module.rules.push({
             test: /\.svg$/,
@@ -18,14 +20,14 @@ const nextConfig = {
 
         return config;
     },
-    async rewrites() {
-        return [
-            {
-                source: '/proxy/:path*',
-                destination: `http://${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
-            },
-        ];
-    },
+  async rewrites() {
+    return [
+      {
+        source: '/proxy/:path*',
+        destination: `http://${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {

@@ -20,7 +20,7 @@ export default async function Home() {
   const bojDay = getBojTime();
   const getHomePage = async () => {
     try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/api-internal/home-page?day=${bojDay}`, {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_SERVER_URL}/api-internal/home-page?day=${bojDay}`, {
         headers: memberId ? { 'X-Member-Id': memberId.toString() } : {},
         cache: 'no-store',
       });

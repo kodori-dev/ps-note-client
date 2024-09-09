@@ -16,7 +16,8 @@ env:
   DEPLOYMENT_NAME: deployment/ps-note-client
   CONTAINER_NAME: ps-note-client
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  NEXT_PUBLIC_API_BASE_URL: ps-note-server
+  NEXT_PUBLIC_API_BASE_URL: ps-note-server/api/v1
+  NEXT_PUBLIC_SERVER_URL: ps-note-server
 
 jobs:
   prepare:
@@ -91,6 +92,7 @@ jobs:
           build-args: |
             RELEASE=${{ needs.prepare.outputs.version_name }}
             NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
+            NEXT_PUBLIC_SERVER_URL=${{ env.NEXT_PUBLIC_SERVER_URL }}
           push: true
           platforms: |
             linux/arm64
@@ -188,7 +190,7 @@ jobs:
   notify-build-and-push-result:
     needs: [prepare, notify-start, build-and-push]
     if: ${{ always() }}
-
+    
     runs-on: ubuntu-latest
 
     steps:

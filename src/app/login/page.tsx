@@ -25,9 +25,9 @@ function Login() {
     setIsLoading(true);
     const { user_id, password } = getValues();
     try {
-      const res = await api('POST', '/api/auth/login', { username: user_id, password });
+      const res = await api('POST', '/auth/login', { username: user_id, password });
       if (typeof res === 'string') throw Error(res);
-      const member = await api('GET', '/api/me');
+      const member = await api('GET', '/me');
       toast({
         title: `${member.nickname}님 환영해요!`,
         description: '문제 풀고 부자되세요😎',

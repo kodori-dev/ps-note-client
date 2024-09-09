@@ -29,11 +29,11 @@ function StarButton({ problemId, isStar, stars, isSolve }: Props) {
         if (!user.data) throw Error();
         if (star.state === isStar) return;
         if (star.state) {
-          const res = await api('POST', '/api/problem-stars', { member: user.data?.id, problem: problemId });
+          const res = await api('POST', '/problem-stars', { member: user.data?.id, problem: problemId });
         } else {
-          const starArr = await api('GET', '/api/problem-stars', null, { member_id: user.data.id, problem_id: problemId });
+          const starArr = await api('GET', '/problem-stars', null, { member_id: user.data.id, problem_id: problemId });
           if (starArr.length > 0) {
-            const res = await api('DELETE', `/api/problem-stars/${starArr[0].id}`);
+            const res = await api('DELETE', `/problem-stars/${starArr[0].id}`);
           }
         }
       } catch (err) {}

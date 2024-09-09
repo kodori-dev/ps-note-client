@@ -5,13 +5,11 @@ import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import Button from './Button';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/utils/api';
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import ScreenLoading from './Loading/ScreenLoading';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import { useRouter } from 'next/router';
 import { getBojTime } from '@/utils/getBojTime';
 
 function Header() {
@@ -28,7 +26,7 @@ function Header() {
     queryFn: async () => {
       const today = getBojTime();
       if (!member) return false;
-      const res = await api('GET', '/api/coupons', null, { date: today, member_id: member.id, usable: true });
+      const res = await api('GET', '/coupons', null, { date: today, member_id: member.id, usable: true });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },
@@ -41,7 +39,7 @@ function Header() {
       setIsLoading(true);
       if (!coupon || !member) throw Error();
       const cur = new Date();
-      const res = await api('PATCH', `/api/coupons/${coupon.id}`, {
+      const res = await api('PATCH', `/coupons/${coupon.id}`, {
         name: coupon.name,
         member: member.id,
         used_at: cur.toISOString(),
@@ -54,6 +52,7 @@ function Header() {
     } catch (err) {
       toast({ title: '면제 티켓 사용 실패!', description: '잠시 후 다시 시도해 주세요.', status: 'error' });
     } finally {
+      onClose();
       setIsLoading(false);
     }
   };

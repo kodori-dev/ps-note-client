@@ -46,7 +46,7 @@ function Post() {
         is_correct_answer: is_correct_answer == 'AC',
       } as PostSolReq;
 
-      const res = await api('POST', '/api/solutions', body);
+      const res = await api('POST', '/solutions', body);
       if (typeof res === 'string') throw Error();
       alert('solution이 정상적으로 등록되었습니다.');
       window.location.href = `/solution/${res.id}`;

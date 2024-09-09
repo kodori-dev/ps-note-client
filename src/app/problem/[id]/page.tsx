@@ -20,8 +20,8 @@ async function Problem({ params: { id } }: { params: { id: string } }) {
     }
   };
 
-  const problem = (await getData(`/api/problems/${id}`)) as GetProblemRes | null;
-  const solutions = (await getData(`/api/solutions?order_by=-submitted_at&problem_id=${id}`)) as GetSolsRes | null;
+  const problem = (await getData(`/problems/${id}`)) as GetProblemRes | null;
+  const solutions = (await getData(`/solutions?order_by=-submitted_at&problem_id=${id}`)) as GetSolsRes | null;
 
   return (
     <>

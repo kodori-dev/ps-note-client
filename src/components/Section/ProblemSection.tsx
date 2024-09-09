@@ -3,9 +3,7 @@
 import HomeLock from '../Lock/HomeLock';
 import ProblemCard from '../Card/ProblemCard';
 import { ProblemType } from '@/types/api/problem';
-import { useHomePageContext } from '@/contexts/HomePageContext';
 import EmblaCarousel from '../Carousel/Carousel';
-import { useEffect, useState } from 'react';
 
 interface Props {
   problems: ProblemType[];

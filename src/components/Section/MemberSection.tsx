@@ -2,10 +2,7 @@
 
 import MemberCard from '../Card/MemberCard';
 import HomeLock from '../Lock/HomeLock';
-import dayjs from 'dayjs';
 import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
-import { useHomePageContext } from '@/contexts/HomePageContext';
-import { useState } from 'react';
 import { UserType } from '@/types/api/auth';
 import { PenaltyType } from '@/types/api/penalty';
 import { getBojTime } from '@/utils/getBojTime';

@@ -7,11 +7,13 @@ interface Props {
   heightSize?: 'sm' | 'lg';
   children: ReactNode;
   customStyle?: string;
+  disabled?: boolean;
 }
 
 const STYLE = {
   primary: 'bg-primary text-white hover:bg-primary-hover',
   secondary: 'bg-white text-primary hover:bg-gray-100 border border-primary',
+  disabled: 'bg-gray-4 text-white',
 };
 
 const HEIGHT_STYLE = {
@@ -19,11 +21,11 @@ const HEIGHT_STYLE = {
   lg: 'h-[54px]',
 };
 
-function Button({ theme = 'primary', roundSize = 'md', onClickFunc, heightSize = 'lg', children, customStyle = '' }: Props) {
-  const style = [STYLE[theme], HEIGHT_STYLE[heightSize], `rounded-${roundSize}`, customStyle].join(' ');
+function Button({ theme = 'primary', roundSize = 'md', onClickFunc, heightSize = 'lg', children, customStyle = '', disabled = false }: Props) {
+  const style = [STYLE[disabled ? 'disabled' : theme], HEIGHT_STYLE[heightSize], `rounded-${roundSize}`, customStyle].join(' ');
 
   return (
-    <button onClick={onClickFunc} className={`${style}`}>
+    <button onClick={onClickFunc} className={`${style}`} disabled={disabled}>
       {children}
     </button>
   );

@@ -41,6 +41,13 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
+ARG RELEASE
+ENV RELEASE=${RELEASE}
+
+
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -70,6 +77,12 @@ EXPOSE 3000
 ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
+
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
+ARG RELEASE
+ENV RELEASE=${RELEASE}
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output

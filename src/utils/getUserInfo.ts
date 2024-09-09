@@ -1,10 +1,18 @@
-import { cookies } from 'next/headers';
+'use server';
+
+import { getServerData } from './getServerData';
+import { UserType } from '@/types/api/auth';
 
 export const getUserInfo = async () => {
-  const cookieStore = cookies();
+  const member = ((await getServerData('/me')) as UserType) || null;
 
-  const member = await (await fetch(`https://${process.env.NEXT_PUBLIC_API_BASE_URL}/api/me`, { headers: { Cookie: cookieStore.toString() || '' } })).json();
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/set-user`, {
+  //   method: 'POST',
+  //   body: JSON.stringify({
+  //     nickname: member.nickname,
+  //     memberId: member.id,
+  //   }),
+  // });
 
-  if (member.code) return null;
   return member;
 };

@@ -10,9 +10,27 @@
     url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-bRg.ttf) format('truetype');
 }
 
-html {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
   font-family: 'NanumSquareNeo', sans-serif;
   font-size: 16px;
   color: black;
   background-color: #f2f8ff;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.up-card:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+  -ms-transform: translateY(-5px);
+  box-shadow: 4px 12px 20px 6px rgba(0, 0, 0, 0.14);
 }

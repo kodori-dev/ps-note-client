@@ -23,7 +23,13 @@ const config: Config = {
         },
         chip: {
           red: '#FD9596',
-          green: '#BBDCBD',
+          green: '#ADCEAF',
+          bronze: '#AD5600',
+          silver: '#435F7A',
+          gold: '#EC9A00',
+          platinum: '#27E2A4',
+          diamond: '#00B4FC',
+          ruby: '#FF0062',
         },
         red: {
           DEFAULT: '#FF0800',
@@ -33,6 +39,7 @@ const config: Config = {
           2: '#7E7E7E',
           3: '#ACACAC',
           4: '#D9D9D9',
+          5: '#EDEDED',
         },
         black: {
           DEFAULT: '#000000',
@@ -64,6 +71,7 @@ const config: Config = {
         20: '1.25rem',
         24: '1.5rem',
         32: '2rem',
+        36: '2.25rem',
         40: '2.5rem',
         48: '3rem',
       },

@@ -4,7 +4,7 @@ interface Props {
   label: string;
   placeholder?: string;
   description?: string;
-  type?: 'password' | 'text';
+  type?: 'password' | 'text' | 'date';
   register?: UseFormRegisterReturn<any>;
   error?: any;
 }

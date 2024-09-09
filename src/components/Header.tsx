@@ -11,43 +11,58 @@ import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseBu
 import ScreenLoading from './Loading/ScreenLoading';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
+import { logout } from '@/utils/logout';
+import dayjs from 'dayjs';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { data: member } = useGetUserInfo();
+
+  const { data: user, isSuccess: isUserSuccess } = useGetUserInfo();
   const {
     data: coupon,
-    refetch,
+    refetch: getCoupon,
     isSuccess,
   } = useQuery({
-    queryKey: ['coupon', member?.id],
+    queryKey: ['coupon', user.userId],
     queryFn: async () => {
+      if (!user.isLogin) return false;
       const today = getBojTime();
-      if (!member) return false;
-      const res = await api('GET', '/coupons', null, { date: today, member_id: member.id, usable: true });
+      const res = await api('GET', '/coupons', null, { date: today, member_id: user.userId, usable: true });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },
     enabled: false,
+    staleTime: 60 * (60 * 1000),
+    gcTime: Infinity,
   });
+
+  useEffect(() => {
+    if (isUserSuccess && user.isLogin) {
+      getCoupon();
+    }
+  }, [isUserSuccess]);
+
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const handleCouponClick = async () => {
     try {
       setIsLoading(true);
-      if (!coupon || !member) throw Error();
+      if (!coupon || !user.isLogin) throw Error();
       const cur = new Date();
       const res = await api('PATCH', `/coupons/${coupon.id}`, {
         name: coupon.name,
-        member: member.id,
-        used_at: cur.toISOString(),
+        member: user.userId,
+        used_at: dayjs(cur).format('YYYY-MM-DDTHH:mm:ss'),
         valid_to: coupon.valid_to,
         valid_from: coupon.valid_from,
       });
       if (typeof res == 'string') throw Error();
+      setIsDropDown(false);
       toast({ title: '면제 티켓 사용 성공!', description: '내일은 더 열심히~!', status: 'success' });
+      getCoupon();
     } catch (err) {
       toast({ title: '면제 티켓 사용 실패!', description: '잠시 후 다시 시도해 주세요.', status: 'error' });
     } finally {
@@ -56,21 +71,8 @@ function Header() {
     }
   };
 
-  useEffect(() => {
-    if (member) refetch();
-  }, [member]);
-
-  const logout = () => {
-    var today = new Date();
-    today.setTime(today.getTime() - 1 * 24 * 60 * 60 * 1000);
-
-    document.cookie = 'csrftoken=; path=/; expires=' + today.toUTCString() + ';';
-
-    window.location.href = '/login';
-  };
-
   const DROPDOWN_BTN = [
-    { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${member?.id}`) },
+    { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${user.userId}`) },
     { type: '로그아웃', onClick: logout },
   ];
 
@@ -80,7 +82,8 @@ function Header() {
       <Link href="/" className="text-14">
         $$합법 PS 놀이터$$
       </Link>
-      {member ? (
+
+      {user.isLogin ? (
         <div className="flex gap-12">
           {isSuccess && (
             <button disabled={isUsed} onClick={onOpen} className="active:hover:text-gray-2 disabled:opacity-30 disabled:cursor-not-allowed">
@@ -91,7 +94,7 @@ function Header() {
             <button className="hover:text-gray-2">체크인</button>
           </Link>
           <button onClick={() => setIsDropDown((prev) => !prev)}>
-            <span className="font-700">{member.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
+            <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
           </button>
         </div>
       ) : (
@@ -101,12 +104,12 @@ function Header() {
           </Button>
         </Link>
       )}
+
       {isDropdown && (
         <div className="absolute z-modal -bottom-[84px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
           {DROPDOWN_BTN.map(({ onClick, type }) => (
             <button
               key={type}
-              disabled={type == '로그아웃'}
               onClick={() => {
                 onClick();
                 setIsDropDown(false);
@@ -118,6 +121,7 @@ function Header() {
           ))}
         </div>
       )}
+
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>

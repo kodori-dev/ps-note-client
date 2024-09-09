@@ -1,3 +1,4 @@
+import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { SERVER_ERR } from '@/constants/errorMsg';
 import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { CouponType, GetCouponsRes, PatchCouponReq } from '@/types/api/coupon';
@@ -15,6 +16,13 @@ export type GetType = {
   '/members': {
     req: null;
     res: GetMembersRes;
+    query: {
+      boj_id?: string;
+      is_off?: boolean;
+      nickname?: string;
+      order_by?: 'id' | '-id' | 'is_off' | '-is_off' | 'boj_id' | '-boj_id' | 'nickname' | '-nickname';
+      username?: string;
+    };
   };
   [key: `/members/${string}`]: {
     req: null;
@@ -91,6 +99,10 @@ interface PostType {
     req: PostLoginReq;
     res: null;
   };
+  '/auth/logout': {
+    req: null;
+    res: null;
+  };
   '/auth/signup': {
     req: PostSignUpReq;
     res: PostSignUpRes;
@@ -119,7 +131,7 @@ interface DeleteType {
   };
 }
 
-const RES_BODY_NULL = ['/auth/login'];
+const RES_BODY_NULL = ['/auth/login', '/auth/logout'];
 
 interface BodyType {
   GET: GetType;
@@ -150,6 +162,7 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
       body: body ? JSON.stringify(body) : null,
       cache: 'no-cache',
     });
+
     if (res.status >= 500) throw Error(`500/${SERVER_ERR}`);
     if (!res.ok) {
       const resObj = await res.json();
@@ -161,6 +174,10 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
   } catch (err: any) {
     const [code, msg] = err.message.split('/');
     if (code == 500) alert(msg);
+    if (code == UNAUTHORIZED_ERR_CODE) {
+      alert('세션이 만료됐어요!\n다시 로그인해 주세요.');
+      window.location.href = '/login';
+    }
     return code;
   }
 };

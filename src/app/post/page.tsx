@@ -10,7 +10,6 @@ import { api } from '@/utils/api';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { PostSolReq } from '@/types/api/solution';
-import dayjs from 'dayjs';
 import MetaTag from '@/components/MetaTag';
 
 const DEFAULT_INPUT = {
@@ -37,7 +36,7 @@ function Post() {
 
     try {
       const body = {
-        member: user?.id,
+        member: user.userId,
         problem: Number(pid),
         comment,
         source_lang: source_lang.toLowerCase(),

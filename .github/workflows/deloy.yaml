@@ -189,6 +189,10 @@ jobs:
     needs: [prepare, notify-start, build-and-push]
     if: ${{ always() }}
 
+    env:
+      NEXT_PUBLIC_API_BASE_URL: ps-note-server/api/v1
+      NEXT_PUBLIC_SERVER_URL: ps-note-server
+    
     runs-on: ubuntu-latest
 
     steps:

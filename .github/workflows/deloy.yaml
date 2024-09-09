@@ -54,7 +54,8 @@ jobs:
       id-token: 'write'
 
     env:
-      NEXT_PUBLIC_API_BASE_URL: ps-note-server
+      NEXT_PUBLIC_API_BASE_URL: ps-note-server/api/v1
+      NEXT_PUBLIC_SERVER_URL: ps-note-server
 
     steps:
     - name: Checkout code

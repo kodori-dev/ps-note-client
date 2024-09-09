@@ -16,6 +16,13 @@ export type GetType = {
   '/members': {
     req: null;
     res: GetMembersRes;
+    query: {
+      boj_id?: string;
+      is_off?: boolean;
+      nickname?: string;
+      order_by?: 'id' | '-id' | 'is_off' | '-is_off' | 'boj_id' | '-boj_id' | 'nickname' | '-nickname';
+      username?: string;
+    };
   };
   [key: `/members/${string}`]: {
     req: null;

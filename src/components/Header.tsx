@@ -6,7 +6,7 @@ import Button from './Button';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/utils/api';
 import { useEffect, useState } from 'react';
-import { useDisclosure, useToast } from '@chakra-ui/react';
+import { Spinner, useDisclosure, useToast } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import ScreenLoading from './Loading/ScreenLoading';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -24,6 +24,7 @@ function Header() {
     data: coupon,
     refetch: getCoupon,
     isSuccess,
+    isLoading: isCouponLoading,
   } = useQuery({
     queryKey: ['coupon', user.userId],
     queryFn: async () => {
@@ -98,6 +99,7 @@ function Header() {
               면제 티켓
             </button>
           )}
+          {isCouponLoading && <Spinner boxSize={'24px'} />}
           <Link href={'/post'}>
             <button className="hover:text-gray-2">체크인</button>
           </Link>

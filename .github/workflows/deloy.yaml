@@ -8,16 +8,18 @@ on:
 env:
   DEPLOY_ALERT_CHANNEL: C07J1U691R6
   AWS_ROLE: ${{ secrets.AWS_ROLE }}
-  AWS_REGION: "ap-northeast-2"
+  AWS_REGION: 'ap-northeast-2'
   REGISTRY: ${{ secrets.AWS_REGISTRY }}
-  REPOSITORY: "ps-note/ps-note-client"
+  REPOSITORY: 'ps-note/ps-note-client'
   CLUSTER_NAME: kodori-cluster
   NAMESPACE: ps-note
   DEPLOYMENT_NAME: deployment/ps-note-client
   CONTAINER_NAME: ps-note-client
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  NEXT_PUBLIC_API_BASE_URL: ps-note-server/api/v1
-  NEXT_PUBLIC_SERVER_URL: ps-note-server
+  NEXT_PUBLIC_API_BASE_URL: ${{ secrets.API_BASE_URL }}
+  NEXT_PUBLIC_SERVER_URL: ${{ secrets.SERVER_URL }}
+  NEXT_PUBLIC_FRONT_URL: ${{ secrets.FRONT_URL }}
+  NEXT_PUBLIC_SESSION_PW: ${{ secrets.FRONT_SESSION_PW }}
 
 jobs:
   prepare:
@@ -93,6 +95,8 @@ jobs:
             RELEASE=${{ needs.prepare.outputs.version_name }}
             NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
             NEXT_PUBLIC_SERVER_URL=${{ env.NEXT_PUBLIC_SERVER_URL }}
+            NEXT_PUBLIC_FRONT_URL=${{ env.NEXT_PUBLIC_FRONT_URL }}
+            NEXT_PUBLIC_SESSION_PW=${{ env.NEXT_PUBLIC_SESSION_PW }}
           push: true
           platforms: |
             linux/arm64
@@ -185,12 +189,11 @@ jobs:
                 }
               ]
             }
-  
 
   notify-build-and-push-result:
     needs: [prepare, notify-start, build-and-push]
     if: ${{ always() }}
-    
+
     runs-on: ubuntu-latest
 
     steps:
@@ -259,7 +262,6 @@ jobs:
                 }
               ]
             }
-
 
       - name: Notify failed
         if: ${{ needs.build-and-push.result == 'cancelled' || needs.build-and-push.result == 'failure' }}

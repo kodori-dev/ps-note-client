@@ -5,7 +5,7 @@ import { CouponType, GetCouponsRes, PatchCouponReq } from '@/types/api/coupon';
 import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
 import { GetProblemsRes } from '@/types/api/problem';
-import { PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
+import { GetSolsRes, PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
 import { GetStarsRes, PostStarReq } from '@/types/api/star';
 
 export type GetType = {
@@ -24,7 +24,7 @@ export type GetType = {
       username?: string;
     };
   };
-  [key: `/members/${string}`]: {
+  [key: `/members/${number}`]: {
     req: null;
     res: PostSignUpRes;
   };
@@ -55,6 +55,10 @@ export type GetType = {
       submitted_at__start?: string;
     };
   };
+  [key: `/problems/${number}`]: {
+    req: null;
+    res: PostSignUpRes;
+  };
   '/problem-stars': {
     req: null;
     res: GetStarsRes;
@@ -63,7 +67,18 @@ export type GetType = {
       problem_id?: number;
     };
   };
-  [key: `/solutions/${string}`]: {
+  '/solutions': {
+    req: null;
+    res: GetSolsRes;
+    query: {
+      member_id?: number;
+      order_by?: 'id' | '-id' | 'source_lang' | '-source_lang' | 'submitted_at' | '-submitted_at';
+      page?: number;
+      page_size?: number;
+      problem_id?: number;
+    };
+  };
+  [key: `/solutions/${number}`]: {
     req: null;
     res: SolutionType;
   };

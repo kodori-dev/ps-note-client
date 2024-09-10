@@ -1,32 +1,18 @@
 import SearchBar from '@/components/Search/SearchBar';
-import { PROBLEMS } from '@/constants/mockup';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import CardList from './_components/CardList';
-import { GetProblemsRes, ProblemType } from '@/types/api/problem';
+import { GetProblemsRes } from '@/types/api/problem';
 import Button from '@/components/Button';
 import Link from 'next/link';
 import MetaTag from '@/components/MetaTag';
+import { getServerData } from '@/utils/getServerData';
 
 const PAGE_SIZE = 30;
 
 async function Search() {
   const keyword = decodeURIComponent(headers().get('x-query-keyword') || '');
   const page = headers().get('x-query-page') || '';
-  const cookie = cookies();
-
-  const getSearchData = async () => {
-    try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}/problems/search?page=${page}&page_size=${PAGE_SIZE}&query=${keyword}`, {
-        headers: { Cookie: cookie.toString() || '' },
-      });
-      if (res.ok) return await res.json();
-      throw Error();
-    } catch (err) {
-      return null;
-    }
-  };
-
-  const data = (await getSearchData()) as GetProblemsRes | null;
+  const data = (await getServerData('/problems/search', { page: page, page_size: PAGE_SIZE, query: keyword })) as GetProblemsRes | null;
 
   return (
     <>

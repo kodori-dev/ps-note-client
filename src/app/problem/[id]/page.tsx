@@ -1,27 +1,13 @@
 import ProblemInfo from './_components/ProblemInfo';
 import SolutionList from './_components/SolutionList';
-import { cookies } from 'next/headers';
 import { GetProblemRes } from '@/types/api/problem';
 import { GetSolsRes } from '@/types/api/solution';
 import MetaTag from '@/components/MetaTag';
+import { getServerData } from '@/utils/getServerData';
 
 async function Problem({ params: { id } }: { params: { id: string } }) {
-  const cookie = cookies();
-
-  const getData = async (url: string) => {
-    try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
-        headers: { Cookie: cookie.toString() || '' },
-      });
-      if (res.ok) return await res.json();
-      throw Error();
-    } catch (err) {
-      return null;
-    }
-  };
-
-  const problem = (await getData(`/problems/${id}`)) as GetProblemRes | null;
-  const solutions = (await getData(`/solutions?order_by=-submitted_at&problem_id=${id}`)) as GetSolsRes | null;
+  const problem = (await getServerData(`/problems/${id}` as `/problems/${number}`)) as GetProblemRes | null;
+  const solutions = (await getServerData(`/solutions`, { order_by: '-submitted_at', problem_id: id })) as GetSolsRes | null;
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { SERVER_ERR } from '@/constants/errorMsg';
-import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetMembersRes, PostLoginReq, PostMembersReq, PostMembersRes, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { CouponType, GetCouponsRes, PatchCouponReq } from '@/types/api/coupon';
 import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
@@ -129,6 +129,10 @@ interface PostType {
   '/problem-stars': {
     req: PostStarReq;
     res: PostStarReq;
+  };
+  '/members': {
+    req: PostMembersReq;
+    res: PostMembersRes;
   };
 }
 

@@ -9,7 +9,7 @@ async function SolutionEdit({ params: { id } }: { params: { id: string } }) {
   const loginUser = await getUserSession();
   const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
 
-  const isMyPost = loginUser.userId === data.member.id;
+  const isMyPost = data ? loginUser.userId === data.member.id : false;
   if (!isMyPost) redirect('/404');
 
   const defaultInput: PostFormType = {

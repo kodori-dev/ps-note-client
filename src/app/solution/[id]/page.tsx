@@ -6,10 +6,12 @@ import { getServerData } from '@/utils/getServerData';
 import MetaTag from '@/components/MetaTag';
 import { getUserSession } from '@/utils/getUserSession';
 import EditSection from './_components/EditSection';
+import { redirect } from 'next/navigation';
 
 async function Solution({ params: { id } }: { params: { id: string } }) {
   const loginUser = await getUserSession();
   const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
+  if (!data) redirect('/404');
   const isMySol = loginUser.userId === data.member.id;
 
   return (

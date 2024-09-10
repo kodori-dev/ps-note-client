@@ -24,7 +24,7 @@ export type GetType = {
       username?: string;
     };
   };
-  [key: `/members/${number}`]: {
+  [key: `/members/${string}`]: {
     req: null;
     res: PostSignUpRes;
   };
@@ -78,7 +78,7 @@ export type GetType = {
       problem_id?: number;
     };
   };
-  [key: `/solutions/${number}`]: {
+  [key: `/solutions/${string}`]: {
     req: null;
     res: SolutionType;
   };

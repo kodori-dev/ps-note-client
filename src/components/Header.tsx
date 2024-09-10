@@ -73,7 +73,15 @@ function Header() {
 
   const DROPDOWN_BTN = [
     { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${user.userId}`) },
-    { type: '로그아웃', onClick: logout },
+    {
+      type: '로그아웃',
+      onClick: async () => {
+        setIsLoading(true);
+        await logout();
+        setIsLoading(false);
+        window.location.reload();
+      },
+    },
   ];
 
   return (

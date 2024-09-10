@@ -60,7 +60,11 @@ function Login() {
   };
 
   useEffect(() => {
-    if (isLogout) logout();
+    if (isLogout) {
+      setIsLoading(true);
+      logout();
+      setIsLoading(false);
+    }
   }, [isLogout]);
 
   return (

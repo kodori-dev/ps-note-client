@@ -148,6 +148,10 @@ interface DeleteType {
     req: null;
     res: null;
   };
+  [key: `/solutions/${string}`]: {
+    req: null;
+    res: null;
+  };
 }
 
 const RES_BODY_NULL = ['/auth/login', '/auth/logout'];

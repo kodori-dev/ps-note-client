@@ -4,9 +4,13 @@ import { SolutionType } from '@/types/api/solution';
 import BodySection from './_components/BodySection';
 import { getServerData } from '@/utils/getServerData';
 import MetaTag from '@/components/MetaTag';
+import { getUserSession } from '@/utils/getUserSession';
+import EditSection from './_components/EditSection';
 
 async function Solution({ params: { id } }: { params: { id: string } }) {
+  const loginUser = await getUserSession();
   const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
+  const isMySol = loginUser.userId === data.member.id;
 
   return (
     <>
@@ -22,6 +26,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
           isCorrectAnswer={data.is_correct_answer}
           answerLabel={data.score_label}
         />
+        {isMySol && <EditSection solutionId={id} />}
         <InfoSection
           nickname={data.member.nickname}
           sourceLang={data.source_lang}

@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 async function SolutionEdit({ params: { id } }: { params: { id: string } }) {
   const loginUser = await getUserSession();
   const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
+
   const isMyPost = loginUser.userId === data.member.id;
   if (!isMyPost) redirect('/404');
 

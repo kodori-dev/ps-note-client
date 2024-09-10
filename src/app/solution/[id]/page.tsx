@@ -28,7 +28,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
           isCorrectAnswer={data.is_correct_answer}
           answerLabel={data.score_label}
         />
-        {isMySol && <EditSection solutionId={id} />}
+
         <InfoSection
           nickname={data.member.nickname}
           sourceLang={data.source_lang}
@@ -37,6 +37,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
           submittedAt={data.submitted_at}
           createdAt={data.created_at}
         />
+        {isMySol && <EditSection solutionId={id} />}
         <BodySection language={data.source_lang} code={data.source_code} comment={data.comment} />
       </main>
     </>

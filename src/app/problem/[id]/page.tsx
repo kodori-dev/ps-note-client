@@ -11,7 +11,7 @@ async function Problem({ params: { id } }: { params: { id: string } }) {
 
   return (
     <>
-      <MetaTag title={`${problem?.name} - 솔루션 리스트`} description={`${problem?.name} 문제에 등록된 솔루션을 한 곳에서 확인하세요.`} />
+      <MetaTag title={`[ ${problem?.name} ] 솔루션 리스트`} description={`${problem?.name} 문제에 등록된 솔루션을 한 곳에서 확인하세요.`} />
       <div className="flex flex-col gap-16">
         {problem && (
           <ProblemInfo

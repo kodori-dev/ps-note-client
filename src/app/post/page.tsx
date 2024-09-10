@@ -1,9 +1,6 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
-import ProblemSection from './_components/ProblemSection';
-import SolutionSection from './_components/SolutionSection';
-import CommentSection from './_components/CommentSection';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Button from '@/components/Button';
 import { api } from '@/utils/api';
@@ -11,15 +8,18 @@ import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { PostSolReq } from '@/types/api/solution';
 import MetaTag from '@/components/MetaTag';
+import PostLayout from '@/components/Layout/PostLayout';
+import { PostFormType } from '@/types/input';
 
-const DEFAULT_INPUT = {
+const DEFAULT_INPUT: PostFormType = {
   boj_id: '',
   is_correct_answer: '',
   isStar: false,
   source_lang: '풀이 언어를 선택하세요.',
   source_code: '',
   pid: '',
-  comment: '',
+  comment:
+    '## 아이디어\n<!-- AC의 경우에는 간단한 아이디어를,\nWA의 경우에는 문제 풀이를 상세히 기록해 주세요.\n(주석은 삭제 후 코멘트를 작성해 주세요.) -->',
 };
 
 function Post() {
@@ -59,23 +59,12 @@ function Post() {
   return (
     <>
       <MetaTag title="체크인" description="오늘 푼 문제의 솔루션을 등록하세요. 아이디어 섹션을 통해 자유롭게 문제 풀이 방법을 기록해 보세요." />
-      <FormProvider {...methods}>
-        <form className="flex flex-col gap-16 mb-24" onSubmit={handleSubmit(handleCheckIn)}>
-          <div className="flex flex-col gap-1">
-            <h1 className="text-48 font-700 text-primary">{`Today's Check-In✏️`}</h1>
-            <p className="text-12 text-gray-3">* 출석 날짜는 BOJ 기준(06시 초기화)에 맞춰 자동 반영됩니다.</p>
-          </div>
-          <ProblemSection />
-          <SolutionSection />
-          <CommentSection />
-          <div className="flex justify-end">
-            <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
-              Save
-            </Button>
-          </div>
-        </form>
-        {isLoading && <ScreenLoading />}
-      </FormProvider>
+      <PostLayout methods={methods} onSubmitFunc={handleSubmit(handleCheckIn)}>
+        <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
+          Save
+        </Button>
+      </PostLayout>
+      {isLoading && <ScreenLoading />}
     </>
   );
 }

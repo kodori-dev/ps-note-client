@@ -13,7 +13,7 @@ interface Props {
 const STYLE = {
   primary: 'bg-primary text-white hover:bg-primary-hover',
   secondary: 'bg-white text-primary hover:bg-gray-100 border border-primary',
-  disabled: 'bg-gray-4 text-white',
+  disabled: 'bg-gray-4 text-white cursor-not-allowed',
 };
 
 const HEIGHT_STYLE = {

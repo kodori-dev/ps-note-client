@@ -4,9 +4,15 @@ import { SolutionType } from '@/types/api/solution';
 import BodySection from './_components/BodySection';
 import { getServerData } from '@/utils/getServerData';
 import MetaTag from '@/components/MetaTag';
+import { getUserSession } from '@/utils/getUserSession';
+import EditSection from './_components/EditSection';
+import { redirect } from 'next/navigation';
 
 async function Solution({ params: { id } }: { params: { id: string } }) {
+  const loginUser = await getUserSession();
   const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
+  if (!data) redirect('/404');
+  const isMySol = loginUser.userId === data.member.id;
 
   return (
     <>
@@ -22,6 +28,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
           isCorrectAnswer={data.is_correct_answer}
           answerLabel={data.score_label}
         />
+
         <InfoSection
           nickname={data.member.nickname}
           sourceLang={data.source_lang}
@@ -30,6 +37,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
           submittedAt={data.submitted_at}
           createdAt={data.created_at}
         />
+        {isMySol && <EditSection solutionId={id} />}
         <BodySection language={data.source_lang} code={data.source_code} comment={data.comment} />
       </main>
     </>

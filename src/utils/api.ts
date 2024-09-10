@@ -137,6 +137,10 @@ interface PatchType {
     req: PatchCouponReq;
     res: CouponType;
   };
+  [key: `/solutions/${string}`]: {
+    req: PostSolReq;
+    res: PostSolRes;
+  };
 }
 
 interface DeleteType {

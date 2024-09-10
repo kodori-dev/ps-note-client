@@ -1,6 +1,5 @@
 'use client';
 
-import Button from '@/components/Button';
 import Link from 'next/link';
 
 interface Props {
@@ -9,15 +8,11 @@ interface Props {
 
 function EditSection({ solutionId }: Props) {
   return (
-    <div className="flex gap-6 mb-6">
+    <div className="flex gap-5">
       <Link href={`/solution/${solutionId}/edit`}>
-        <Button theme="secondary" heightSize="sm" roundSize="lg" customStyle="px-5 text-14">
-          ✏️수정
-        </Button>
+        <button className="hover:border-primary text-primary border-b text-14">✏️수정하기</button>
       </Link>
-      <Button theme="secondary" heightSize="sm" roundSize="lg" customStyle="px-5 text-14">
-        🗑️ 삭제
-      </Button>
+      <button className="hover:border-red hover:text-red text-gray-2 border-b text-14">🗑️삭제하기</button>
     </div>
   );
 }

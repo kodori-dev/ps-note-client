@@ -22,7 +22,7 @@ async function SolutionEdit({ params: { id } }: { params: { id: string } }) {
     comment: data.comment,
   };
 
-  return <>{isMyPost && <EditForm defaultValue={defaultInput} />}</>;
+  return <>{isMyPost && <EditForm userId={loginUser.userId} defaultValue={defaultInput} solutionId={id} />}</>;
 }
 
 export default SolutionEdit;

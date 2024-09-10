@@ -10,6 +10,7 @@ import { PostSolReq } from '@/types/api/solution';
 import MetaTag from '@/components/MetaTag';
 import PostLayout from '@/components/Layout/PostLayout';
 import { PostFormType } from '@/types/input';
+import { useToast } from '@chakra-ui/react';
 
 const DEFAULT_INPUT: PostFormType = {
   boj_id: '',
@@ -29,6 +30,7 @@ function Post() {
   const isSave = pid && boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
   const { data: user } = useGetUserInfo();
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const handleCheckIn = async () => {
     setIsLoading(true);
@@ -47,10 +49,18 @@ function Post() {
 
       const res = await api('POST', '/solutions', body);
       if (typeof res === 'string') throw Error();
-      alert('solution이 정상적으로 등록되었습니다.');
+      toast({
+        title: `체크인 완료!`,
+        description: '내일도 화이팅❤️‍🔥!',
+        status: 'success',
+      });
       window.location.href = `/solution/${res.id}`;
     } catch (err) {
-      alert('solution을 등록하는 데 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.');
+      toast({
+        title: `체크인 실패!`,
+        description: '잠시 후 다시 시도해 주세요.',
+        status: 'error',
+      });
     } finally {
       setIsLoading(false);
     }

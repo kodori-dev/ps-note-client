@@ -1,12 +1,9 @@
 import { getServerData } from '@/utils/getServerData';
 import WeekSection from './_component/WeekSection';
-import { GetPenaltiesRes, PenaltyType } from '@/types/api/penalty';
+import { PenaltyType } from '@/types/api/penalty';
 import { UserType } from '@/types/api/auth';
 import { GetHolidayRes } from '@/types/api/holiday';
 import MetaTag from '@/components/MetaTag';
-import { getUserSession } from '@/utils/getUserSession';
-
-const ALL_BOJ_PROBLEM = 31200;
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
   const today = new Date();

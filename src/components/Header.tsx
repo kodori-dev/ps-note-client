@@ -117,20 +117,23 @@ function Header() {
       )}
 
       {isDropdown && (
-        <div className="absolute z-modal -bottom-[124px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
-          {DROPDOWN_BTN.map(({ onClick, type }) => (
-            <button
-              key={type}
-              onClick={() => {
-                onClick();
-                setIsDropDown(false);
-              }}
-              className="enabled:hover:text-primary enabled:hover:bg-primary/10 py-3 px-6 disabled:opacity-20 disabled:cursor-not-allowed"
-            >
-              {type}
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="w-full h-svh z-20 fixed top-0 left-0" onClick={() => setIsDropDown(false)} />
+          <div className="absolute z-modal -bottom-[124px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
+            {DROPDOWN_BTN.map(({ onClick, type }) => (
+              <button
+                key={type}
+                onClick={() => {
+                  onClick();
+                  setIsDropDown(false);
+                }}
+                className="enabled:hover:text-primary enabled:hover:bg-primary/10 py-3 px-6 disabled:opacity-20 disabled:cursor-not-allowed"
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </>
       )}
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>

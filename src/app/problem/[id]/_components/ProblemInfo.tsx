@@ -6,8 +6,10 @@ import LevelIcon from '../../../../../public/icon-problem-level.svg';
 import ListIcon from '../../../../../public/icon-problem-list.svg';
 import { LevelType, TagType } from '@/types/api/problem';
 import LinkIcon from '../../../../../public/icon-link-arrow.svg';
+import Button from '@/components/Button';
 
 interface Props {
+  id: number;
   number: string;
   isSolved?: 'AC' | 'WA' | null;
   title: string;
@@ -17,7 +19,7 @@ interface Props {
   tags: TagType[];
 }
 
-function ProblemInfo({ number, isSolved = null, title, level, isStar = false, stars, tags }: Props) {
+function ProblemInfo({ id, number, isSolved = null, title, level, isStar = false, stars, tags }: Props) {
   const INFO_GRID = [
     { icon: <GoodIcon fill="#ACACAC" />, head: '이 문제를 추천한 사람', body: <p className="text-20">{stars}</p> },
     {
@@ -41,7 +43,12 @@ function ProblemInfo({ number, isSolved = null, title, level, isStar = false, st
   ];
 
   return (
-    <div>
+    <div className="relative">
+      <Link href={`/post?id=${id}&boj_id=${number} - ${title}`}>
+        <Button heightSize="sm" roundSize="sm" customStyle="px-4 absolute top-0 right-0">
+          이 문제 바로 체크인하기
+        </Button>
+      </Link>
       <div className="flex gap-5 items-center">
         <Link href={`https://www.acmicpc.net/problem/${number}`} className="group relative hover:text-black text-gray-2 text-24 border-b border-gray-3">
           {number}

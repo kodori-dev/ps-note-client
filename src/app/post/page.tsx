@@ -11,19 +11,22 @@ import MetaTag from '@/components/MetaTag';
 import PostLayout from '@/components/Layout/PostLayout';
 import { PostFormType } from '@/types/input';
 import { useToast } from '@chakra-ui/react';
-
-const DEFAULT_INPUT: PostFormType = {
-  boj_id: '',
-  is_correct_answer: '',
-  isStar: false,
-  source_lang: '풀이 언어를 선택하세요.',
-  source_code: '',
-  pid: '',
-  comment:
-    '## 아이디어\n<!-- AC의 경우에는 간단한 아이디어를,\nWA의 경우에는 문제 풀이를 상세히 기록해 주세요.\n(주석은 삭제 후 코멘트를 작성해 주세요.) -->',
-};
+import { useSearchParams } from 'next/navigation';
 
 function Post() {
+  const param = useSearchParams();
+
+  const DEFAULT_INPUT: PostFormType = {
+    boj_id: param.get('boj_id') || '',
+    is_correct_answer: '',
+    isStar: false,
+    source_lang: '풀이 언어를 선택하세요.',
+    source_code: '',
+    pid: param.get('id') || '',
+    comment:
+      '## 아이디어\n<!-- AC의 경우에는 간단한 아이디어를,\nWA의 경우에는 문제 풀이를 상세히 기록해 주세요.\n(주석은 삭제 후 코멘트를 작성해 주세요.) -->',
+  };
+
   const methods = useForm({ mode: 'onSubmit', defaultValues: DEFAULT_INPUT });
   const { watch, getValues, handleSubmit } = methods;
   const { pid, boj_id, is_correct_answer, source_lang, source_code } = watch();

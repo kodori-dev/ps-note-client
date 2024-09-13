@@ -62,7 +62,7 @@ function Admin() {
           end_date: dayjs(dateArr[4]).format('YYYY-MM-DD'),
         });
         const { penalty } = calcSimplePenalty(memberPenalty);
-        let colArr = [memberPenalty, penalty]; //[[{m}, {t}, {w}, {t}, {f}], 벌금]
+        let colArr = [memberPenalty, penalty]; //[{m}, {t}, {w}, {t}, {f}], 벌금]
         res.push(colArr);
       }
       return res;
@@ -74,8 +74,12 @@ function Admin() {
     if (isMembersSuccess && membersData) getPenalty();
   }, [isMembersSuccess]);
 
+  useEffect(() => {
+    getPenalty();
+  }, [dateArr]);
+
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       <div className="w-[386px]">
         <Input label="출석 조회 날짜" description="해당 날짜가 포함된 1주 단위로 조회됩니다." register={register('selectedWeek')} type="date" />
       </div>
@@ -90,14 +94,18 @@ function Admin() {
           {isSuccess &&
             data &&
             data.map((item) => (
-              <Fragment key={item[0][0].member.id}>
-                <p>{item[0][0].member.nickname}</p>
-                {item[0].map((penalty: any) => (
-                  <p key={`${penalty.day}+${penalty.member.id}`}>{penalty.coupons.length > 0 ? `🎟️` : penalty.is_penalty ? '❌' : '✅'}</p>
-                ))}
-                <p>{(item[1] as number).toLocaleString('ko-KR')} 원</p>
-                <p>냠</p>
-              </Fragment>
+              <>
+                {item[0].length > 0 && (
+                  <Fragment key={item[0][0].member.id}>
+                    <p>{item[0][0].member.nickname}</p>
+                    {item[0].map((penalty: any) => (
+                      <p key={`${penalty.day}+${penalty.member.id}`}>{penalty.coupons.length > 0 ? `🎟️` : penalty.is_penalty ? '✖️' : '✅'}</p>
+                    ))}
+                    <p>{(item[1] as number).toLocaleString('ko-KR')} 원</p>
+                    <p>냠</p>
+                  </Fragment>
+                )}
+              </>
             ))}
         </>
       </div>

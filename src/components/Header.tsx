@@ -18,6 +18,7 @@ function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { data: user, isSuccess: isUserSuccess } = useGetUserInfo();
   const {
@@ -42,6 +43,9 @@ function Header() {
   useEffect(() => {
     if (isUserSuccess && user.isLogin) {
       getCoupon();
+      if ([process.env.NEXT_PUBLIC_ADMIN_ID1, process.env.NEXT_PUBLIC_ADMIN_ID2].includes(String(user.userId))) {
+        setIsAdmin(true);
+      }
     }
   }, [isUserSuccess]);
 
@@ -104,6 +108,11 @@ function Header() {
           <Link href={'/post'}>
             <button className="hover:text-gray-2">체크인</button>
           </Link>
+          {isAdmin && (
+            <Link href={'/admin'}>
+              <button className="hover:text-gray-2">관리자</button>
+            </Link>
+          )}
           <button onClick={() => setIsDropDown((prev) => !prev)}>
             <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
           </button>

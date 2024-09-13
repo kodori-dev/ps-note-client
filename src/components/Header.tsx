@@ -13,12 +13,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
 import { logout } from '@/utils/logout';
 import dayjs from 'dayjs';
+import { useCheckAdmin } from '@/hooks/useCheckAdmin';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const isAdmin = useCheckAdmin();
 
   const { data: user, isSuccess: isUserSuccess } = useGetUserInfo();
   const {
@@ -43,9 +44,6 @@ function Header() {
   useEffect(() => {
     if (isUserSuccess && user.isLogin) {
       getCoupon();
-      if ([process.env.NEXT_PUBLIC_ADMIN_ID1, process.env.NEXT_PUBLIC_ADMIN_ID2].includes(String(user.userId))) {
-        setIsAdmin(true);
-      }
     }
   }, [isUserSuccess]);
 

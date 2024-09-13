@@ -15,6 +15,7 @@ async function Problem({ params: { id } }: { params: { id: string } }) {
       <div className="flex flex-col gap-16">
         {problem && (
           <ProblemInfo
+            id={problem.id}
             title={problem.name}
             isSolved={problem.is_solved ? 'AC' : null}
             level={problem.level}

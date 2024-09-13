@@ -50,7 +50,11 @@ function ProblemInfo({ id, number, isSolved = null, title, level, isStar = false
         </Button>
       </Link>
       <div className="flex gap-5 items-center">
-        <Link href={`https://www.acmicpc.net/problem/${number}`} className="group relative hover:text-black text-gray-2 text-24 border-b border-gray-3">
+        <Link
+          target="_blank"
+          href={`https://www.acmicpc.net/problem/${number}`}
+          className="group relative hover:text-black text-gray-2 text-24 border-b border-gray-3"
+        >
           {number}
           <LinkIcon fill="#ACACAC" className="absolute top-[6px] -right-3" />
           <span className="hidden group-hover:inline-block text-12 absolute whitespace-nowrap -right-56 top-2 px-2 py-[2px] bg-black/30 text-white rounded-md">

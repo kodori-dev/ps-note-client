@@ -20,6 +20,8 @@ env:
   NEXT_PUBLIC_SERVER_URL: ${{ secrets.SERVER_URL }}
   NEXT_PUBLIC_FRONT_URL: ${{ secrets.FRONT_URL }}
   NEXT_PUBLIC_SESSION_PW: ${{ secrets.FRONT_SESSION_PW }}
+  NEXT_PUBLIC_ADMIN_ID1: ${{ secrets.ADMIN_ID1 }}
+  NEXT_PUBLIC_ADMIN_ID2: ${{ secrets.ADMIN_ID2 }}
 
 jobs:
   prepare:
@@ -97,6 +99,8 @@ jobs:
             NEXT_PUBLIC_SERVER_URL=${{ env.NEXT_PUBLIC_SERVER_URL }}
             NEXT_PUBLIC_FRONT_URL=${{ env.NEXT_PUBLIC_FRONT_URL }}
             NEXT_PUBLIC_SESSION_PW=${{ env.NEXT_PUBLIC_SESSION_PW }}
+            NEXT_PUBLIC_ADMIN_ID1: ${{ secrets.ADMIN_ID1 }}
+            NEXT_PUBLIC_ADMIN_ID2: ${{ secrets.ADMIN_ID2 }}
           push: true
           platforms: |
             linux/arm64

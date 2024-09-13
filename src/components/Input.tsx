@@ -7,17 +7,19 @@ interface Props {
   type?: 'password' | 'text' | 'date';
   register?: UseFormRegisterReturn<any>;
   error?: any;
+  disabled?: boolean;
 }
 
 const ERR_STYLE = 'border-red focus:border-red';
 
-function Input({ label, placeholder, description, register, error, type = 'text' }: Props) {
+function Input({ label, placeholder, description, register, error, type = 'text', disabled = false }: Props) {
   return (
     <div className="flex flex-col gap-1">
       <label className="font-700 flex flex-col gap-2 text-14">
         {label}
         <input
           type={type}
+          disabled={disabled}
           {...register}
           placeholder={placeholder}
           className={`focus:outline-none focus:border-primary h-[54px] p-4 font-400 border border-gray-4 rounded-md placeholder:text-gray-3 + ${

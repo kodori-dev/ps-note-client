@@ -12,7 +12,6 @@ import ScreenLoading from './Loading/ScreenLoading';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
 import { logout } from '@/utils/logout';
-import dayjs from 'dayjs';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
@@ -52,11 +51,11 @@ function Header() {
     try {
       setIsLoading(true);
       if (!coupon || !user.isLogin) throw Error();
-      const cur = new Date();
+      const today = getBojTime();
       const res = await api('PATCH', `/coupons/${coupon.id}`, {
         name: coupon.name,
         member: user.userId,
-        used_at: dayjs(cur).format('YYYY-MM-DDTHH:mm:ss'),
+        used_at: `${today}T09:00:00`,
         valid_to: coupon.valid_to,
         valid_from: coupon.valid_from,
       });

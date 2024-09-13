@@ -28,7 +28,7 @@ export type GetMembersRes = UserType[];
 
 export interface GetMemberForIdRes extends UserType {}
 
-export interface PostMembersReq {
+export interface PatchMembersReq {
   username: string;
   password: string;
   nickname: string;
@@ -37,6 +37,6 @@ export interface PostMembersReq {
   is_off: boolean;
 }
 
-export interface PostMembersRes extends PostMembersReq {
+export interface PatchMembersRes extends PatchMembersReq {
   id: number;
 }

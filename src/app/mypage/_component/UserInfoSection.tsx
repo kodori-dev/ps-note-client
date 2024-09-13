@@ -4,6 +4,7 @@ import Button from '@/components/Button';
 import { UserType } from '@/types/api/auth';
 import { useState } from 'react';
 import UserEditBox from './UserEditBox';
+import Link from 'next/link';
 
 interface Props {
   userData: UserType;
@@ -14,7 +15,7 @@ function UserInfoSection({ userData }: Props) {
   const { boj_id, nickname, username, is_off } = userData;
 
   const INFO = [
-    { type: '연동된 ID (BOJ)', value: `@${boj_id}` },
+    { type: '연동된 ID (BOJ)', value: <Link href={`https://www.acmicpc.net/user/${boj_id}`}>@{boj_id}</Link> },
     {
       type: '현재 상태',
       value: is_off ? '잠시 쉬어가는 중💤' : '열심히 달리는 중❤️‍🔥',
@@ -39,8 +40,10 @@ function UserInfoSection({ userData }: Props) {
           <div className="flex gap-12">
             {INFO.map(({ type, value }) => (
               <div key={type} className="flex flex-col gap-1">
-                <p className="text-20 bg-black/10 rounded-md py-1 px-3">{value}</p>
-                <p className="text-gray-3">{type}</p>
+                <p className={['text-20 bg-black/10 rounded-sm py-1 px-3', type === '현재 상태' && !is_off ? 'bg-progress-pink/50' : ''].join(' ')}>
+                  {value}
+                </p>
+                <p className="text-gray-3 text-14">{type}</p>
               </div>
             ))}
           </div>

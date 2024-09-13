@@ -41,7 +41,7 @@ function UserEditBox({ defaultValue }: Props) {
       is_off: defaultValue.is_off,
     };
     try {
-      const res = await api('POST', '/members', body);
+      const res = await api('PATCH', `/members/${defaultValue.id}`, body);
       if (typeof res === 'string') throw Error(res);
       await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/session`, {
         method: 'POST',
@@ -82,8 +82,8 @@ function UserEditBox({ defaultValue }: Props) {
           placeholder="연동할 BOJ ID를 입력하세요."
           error={errors.boj_id}
         />
-        <Input register={register('password', { required: REQUIRED_INPUT })} label="비밀번호 입력" placeholder="비밀번호를 입력해 주세요." type="password" />
-        <Button disabled={!isEdit}>수정하기</Button>
+        <Input register={register('password', { required: REQUIRED_INPUT })} label="비밀번호 확인" placeholder="비밀번호를 입력해 주세요." type="password" />
+        <Button disabled={true || !isEdit}>수정하기</Button>
       </form>
     </>
   );

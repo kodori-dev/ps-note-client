@@ -1,6 +1,6 @@
 import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { SERVER_ERR } from '@/constants/errorMsg';
-import { GetMembersRes, PostLoginReq, PostMembersReq, PostMembersRes, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetMembersRes, PatchMembersReq, PatchMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { CouponType, GetCouponsRes, PatchCouponReq } from '@/types/api/coupon';
 import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
@@ -130,10 +130,6 @@ interface PostType {
     req: PostStarReq;
     res: PostStarReq;
   };
-  '/members': {
-    req: PostMembersReq;
-    res: PostMembersRes;
-  };
 }
 
 interface PatchType {
@@ -144,6 +140,10 @@ interface PatchType {
   [key: `/solutions/${string}`]: {
     req: PostSolReq;
     res: PostSolRes;
+  };
+  [key: `/members/${string}`]: {
+    req: PatchMembersReq;
+    res: PatchMembersRes;
   };
 }
 

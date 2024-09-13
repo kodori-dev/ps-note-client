@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { Spinner } from '@chakra-ui/react';
+import { useClientFlag } from '@/hooks/useClientFlag';
 
 interface Props {
   solutions: SolutionType[];
@@ -13,6 +14,8 @@ interface Props {
 const CATEGORY = ['제출일', '채점 결과', '언어', '사람', '백준 연동 여부', '풀이 보기'];
 
 function SolutionList({ solutions }: Props) {
+  const isClient = useClientFlag();
+
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-6 gap-1 border-b border-gray-3 pb-1">
@@ -43,7 +46,7 @@ function SolutionList({ solutions }: Props) {
                 </span>
               </Link>
               <Link href={`/solution/${solution.id}`} className="flex items-center">
-                <ChevronRightIcon boxSize={6} />
+                {isClient && <ChevronRightIcon boxSize={6} />}
               </Link>
             </div>
           </Fragment>

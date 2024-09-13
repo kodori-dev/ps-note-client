@@ -1,10 +1,11 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 import { EmblaOptionsType } from 'embla-carousel';
 import { PrevButton, NextButton, usePrevNextButtons } from './CarouselArrowButton';
 import useEmblaCarousel from 'embla-carousel-react';
 import './embla.css';
+import { useClientFlag } from '@/hooks/useClientFlag';
 
 interface Props {
   children: ReactNode;
@@ -13,13 +14,10 @@ interface Props {
 
 function Carousel({ children, options }: Props) {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
-  const [isClient, setIsClient] = useState(false);
+  const isClient = useClientFlag();
 
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
   return (
     <section className="embla flex items-center w-full">
       {isClient && <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />}

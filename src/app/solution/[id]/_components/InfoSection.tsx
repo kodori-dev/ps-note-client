@@ -26,7 +26,7 @@ function InfoSection({ nickname, sourceLang, solutionId, isVerified, submittedAt
         return <p>{value}</p>;
       case 'link':
         return (
-          <Link href={value as string} className="text-gray-2 w-fit border-b border-gray-2">
+          <Link target="_blank" href={value as string} className="text-gray-2 w-fit border-b border-gray-2">
             {value}
           </Link>
         );

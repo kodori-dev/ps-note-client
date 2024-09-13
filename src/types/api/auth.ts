@@ -27,3 +27,16 @@ export interface PostLoginReq {
 export type GetMembersRes = UserType[];
 
 export interface GetMemberForIdRes extends UserType {}
+
+export interface PatchMembersReq {
+  username: string;
+  password: string;
+  nickname: string;
+  boj_id: string;
+  is_active: boolean;
+  is_off: boolean;
+}
+
+export interface PatchMembersRes extends PatchMembersReq {
+  id: number;
+}

@@ -13,11 +13,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
 import { logout } from '@/utils/logout';
 import dayjs from 'dayjs';
+import { useCheckAdmin } from '@/hooks/useCheckAdmin';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const isAdmin = useCheckAdmin();
 
   const { data: user, isSuccess: isUserSuccess } = useGetUserInfo();
   const {
@@ -74,6 +76,7 @@ function Header() {
 
   const DROPDOWN_BTN = [
     { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${user.userId}`) },
+    { type: '마이페이지', onClick: () => (window.location.href = `/mypage`) },
     {
       type: '로그아웃',
       onClick: async () => {
@@ -103,6 +106,11 @@ function Header() {
           <Link href={'/post'}>
             <button className="hover:text-gray-2">체크인</button>
           </Link>
+          {isAdmin && (
+            <Link href={'/admin'}>
+              <button className="hover:text-gray-2">관리자</button>
+            </Link>
+          )}
           <button onClick={() => setIsDropDown((prev) => !prev)}>
             <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
           </button>
@@ -116,20 +124,23 @@ function Header() {
       )}
 
       {isDropdown && (
-        <div className="absolute z-modal -bottom-[84px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
-          {DROPDOWN_BTN.map(({ onClick, type }) => (
-            <button
-              key={type}
-              onClick={() => {
-                onClick();
-                setIsDropDown(false);
-              }}
-              className="enabled:hover:text-primary enabled:hover:bg-primary/10 py-3 px-6 disabled:opacity-20 disabled:cursor-not-allowed"
-            >
-              {type}
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="w-full h-svh z-20 fixed top-0 left-0" onClick={() => setIsDropDown(false)} />
+          <div className="absolute z-modal -bottom-[124px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
+            {DROPDOWN_BTN.map(({ onClick, type }) => (
+              <button
+                key={type}
+                onClick={() => {
+                  onClick();
+                  setIsDropDown(false);
+                }}
+                className="enabled:hover:text-primary enabled:hover:bg-primary/10 py-3 px-6 disabled:opacity-20 disabled:cursor-not-allowed"
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </>
       )}
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>

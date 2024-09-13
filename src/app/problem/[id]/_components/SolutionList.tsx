@@ -32,10 +32,10 @@ function SolutionList({ solutions }: Props) {
               <p className="text-gray-2 text-14">{solution.submitted_at}</p>
               <Chip type={solution.is_correct_answer ? 'AC' : 'WA'}>{solution.score_label}</Chip>
               <p>{solution.source_lang}</p>
-              <Link passHref href={`https://www.acmicpc.net/user/${solution.member.boj_id}`}>
+              <Link target="_blank" href={`https://www.acmicpc.net/user/${solution.member.boj_id}`}>
                 {solution.member.nickname}
               </Link>
-              <Link href={`https://www.acmicpc.net/source/${solution.boj_solution_id}`} className="group relative flex items-center z-star">
+              <Link target="_blank" href={`https://www.acmicpc.net/source/${solution.boj_solution_id}`} className="group relative flex items-center z-star">
                 {solution.is_boj_verified === null ? (
                   <Spinner color="blue.200" size="md" thickness="3px" />
                 ) : (

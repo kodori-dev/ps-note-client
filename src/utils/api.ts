@@ -1,10 +1,11 @@
 import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { SERVER_ERR } from '@/constants/errorMsg';
-import { GetMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
+import { GetMembersRes, PatchMembersReq, PatchMembersRes, PostLoginReq, PostSignUpReq, PostSignUpRes } from '@/types/api/auth';
 import { CouponType, GetCouponsRes, PatchCouponReq } from '@/types/api/coupon';
 import { GetHolidayRes } from '@/types/api/holiday';
 import { GetPenaltiesRes } from '@/types/api/penalty';
 import { GetProblemsRes } from '@/types/api/problem';
+import { GetSolsQueryType } from '@/types/api/query';
 import { GetSolsRes, PostSolReq, PostSolRes, SolutionType } from '@/types/api/solution';
 import { GetStarsRes, PostStarReq } from '@/types/api/star';
 
@@ -72,7 +73,7 @@ export type GetType = {
     res: GetSolsRes;
     query: {
       member_id?: number;
-      order_by?: 'id' | '-id' | 'source_lang' | '-source_lang' | 'submitted_at' | '-submitted_at';
+      order_by?: GetSolsQueryType;
       page?: number;
       page_size?: number;
       problem_id?: number;
@@ -140,6 +141,10 @@ interface PatchType {
   [key: `/solutions/${string}`]: {
     req: PostSolReq;
     res: PostSolRes;
+  };
+  [key: `/members/${string}`]: {
+    req: PatchMembersReq;
+    res: PatchMembersRes;
   };
 }
 

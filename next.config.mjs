@@ -13,6 +13,8 @@ const nextConfig = {
     NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
     NEXT_PUBLIC_FRONT_URL: process.env.NEXT_PUBLIC_FRONT_URL,
     NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
+    NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
+    NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
   },
   output: 'standalone',
   webpack: (config) => {

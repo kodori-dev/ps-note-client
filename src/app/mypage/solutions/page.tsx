@@ -55,7 +55,7 @@ function MySolutions() {
           </Tag>
         ))}
       </div>
-      {isSuccess && data && data.count && <CardList type="solution" data={data.results} />}
+      {isSuccess && data && data.count > 0 ? <CardList type="solution" data={data.results} /> : <div className="text-center">제출한 솔루션이 없습니다.</div>}
       {isLoading && <ScreenLoading />}
     </div>
   );

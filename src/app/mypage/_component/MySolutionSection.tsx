@@ -18,23 +18,27 @@ function MySolutionSection({ solutionsData }: Props) {
         </Link>
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {solutionsData.map(({ id, problem, is_correct_answer, score_label }) => (
-          <ProblemCard
-            key={id}
-            type="solution"
-            bojId={problem.boj_id}
-            isSolved={problem.is_solved}
-            level={problem.level}
-            problemId={problem.id}
-            stars={problem.stars}
-            title={problem.name}
-            isCorrectAnswer={is_correct_answer}
-            solutionId={id}
-            isStar={problem.is_starred}
-            resultLabel={score_label}
-            customStyle=" w-full"
-          />
-        ))}
+        {solutionsData.length > 0 ? (
+          solutionsData.map(({ id, problem, is_correct_answer, score_label }) => (
+            <ProblemCard
+              key={id}
+              type="solution"
+              bojId={problem.boj_id}
+              isSolved={problem.is_solved}
+              level={problem.level}
+              problemId={problem.id}
+              stars={problem.stars}
+              title={problem.name}
+              isCorrectAnswer={is_correct_answer}
+              solutionId={id}
+              isStar={problem.is_starred}
+              resultLabel={score_label}
+              customStyle=" w-full"
+            />
+          ))
+        ) : (
+          <div>제출한 솔루션이 없어요 🥲</div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,64 @@
+'use client';
+
+import CardList from '@/components/CardList/CardList';
+import ScreenLoading from '@/components/Loading/ScreenLoading';
+import Tag from '@/components/Tag';
+import { useGetUserInfo } from '@/hooks/useGetUserInfo';
+import { GetSolsQueryType } from '@/types/api/query';
+import { api } from '@/utils/api';
+import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+const ORDER_STRING = ['최신순', '오래된순', '풀이 언어순'] as const;
+type orderType = (typeof ORDER_STRING)[number];
+
+const ORDER = {
+  '풀이 언어순': 'source_lang',
+  최신순: '-submitted_at',
+  오래된순: 'submitted_at',
+};
+
+const PAGE_SIZE = 30;
+
+function MySolutions() {
+  const page = useSearchParams().get('page');
+  const { data: user } = useGetUserInfo();
+  const [order, setOrder] = useState('최신순');
+
+  const { data, isLoading, isSuccess, refetch } = useQuery({
+    queryKey: ['my_solutions'],
+    queryFn: async () => {
+      const res = await api('GET', '/solutions', null, {
+        member_id: user.userId,
+        order_by: ORDER[order as orderType] as GetSolsQueryType,
+        page: Number(page),
+        page_size: PAGE_SIZE,
+      });
+      return res;
+    },
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [order]);
+
+  return (
+    <div className="flex flex-col gap-5">
+      <h1 className="text-32 mb-4">
+        <span className="font-700">내가 제출한 솔루션</span>을 확인하세요.
+      </h1>
+      <div className="flex gap-2">
+        {ORDER_STRING.map((item) => (
+          <Tag key={item} onClickFunc={() => setOrder(item)} initialState={order === item} customStyle="px-3">
+            {item}
+          </Tag>
+        ))}
+      </div>
+      {isSuccess && data && data.count && <CardList type="solution" data={data.results} />}
+      {isLoading && <ScreenLoading />}
+    </div>
+  );
+}
+
+export default MySolutions;

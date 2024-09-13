@@ -1,6 +1,6 @@
 import SearchBar from '@/components/Search/SearchBar';
 import { headers } from 'next/headers';
-import CardList from './_components/CardList';
+import CardList from '../../components/CardList/CardList';
 import { GetProblemsRes } from '@/types/api/problem';
 import Button from '@/components/Button';
 import Link from 'next/link';
@@ -24,7 +24,7 @@ async function Search() {
         </p>
         {data ? (
           data.count > 0 ? (
-            <CardList data={data.results} />
+            <CardList type="problem" data={data.results} />
           ) : (
             <p className="text-gray-2 h-32 flex items-center justify-center">일치하는 데이터가 없어요🥲</p>
           )

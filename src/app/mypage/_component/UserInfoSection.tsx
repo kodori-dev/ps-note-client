@@ -15,11 +15,11 @@ function UserInfoSection({ userData }: Props) {
   const { boj_id, nickname, username, is_off } = userData;
 
   const INFO = [
-    { type: '연동된 ID (BOJ)', value: <Link href={`https://www.acmicpc.net/user/${boj_id}`}>@{boj_id}</Link> },
     {
       type: '현재 상태',
       value: is_off ? '잠시 쉬어가는 중💤' : '열심히 달리는 중❤️‍🔥',
     },
+    { type: '연동된 ID (BOJ)', value: <Link href={`https://www.acmicpc.net/user/${boj_id}`}>@{boj_id}</Link> },
   ];
 
   return (
@@ -28,7 +28,7 @@ function UserInfoSection({ userData }: Props) {
         <UserEditBox defaultValue={userData} />
       ) : (
         <div className="bg-white rounded-md p-9 relative flex flex-col gap-8">
-          <Button onClickFunc={() => setIsEdit(true)} customStyle="w-[174px] absolute top-9 right-9" heightSize="sm" roundSize="sm">
+          <Button disabled={true} onClickFunc={() => setIsEdit(true)} customStyle="w-[174px] absolute top-9 right-9" heightSize="sm" roundSize="sm">
             내 정보 수정하기
           </Button>
           <div>

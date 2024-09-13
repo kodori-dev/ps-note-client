@@ -74,6 +74,7 @@ function Header() {
 
   const DROPDOWN_BTN = [
     { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${user.userId}`) },
+    { type: '마이페이지', onClick: () => (window.location.href = `/mypage`) },
     {
       type: '로그아웃',
       onClick: async () => {
@@ -116,7 +117,7 @@ function Header() {
       )}
 
       {isDropdown && (
-        <div className="absolute z-modal -bottom-[84px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
+        <div className="absolute z-modal -bottom-[124px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
           {DROPDOWN_BTN.map(({ onClick, type }) => (
             <button
               key={type}

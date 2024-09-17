@@ -107,12 +107,9 @@ function Header() {
             <button className="hover:text-gray-2">체크인</button>
           </Link>
           {isAdmin && (
-              <>
-                <Link href={'/admin'}>
-                  <button className="hover:text-gray-2">관리자</button>
-                </Link>
-                <button className="hover:text-gray-2" onClick={() => {throw new Error("센트리 에러 테스트")}}>에러 테스트</button>
-              </>
+              <Link href={'/admin'}>
+                <button className="hover:text-gray-2">관리자</button>
+              </Link>
             )}
           <button onClick={() => setIsDropDown((prev) => !prev)}>
             <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}

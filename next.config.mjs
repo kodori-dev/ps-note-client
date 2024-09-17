@@ -9,6 +9,7 @@ const nextConfig = {
     NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
     NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
     NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
+    RELEASE: process.env.RELEASE
   },
   publicRuntimeConfig: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -17,6 +18,7 @@ const nextConfig = {
     NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
     NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
     NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
+    RELEASE: process.env.RELEASE
   },
   output: 'standalone',
   webpack: (config) => {

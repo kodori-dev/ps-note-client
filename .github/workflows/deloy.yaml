@@ -101,6 +101,7 @@ jobs:
             NEXT_PUBLIC_SESSION_PW=${{ env.NEXT_PUBLIC_SESSION_PW }}
             NEXT_PUBLIC_ADMIN_ID1: ${{ secrets.ADMIN_ID1 }}
             NEXT_PUBLIC_ADMIN_ID2: ${{ secrets.ADMIN_ID2 }}
+            SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
           push: true
           platforms: |
             linux/arm64

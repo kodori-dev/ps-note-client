@@ -15,51 +15,6 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-
-# Rebuild the source code only when needed
-FROM base AS builder
-
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-ARG NEXT_PUBLIC_API_BASE_URL
-ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
-
-ARG NEXT_PUBLIC_SERVER_URL
-ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
-
-ARG NEXT_PUBLIC_FRONT_URL
-ENV NEXT_PUBLIC_FRONT_URL=${NEXT_PUBLIC_FRONT_URL}
-
-ARG NEXT_PUBLIC_SESSION_PW
-ENV NEXT_PUBLIC_SESSION_PW=${NEXT_PUBLIC_SESSION_PW}
-
-ARG NEXT_PUBLIC_ADMIN_ID1
-ENV NEXT_PUBLIC_ADMIN_ID1=${NEXT_PUBLIC_ADMIN_ID1}
-
-ARG NEXT_PUBLIC_ADMIN_ID2
-ENV NEXT_PUBLIC_ADMIN_ID2=${NEXT_PUBLIC_ADMIN_ID2}
-
-ARG RELEASE
-ENV RELEASE=${RELEASE}
-
-ARG SENTRY_AUTH_TOKEN
-ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN \
-    if [ -f yarn.lock ]; then yarn run build; \
-    elif [ -f package-lock.json ]; then npm run build; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
-
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -71,7 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY /public ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
@@ -79,14 +34,15 @@ RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --chown=nextjs:nodejs .next/standalone ./
+COPY --chown=nextjs:nodejs .next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT 3000
+
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
@@ -108,8 +64,8 @@ ENV NEXT_PUBLIC_ADMIN_ID1=${NEXT_PUBLIC_ADMIN_ID1}
 ARG NEXT_PUBLIC_ADMIN_ID2
 ENV NEXT_PUBLIC_ADMIN_ID2=${NEXT_PUBLIC_ADMIN_ID2}
 
-ARG RELEASE
-ENV RELEASE=${RELEASE}
+ARG NEXT_PUBLIC_RELEASE
+ENV NEXT_PUBLIC_RELEASE=${NEXT_PUBLIC_RELEASE}
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output

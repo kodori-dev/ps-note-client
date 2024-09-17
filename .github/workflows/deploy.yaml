@@ -6,6 +6,9 @@ on:
       - main
 
 env:
+  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+  CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+  NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
   DEPLOY_ALERT_CHANNEL: C07J1U691R6
   AWS_ROLE: ${{ secrets.AWS_ROLE }}
   AWS_REGION: 'ap-northeast-2'
@@ -88,13 +91,32 @@ jobs:
             latest
             batch
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ">=20"
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Build
+        env:
+          CI: false
+          NEXT_PUBLIC_RELEASE: ${{ needs.prepare.outputs.version_name }}
+          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+        run: |
+          npm run build
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: docker/Dockerfile
           build-args: |
-            RELEASE=${{ needs.prepare.outputs.version_name }}
+            NEXT_PUBLIC_RELEASE=${{ needs.prepare.outputs.version_name }}
             NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
             NEXT_PUBLIC_SERVER_URL=${{ env.NEXT_PUBLIC_SERVER_URL }}
             NEXT_PUBLIC_FRONT_URL=${{ env.NEXT_PUBLIC_FRONT_URL }}
@@ -102,6 +124,7 @@ jobs:
             NEXT_PUBLIC_ADMIN_ID1=${{ env.NEXT_PUBLIC_ADMIN_ID1 }}
             NEXT_PUBLIC_ADMIN_ID2=${{ env.NEXT_PUBLIC_ADMIN_ID2 }}
             SENTRY_AUTH_TOKEN=${{ env.SENTRY_AUTH_TOKEN }}
+            NEXT_PUBLIC_CDN_URL=${{ env.NEXT_PUBLIC_CDN_URL }}
           push: true
           platforms: |
             linux/arm64
@@ -109,6 +132,10 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:cache
           cache-to: type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:cache
+
+      - name: Upload to S3
+        run: |
+          aws s3 sync ./.next/static s3://${{ env.S3_BUCKET_NAME }}/_next/static
 
   deploy:
     needs: [prepare, build-and-push]
@@ -147,6 +174,25 @@ jobs:
       - name: Verify Deployment Status
         run: |
           kubectl rollout status --namespace ${{ env.NAMESPACE }} --timeout 10m ${{ env.DEPLOYMENT_NAME }}
+
+  deploy-cloudfront:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE }}
+
+      - name: CloudFront Invalidation
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'
 
   notify-start:
     needs: [prepare]
@@ -313,7 +359,7 @@ jobs:
             }
 
   notify-deploy-result:
-    needs: [prepare, notify-start, build-and-push, deploy]
+    needs: [prepare, notify-start, build-and-push, deploy, deploy-cloudfront]
     if: ${{ always() && needs.build-and-push.result == 'success' && needs.deploy.result != 'skipped'  }}
 
     runs-on: ubuntu-latest

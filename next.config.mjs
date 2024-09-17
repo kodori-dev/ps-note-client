@@ -9,7 +9,7 @@ const nextConfig = {
     NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
     NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
     NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
-    RELEASE: process.env.RELEASE
+    NEXT_PUBLIC_RELEASE: process.env.NEXT_PUBLIC_RELEASE
   },
   publicRuntimeConfig: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -18,9 +18,10 @@ const nextConfig = {
     NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
     NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
     NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
-    RELEASE: process.env.RELEASE
+    NEXT_PUBLIC_RELEASE: process.env.NEXT_PUBLIC_RELEASE
   },
   output: 'standalone',
+  assetPrefix: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_CDN_URL : undefined,
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,

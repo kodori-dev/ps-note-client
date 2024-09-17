@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === "production") {
   Sentry.init({
     dsn: "https://e44e2ce601badd83ac35efea8cb29576@o4507556578852864.ingest.us.sentry.io/4507831593271296",
 
-    release: process.env.RELEASE,
+    release: process.env.NEXT_PUBLIC_RELEASE,
 
     // Adjust this value in production, or use tracesSampler for greater control
     tracesSampler: ({name}) => {

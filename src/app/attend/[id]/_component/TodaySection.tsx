@@ -1,8 +1,8 @@
 import ProblemCard from '@/components/Card/ProblemCard';
-import { SolutionType } from '@/types/api/solution';
+import { SolutionSchema } from '../../../../../models';
 
 interface Props {
-  data: SolutionType[];
+  data: SolutionSchema[];
 }
 
 function TodaySection({ data }: Props) {
@@ -21,7 +21,7 @@ function TodaySection({ data }: Props) {
               problemId={problem.id}
               solutionId={id}
               title={problem.name}
-              isStar={problem.is_starred}
+              isStar={problem.is_starred ?? false}
               stars={problem.stars}
               isCorrectAnswer={is_correct_answer}
               resultLabel={score_label}

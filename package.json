@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "openapi": "openapi-generator-cli generate -g typescript-fetch -i https://ps-note-server.kodori.dev/api/v2/openapi.json -o ./models --additional-properties=paramNaming=original,modelPropertyNaming=original",
+    "templete": "openapi-generator-cli author template -g typescript-fetch -o ./mustaches"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
@@ -39,6 +41,7 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

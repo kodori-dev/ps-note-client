@@ -1,13 +1,13 @@
 'use client';
 
 import Button from '@/components/Button';
-import { UserType } from '@/types/api/auth';
 import { useState } from 'react';
 import UserEditBox from './UserEditBox';
 import Link from 'next/link';
+import { MemberSchema } from '../../../../models';
 
 interface Props {
-  userData: UserType;
+  userData: MemberSchema;
 }
 
 function UserInfoSection({ userData }: Props) {

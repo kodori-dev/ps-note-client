@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers';
-import { BodyInterfaceType, GetType } from './api';
+import { BodyInterfaceType } from './api';
 import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { redirect } from 'next/navigation';
+import { GetType } from '@/types/api/get';
 
 /**
  * SSR을 위한 API fetch 함수

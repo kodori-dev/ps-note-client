@@ -1,9 +1,9 @@
 import ProblemCard from '@/components/Card/ProblemCard';
-import { GetSolsRes, SolutionType } from '@/types/api/solution';
 import Link from 'next/link';
+import { SolutionSchema } from '../../../../models';
 
 interface Props {
-  solutionsData: SolutionType[];
+  solutionsData: SolutionSchema[];
 }
 
 function MySolutionSection({ solutionsData }: Props) {
@@ -24,14 +24,14 @@ function MySolutionSection({ solutionsData }: Props) {
               key={id}
               type="solution"
               bojId={problem.boj_id}
-              isSolved={problem.is_solved}
+              isSolved={problem.is_solved ?? false}
               level={problem.level}
               problemId={problem.id}
               stars={problem.stars}
               title={problem.name}
               isCorrectAnswer={is_correct_answer}
               solutionId={id}
-              isStar={problem.is_starred}
+              isStar={problem.is_starred ?? false}
               resultLabel={score_label}
               customStyle=" w-full"
             />

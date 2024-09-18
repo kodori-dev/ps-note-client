@@ -6,7 +6,6 @@ import Button from '@/components/Button';
 import { api } from '@/utils/api';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
-import { PostSolReq } from '@/types/api/solution';
 import MetaTag from '@/components/MetaTag';
 import PostLayout from '@/components/Layout/PostLayout';
 import { PostFormType } from '@/types/input';
@@ -40,17 +39,16 @@ function Post() {
     const { pid, isStar, is_correct_answer, source_code, source_lang, comment } = getValues();
 
     try {
-      const body = {
-        member: user.userId,
-        problem: Number(pid),
+      const today = new Date(); //날짜 사용자 input 넣기
+      const res = await api('POST', '/solutions', {
         comment,
-        source_lang: source_lang.toLowerCase(),
-        source_code,
-        star: isStar,
         is_correct_answer: is_correct_answer == 'AC',
-      } as PostSolReq;
-
-      const res = await api('POST', '/solutions', body);
+        problem_id: Number(pid),
+        source_code,
+        source_lang: source_lang.toLowerCase(),
+        star: isStar,
+        submitted_at: today,
+      });
       if (typeof res === 'string') throw Error();
       toast({
         title: `체크인 완료!`,

@@ -4,14 +4,14 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { REQUIRED_INPUT } from '@/constants/errorMsg';
-import { UserType } from '@/types/api/auth';
 import { api } from '@/utils/api';
 import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { MemberSchema } from '../../../../models';
 
 interface Props {
-  defaultValue: UserType;
+  defaultValue: MemberSchema;
 }
 
 function UserEditBox({ defaultValue }: Props) {

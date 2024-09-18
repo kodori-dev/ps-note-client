@@ -1,17 +1,15 @@
-import { LanguageType } from '@/types/api/solution';
-import { CircularProgress, Spinner } from '@chakra-ui/react';
+import { Spinner } from '@chakra-ui/react';
 import Link from 'next/link';
 
 interface Props {
   nickname: string;
-  sourceLang: LanguageType;
-  solutionId: string | null;
+  sourceLang: string;
+  solutionId?: string | null;
   isVerified: boolean | null;
   submittedAt: string;
-  createdAt: string;
 }
 
-function InfoSection({ nickname, sourceLang, solutionId, isVerified, submittedAt, createdAt }: Props) {
+function InfoSection({ nickname, sourceLang, solutionId = null, isVerified, submittedAt }: Props) {
   const SOLUTION_INFO_LIST = [
     { icon: null, label: '사람', value: nickname, type: 'string' },
     { icon: null, label: '풀이 언어', value: sourceLang, type: 'string' },

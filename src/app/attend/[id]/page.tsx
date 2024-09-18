@@ -1,15 +1,14 @@
 import { getServerData } from '@/utils/getServerData';
 import WeekSection from './_component/WeekSection';
-import { PenaltyType } from '@/types/api/penalty';
-import { UserType } from '@/types/api/auth';
-import { GetHolidayRes } from '@/types/api/holiday';
 import MetaTag from '@/components/MetaTag';
+import { MemberSchema, PenaltySchema } from '../../../../models';
+import { GetType } from '@/types/api/get';
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
   const today = new Date();
-  const member = (await getServerData(`/members/${id}`)) as UserType | null;
-  const holidays = (await getServerData('/holidays', { year: today.getFullYear() })) as GetHolidayRes;
-  const calcPassMemCnt = (data: PenaltyType[]) => {
+  const member = (await getServerData(`/members/${id}`)) as GetType[`/members/${string}`]['res'];
+  const holidays = (await getServerData('/holidays', { year: today.getFullYear() })) as GetType['/holidays']['res'];
+  const calcPassMemCnt = (data: PenaltySchema[]) => {
     let attendCnt = 0;
     for (const mem of data) {
       if (mem.is_penalty) continue;

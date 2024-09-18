@@ -1,15 +1,10 @@
-import {UserType} from "@/types/api/auth";
-import {PenaltyType} from "@/types/api/penalty";
-import {ProblemType} from "@/types/api/problem";
-
-
-
+import { MemberSchema, PenaltySchema, ProblemSchema } from '../../../models';
 export interface HomePageRes {
-  members: UserType[];
-  today_problems: ProblemType[];
-  current_week_starred_problems: ProblemType[];
-  penalties: PenaltyType[];
+  members: MemberSchema[];
+  today_problems: ProblemSchema[];
+  current_week_starred_problems: ProblemSchema[];
+  penalties: PenaltySchema[];
   penalty_map: {
-    [k: string]: PenaltyType[];
-  }
+    [k: string]: PenaltySchema[];
+  };
 }

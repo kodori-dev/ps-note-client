@@ -5,8 +5,7 @@ import ProblemCard from '@/components/Card/ProblemCard';
 import Input from '@/components/Input';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import ProgressBar from '@/components/ProgressBar';
-import { GetHolidayRes } from '@/types/api/holiday';
-import { SolutionType } from '@/types/api/solution';
+import { GetType } from '@/types/api/get';
 import { api } from '@/utils/api';
 import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
 import { findThisWeek } from '@/utils/findThisWeek';
@@ -16,9 +15,10 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { SolutionSchema } from '../../../../../models';
 
 interface Props {
-  holidayData: GetHolidayRes;
+  holidayData: GetType['/holidays']['res'];
   memberId: number;
 }
 
@@ -30,11 +30,10 @@ function WeekSection({ holidayData, memberId }: Props) {
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ['checkin', memberId, dateArr[0], dateArr[1]],
     queryFn: async () => {
-      const penalties = await api('GET', '/penalties', null, {
-        start_date: dayjs(dateArr[0]).format('YYYY-MM-DD'),
-        end_date: dayjs(dateArr[4]).format('YYYY-MM-DD'),
+      const penalties = await api('GET', '/penalties', undefined, {
+        start_date: dateArr[0],
+        end_date: dateArr[4],
         member_id: memberId,
-        order_by: 'day',
       });
       const { penalty, solveNum, isUsedCoupon } = calcSimplePenalty(penalties);
       return { penalty, solveNum, isUsedCoupon, penalties };
@@ -102,7 +101,7 @@ function WeekSection({ holidayData, memberId }: Props) {
             //공휴일
             if (holidayData && holidayData.length > 0) {
               for (let holiday of holidayData) {
-                if (holiday.date === dayjs(day).format('YYYY-MM-DD')) {
+                if (holiday.date === day) {
                   type = 'holiday';
                   return (
                     <div key={day.getDay()} className="flex gap-20">
@@ -122,11 +121,11 @@ function WeekSection({ holidayData, memberId }: Props) {
               }
             }
 
-            const penaltyArr = data?.penalties.filter(({ day: dataDay }) => dataDay == dayjs(day).format('YYYY-MM-DD'));
+            const penaltyArr = data?.penalties.filter(({ day: dataDay }) => dataDay == day);
             const penalty = penaltyArr.length === 0 ? null : penaltyArr[0];
             if (!penalty || penalty.is_penalty) type = 'noSolve';
 
-            let daySolutions = [] as SolutionType[];
+            let daySolutions = [] as SolutionSchema[];
             if (penalty) {
               daySolutions = penalty.admitted_solutions.concat(penalty.not_admitted_solutions);
               if (penalty.coupons.length > 0) type = 'coupon';
@@ -143,10 +142,10 @@ function WeekSection({ holidayData, memberId }: Props) {
                         type="solution"
                         bojId={problem.boj_id}
                         problemId={problem.id}
-                        isSolved={problem.is_solved}
+                        isSolved={problem.is_solved ?? false}
                         title={problem.name}
                         stars={problem.stars}
-                        isStar={problem.is_starred}
+                        isStar={problem.is_starred ?? false}
                         solLang={source_lang}
                         isCorrectAnswer={is_correct_answer}
                         resultLabel={score_label}

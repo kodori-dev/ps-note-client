@@ -4,7 +4,7 @@ import CardList from '@/components/CardList/CardList';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import Tag from '@/components/Tag';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
-import { GetSolsQueryType } from '@/types/api/query';
+import { GetType } from '@/types/api/get';
 import { api } from '@/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -24,16 +24,16 @@ const PAGE_SIZE = 30;
 function MySolutions() {
   const page = useSearchParams().get('page');
   const { data: user } = useGetUserInfo();
-  const [order, setOrder] = useState('최신순');
+  const [order, setOrder] = useState<orderType>('최신순');
 
   const { data, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ['my_solutions'],
     queryFn: async () => {
-      const res = await api('GET', '/solutions', null, {
+      const res = await api('GET', '/solutions', undefined, {
         member_id: user.userId,
-        order_by: ORDER[order as orderType] as GetSolsQueryType,
+        ordering: [ORDER[order]] as GetType['/solutions']['query']['ordering'],
         page: Number(page),
-        page_size: PAGE_SIZE,
+        size: PAGE_SIZE,
       });
       return res;
     },
@@ -55,7 +55,7 @@ function MySolutions() {
           </Tag>
         ))}
       </div>
-      {isSuccess && data && data.count > 0 ? <CardList type="solution" data={data.results} /> : <div className="text-center">제출한 솔루션이 없습니다.</div>}
+      {isSuccess && data && data.count > 0 ? <CardList type="solution" data={data.items} /> : <div className="text-center">제출한 솔루션이 없습니다.</div>}
       {isLoading && <ScreenLoading />}
     </div>
   );

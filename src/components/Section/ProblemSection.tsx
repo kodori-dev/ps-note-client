@@ -2,11 +2,11 @@
 
 import HomeLock from '../Lock/HomeLock';
 import ProblemCard from '../Card/ProblemCard';
-import { ProblemType } from '@/types/api/problem';
 import EmblaCarousel from '../Carousel/Carousel';
+import { ProblemSchema } from '../../../models';
 
 interface Props {
-  problems: ProblemType[];
+  problems: ProblemSchema[];
 }
 
 function ProblemSection({ problems }: Props) {
@@ -18,7 +18,7 @@ function ProblemSection({ problems }: Props) {
         ) : (
           <EmblaCarousel options={{ slidesToScroll: 'auto' }}>
             <>
-              {problems.map(({ boj_id, id, is_starred, level, name, stars, is_solved, solutions }: ProblemType) => (
+              {problems.map(({ boj_id, id, is_starred, level, name, stars, is_solved, solutions }) => (
                 <ProblemCard
                   key={id}
                   level={level}
@@ -26,8 +26,8 @@ function ProblemSection({ problems }: Props) {
                   bojId={boj_id}
                   stars={stars}
                   title={name}
-                  isStar={is_starred}
-                  isSolved={is_solved}
+                  isStar={is_starred ?? false}
+                  isSolved={is_solved ?? false}
                   solNum={solutions}
                 />
               ))}

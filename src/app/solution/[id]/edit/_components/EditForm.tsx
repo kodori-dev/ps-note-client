@@ -3,7 +3,6 @@
 import Button from '@/components/Button';
 import PostLayout from '@/components/Layout/PostLayout';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
-import { PostSolReq } from '@/types/api/solution';
 import { PostFormType } from '@/types/input';
 import { api } from '@/utils/api';
 import { useToast } from '@chakra-ui/react';
@@ -35,17 +34,15 @@ function EditForm({ defaultValue, userId, solutionId }: Props) {
     const { pid, isStar, is_correct_answer, source_code, source_lang, comment } = getValues();
 
     try {
-      const body = {
-        member: userId,
-        problem: Number(pid),
+      const today = new Date();
+      const res = await api('PATCH', `/solutions/${solutionId}`, {
         comment,
-        source_lang: source_lang.toLowerCase(),
-        source_code,
-        star: isStar,
         is_correct_answer: is_correct_answer == 'AC',
-      } as PostSolReq;
-
-      const res = await api('PATCH', `/solutions/${solutionId}`, body);
+        source_code,
+        source_lang: source_lang.toLowerCase(),
+        star: isStar,
+        submitted_at: today,
+      });
       if (typeof res === 'string') throw Error();
       toast({
         title: `solution 수정 완료!`,

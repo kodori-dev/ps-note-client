@@ -41,7 +41,7 @@ function Admin() {
   } = useQuery({
     queryKey: ['members'],
     queryFn: async () => {
-      const res = await api('GET', '/members', null, { order_by: 'id', is_off: false });
+      const res = await api('GET', '/members', undefined, { is_off: false });
       return res;
     },
     staleTime: 10 * (60 * 1000),

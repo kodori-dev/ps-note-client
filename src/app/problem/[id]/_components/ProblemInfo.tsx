@@ -4,9 +4,10 @@ import Link from 'next/link';
 import GoodIcon from '../../../../../public/icon-problem-good.svg';
 import LevelIcon from '../../../../../public/icon-problem-level.svg';
 import ListIcon from '../../../../../public/icon-problem-list.svg';
-import { LevelType, TagType } from '@/types/api/problem';
 import LinkIcon from '../../../../../public/icon-link-arrow.svg';
 import Button from '@/components/Button';
+import { ProblemTagSchema } from '../../../../../models';
+import { LevelType } from '@/types/problem';
 
 interface Props {
   id: number;
@@ -16,7 +17,7 @@ interface Props {
   level: string;
   isStar?: boolean;
   stars: number;
-  tags: TagType[];
+  tags: ProblemTagSchema[];
 }
 
 function ProblemInfo({ id, number, isSolved = null, title, level, isStar = false, stars, tags }: Props) {

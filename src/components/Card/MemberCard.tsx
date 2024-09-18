@@ -1,14 +1,14 @@
 'use client';
 
-import { SolutionType } from '@/types/api/solution';
 import Link from 'next/link';
+import { SolutionSchema } from '../../../models';
 
 interface Props {
   id: number;
   name: string;
-  bojId: string;
+  bojId: string | null;
   weekSolved: number;
-  todaySolve?: SolutionType[];
+  todaySolve?: SolutionSchema[];
   fine: number;
   isActive?: boolean;
   isCoupon?: boolean;
@@ -42,9 +42,11 @@ function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActi
     >
       <div className="flex flex-col">
         <p className="text-48 font-700">{name}</p>
-        <Link href={`https://www.acmicpc.net/user/${bojId}`} className="text-gray-3 hover:border-b hover:text-gray-1 border-gray-1 w-fit">
-          @{bojId}
-        </Link>
+        {bojId && (
+          <Link href={`https://www.acmicpc.net/user/${bojId}`} className="text-gray-3 hover:border-b hover:text-gray-1 border-gray-1 w-fit">
+            @{bojId}
+          </Link>
+        )}
         {isRest && <p className="text-12 text-gray-1 mt-1 bg-black/10 rounded-md px-2 w-fit">잠시 쉬어 가는 중..💤</p>}
       </div>
       <div className="absolute left-0 bottom-0 w-[298px] h-[88px] bg-gray-100">

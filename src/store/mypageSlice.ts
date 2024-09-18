@@ -1,11 +1,11 @@
 import { StateCreator } from 'zustand';
 
 export interface MyPageSlice {
-  isInfoEdit: boolean;
-  setIsInfoEdit: (isEdit: boolean) => void;
+  isInfoEdit: string;
+  setIsInfoEdit: (isEdit: string) => void;
 }
 
 export const createMyPageSlice: StateCreator<MyPageSlice> = (set) => ({
-  isInfoEdit: false,
+  isInfoEdit: '',
   setIsInfoEdit: (isEdit) => set((state) => ({ ...state, isInfoEdit: isEdit })),
 });

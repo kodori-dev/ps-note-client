@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { MyPageSlice, createMyPageSlice } from './memberSlice';
+import { MyPageSlice, createMyPageSlice } from './mypageSlice';
 
 type SliceType = MyPageSlice;
 

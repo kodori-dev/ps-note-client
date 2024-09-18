@@ -1,21 +1,19 @@
-'use client';
-
-import Button from '@/components/Button';
 import Input from '@/components/Input';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
-import { REQUIRED_INPUT } from '@/constants/errorMsg';
 import { api } from '@/utils/api';
 import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MemberSchema } from '../../../../models';
 import { NOT_USER_PW_ERR_CODE } from '@/constants/errorCode';
+import { REQUIRED_INPUT } from '@/constants/errorMsg';
+import Button from '@/components/Button';
 
 interface Props {
   defaultValue: MemberSchema;
 }
 
-function UserEditBox({ defaultValue }: Props) {
+function PasswordEditBox({ defaultValue }: Props) {
   const {
     register,
     formState: { errors },
@@ -23,21 +21,20 @@ function UserEditBox({ defaultValue }: Props) {
     getValues,
     watch,
     setError,
-  } = useForm({ mode: 'onSubmit', defaultValues: { ...defaultValue, cur_password: '' } });
-  const { boj_id, cur_password } = watch();
-
-  const isEdit = boj_id !== defaultValue.boj_id && cur_password;
+  } = useForm({ mode: 'onSubmit' });
+  const { cur_password, new_password, new_password_check } = watch();
+  const isEdit = cur_password && new_password !== '' && new_password === new_password_check;
 
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
+
   const handleEditSubmit = async () => {
     setIsLoading(true);
-
-    const { boj_id, cur_password } = getValues();
+    const { cur_password, new_password } = getValues();
     try {
       const res = await api('PATCH', `/members/${defaultValue.id}`, {
-        boj_id,
         original_password: cur_password,
+        password: new_password,
       });
       if (typeof res === 'string') throw Error(res);
       await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/session`, {
@@ -58,7 +55,6 @@ function UserEditBox({ defaultValue }: Props) {
         msg = '비밀번호가 일치하지 않습니다.';
         setError('cur_password', { message: msg });
       }
-
       toast({
         title: '변경 실패!',
         description: msg,
@@ -74,22 +70,27 @@ function UserEditBox({ defaultValue }: Props) {
     <>
       {isLoading && <ScreenLoading />}
       <form className="flex flex-col gap-5 w-[400px]" onSubmit={handleSubmit(handleEditSubmit)}>
-        <h2 className="text-32 font-700">내 정보 변경</h2>
-        <p className="text-gray-3 text-14">* 상태 변경은 관리자에게 문의해 주세요.</p>
-        <Input register={register('username')} disabled label="ID" />
-        <Input register={register('nickname')} disabled label="닉네임" />
-        <Input
-          register={register('boj_id', { required: REQUIRED_INPUT })}
-          label="연동 ID(BOJ)"
-          description="해당 계정으로 솔루션을 검증합니다. 실제 사용 계정을 입력해 주세요."
-          placeholder="연동할 BOJ ID를 입력하세요."
-          error={errors.boj_id}
-        />
+        <h2 className="text-32 font-700">비밀번호 변경</h2>
         <Input
           register={register('cur_password', { required: REQUIRED_INPUT })}
-          label="비밀번호 확인"
+          label="현재 비밀번호"
           placeholder="현재 비밀번호를 입력해 주세요."
           type="password"
+          error={errors.cur_password}
+        />
+        <Input
+          register={register('new_password', { required: REQUIRED_INPUT })}
+          label="새로운 비밀번호"
+          placeholder="새로운 비밀번호를 입력해 주세요."
+          type="password"
+          error={errors.new_password}
+        />
+        <Input
+          register={register('new_password_check', { required: REQUIRED_INPUT })}
+          label="새로운 비밀번호 확인"
+          placeholder="새로운 비밀번호를 다시 입력해 주세요."
+          type="password"
+          error={errors.new_password_check}
         />
         <Button disabled={!isEdit}>수정하기</Button>
       </form>
@@ -97,4 +98,4 @@ function UserEditBox({ defaultValue }: Props) {
   );
 }
 
-export default UserEditBox;
+export default PasswordEditBox;

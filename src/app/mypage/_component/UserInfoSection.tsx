@@ -6,6 +6,7 @@ import UserEditBox from './UserEditBox';
 import Link from 'next/link';
 import { MemberSchema } from '../../../../models';
 import { useStore } from '@/store';
+import PasswordEditBox from './PasswordEditBox';
 
 interface Props {
   userData: MemberSchema;
@@ -23,15 +24,25 @@ function UserInfoSection({ userData }: Props) {
     { type: '연동된 ID (BOJ)', value: <Link href={`https://www.acmicpc.net/user/${boj_id}`}>@{boj_id}</Link> },
   ];
 
+  const EDIT_BOX = {
+    info: <UserEditBox defaultValue={userData} />,
+    pw: <PasswordEditBox defaultValue={userData} />,
+  };
+
   return (
     <>
       {isEdit ? (
-        <UserEditBox defaultValue={userData} />
+        <>{EDIT_BOX[isEdit as 'info' | 'pw']}</>
       ) : (
         <div className="bg-white rounded-md p-9 relative flex flex-col gap-8">
-          <Button onClickFunc={() => setIsEdit(true)} customStyle="w-[174px] absolute top-9 right-9" heightSize="sm" roundSize="sm">
-            내 정보 수정하기
-          </Button>
+          <div className="flex gap-4 absolute top-9 right-9 text-14">
+            <button onClick={() => setIsEdit('info')} className="text-primary border-b border-primary hover:opacity-50">
+              내 정보 수정
+            </button>
+            <button onClick={() => setIsEdit('pw')} className="text-primary border-b border-primary hover:opacity-50">
+              비밀번호 수정
+            </button>
+          </div>
           <div>
             <p className="text-40">
               <span className="font-700">{nickname}</span> 님

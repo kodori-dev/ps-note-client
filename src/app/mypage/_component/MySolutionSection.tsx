@@ -24,7 +24,7 @@ function MySolutionSection({ solutionsData }: Props) {
             </Link>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            {solutionsData.length > 0 ? (
+            {solutionsData && solutionsData.length > 0 ? (
               solutionsData.map(({ id, problem, is_correct_answer, score_label }) => (
                 <ProblemCard
                   key={id}

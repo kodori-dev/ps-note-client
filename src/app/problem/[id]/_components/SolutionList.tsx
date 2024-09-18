@@ -27,7 +27,7 @@ function SolutionList({ solutions }: Props) {
         ))}
       </div>
       <div className="flex flex-col gap-2">
-        {solutions.map((solution) => (
+        {solutions?.map((solution) => (
           <Fragment key={solution.id}>
             <div className="grid grid-cols-6 items-center gap-1">
               <p className="text-gray-2 text-14">{dayjs(solution.submitted_at).format('YYYY-MM-DD')}</p>

@@ -1,6 +1,6 @@
-import { GetPenaltiesRes } from '@/types/api/penalty';
+import { PenaltySchema } from '../../models';
 
-export const calcSimplePenalty = (penalties: GetPenaltiesRes) => {
+export const calcSimplePenalty = (penalties: PenaltySchema[]) => {
   let penalty = 0;
   let solveNum = 0;
   let isUsedCoupon = false;

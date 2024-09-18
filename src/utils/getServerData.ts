@@ -15,8 +15,8 @@ export const getServerData = async <T extends keyof GetType>(
 
   let queryStr = '';
   if (query) {
-    for (let key of Object.keys(query)) {
-      queryStr += `${key}=${query[key]}&`;
+    for (const key of Object.keys(query)) {
+      queryStr += `${key}=${(query as any)[key]}&`;
     }
   }
 
@@ -33,6 +33,6 @@ export const getServerData = async <T extends keyof GetType>(
     if (code == UNAUTHORIZED_ERR_CODE) {
       redirect('/login');
     }
-    return null;
+    return err;
   }
 };

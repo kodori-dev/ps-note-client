@@ -1,12 +1,12 @@
-import { GetProblemsRes } from '@/types/api/problem';
 import { Spinner } from '@chakra-ui/react';
+import { PaginatedProblemSchema } from '../../../models';
 
 interface Props {
   query: string;
   isLoading: boolean;
   isSuccess: boolean;
   handleListClick: (id: number, bojId: string, name: string) => void;
-  data?: GetProblemsRes;
+  data?: PaginatedProblemSchema;
   type?: 'post' | 'home';
 }
 
@@ -22,7 +22,7 @@ function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, typ
         {isLoading ? (
           <Spinner color="blue.500" />
         ) : isSuccess && data && data.count > 0 ? (
-          data.results.map(({ id, boj_id: bojId, name }) => (
+          data.items.map(({ id, boj_id: bojId, name }) => (
             <div
               onClick={() => handleListClick(id, bojId, name)}
               key={id}

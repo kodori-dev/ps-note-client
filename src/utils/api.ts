@@ -52,6 +52,6 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
       alert('세션이 만료됐어요!\n다시 로그인해 주세요.');
       window.location.href = '/login';
     }
-    return code;
+    return err.message;
   }
 };

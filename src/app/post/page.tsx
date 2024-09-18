@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Button from '@/components/Button';
 import { api } from '@/utils/api';
-import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import MetaTag from '@/components/MetaTag';
 import PostLayout from '@/components/Layout/PostLayout';
@@ -16,6 +15,7 @@ function Post() {
   const param = useSearchParams();
 
   const DEFAULT_INPUT: PostFormType = {
+    submitted_at: '',
     boj_id: param.get('boj_id') || '',
     is_correct_answer: '',
     isStar: false,
@@ -28,18 +28,16 @@ function Post() {
 
   const methods = useForm({ mode: 'onSubmit', defaultValues: DEFAULT_INPUT });
   const { watch, getValues, handleSubmit } = methods;
-  const { pid, boj_id, is_correct_answer, source_lang, source_code } = watch();
-  const isSave = pid && boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
-  const { data: user } = useGetUserInfo();
+  const { pid, boj_id, is_correct_answer, source_lang, source_code, submitted_at } = watch();
+  const isSave = submitted_at && pid && boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const handleCheckIn = async () => {
     setIsLoading(true);
-    const { pid, isStar, is_correct_answer, source_code, source_lang, comment } = getValues();
+    const { pid, isStar, is_correct_answer, source_code, source_lang, comment, submitted_at } = getValues();
 
     try {
-      const today = new Date(); //날짜 사용자 input 넣기
       const res = await api('POST', '/solutions', {
         comment,
         is_correct_answer: is_correct_answer == 'AC',
@@ -47,19 +45,20 @@ function Post() {
         source_code,
         source_lang: source_lang.toLowerCase(),
         star: isStar,
-        submitted_at: today,
+        submitted_at: submitted_at,
       });
-      if (typeof res === 'string') throw Error();
+      if (typeof res === 'string') throw Error(res);
       toast({
         title: `체크인 완료!`,
         description: '내일도 화이팅❤️‍🔥!',
         status: 'success',
       });
       window.location.href = `/solution/${res.id}`;
-    } catch (err) {
+    } catch (err: any) {
+      const [code, msg] = err.message.split('/');
       toast({
         title: `체크인 실패!`,
-        description: '잠시 후 다시 시도해 주세요.',
+        description: msg,
         status: 'error',
       });
     } finally {

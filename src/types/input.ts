@@ -7,6 +7,7 @@ export interface inputType {
 }
 
 export interface PostFormType {
+  submitted_at: string;
   boj_id: string;
   is_correct_answer: '' | 'AC' | 'WA';
   isStar: boolean;

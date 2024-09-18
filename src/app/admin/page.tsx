@@ -59,7 +59,7 @@ function Admin() {
       if (!membersData) return null;
       let res = [] as any[];
       for (const member of membersData) {
-        const memberPenalty = await api('GET', '/penalties', null, {
+        const memberPenalty = await api('GET', '/penalties', undefined, {
           member_id: member.id,
           order_by: 'day',
           start_date: dayjs(dateArr[0]).format('YYYY-MM-DD'),

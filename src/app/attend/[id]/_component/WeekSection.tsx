@@ -31,8 +31,8 @@ function WeekSection({ holidayData, memberId }: Props) {
     queryKey: ['checkin', memberId, dateArr[0], dateArr[1]],
     queryFn: async () => {
       const penalties = await api('GET', '/penalties', undefined, {
-        start_date: dateArr[0],
-        end_date: dateArr[4],
+        start_date: dayjs(dateArr[0]).format('YYYY-MM-DD'),
+        end_date: dayjs(dateArr[4]).format('YYYY-MM-DD'),
         member_id: memberId,
       });
       const { penalty, solveNum, isUsedCoupon } = calcSimplePenalty(penalties);
@@ -51,7 +51,7 @@ function WeekSection({ holidayData, memberId }: Props) {
     setDateArr(week);
   }, [selectedWeek]);
 
-  const ATTEND_CARD = {
+  const ATTEND_CARD_STR = {
     holiday: '공휴일',
     coupon: '🎟️ 면제 티켓 사용',
     noSolve: '문제를 풀지 않았어요 😭',
@@ -97,43 +97,38 @@ function WeekSection({ holidayData, memberId }: Props) {
         <div className="flex flex-col gap-6 mt-5">
           {dateArr.map((day) => {
             let type = 'attend';
+            let holidayName = '';
 
             //공휴일
             if (holidayData && holidayData.length > 0) {
               for (let holiday of holidayData) {
-                if (holiday.date === day) {
+                if (dayjs(holiday.date).format('YYYY-MM-DD') === dayjs(day).format('YYYY-MM-DD')) {
                   type = 'holiday';
-                  return (
-                    <div key={day.getDay()} className="flex gap-20">
-                      <DateCard
-                        isHoliday
-                        holidayName={holiday.name}
-                        date={day.getDate()}
-                        day={day.getDay()}
-                        isToday={dayjs(day).format('YYYY-MM-DD') === today}
-                      />
-                      <p className="text-red h-[177px] w-full flex items-center justify-center rounded-sm border border-gray-4 bg-white/30">
-                        {ATTEND_CARD['holiday']}
-                      </p>
-                    </div>
-                  );
+                  holidayName = holiday.name;
                 }
               }
             }
 
-            const penaltyArr = data?.penalties.filter(({ day: dataDay }) => dataDay == day);
+            const penaltyArr = data?.penalties.filter(({ day: dataDay }) => dayjs(dataDay).format('YYYY-MM-DD') == dayjs(day).format('YYYY-MM-DD'));
             const penalty = penaltyArr.length === 0 ? null : penaltyArr[0];
-            if (!penalty || penalty.is_penalty) type = 'noSolve';
+            if (type !== 'holiday' && (!penalty || penalty.is_penalty)) type = 'noSolve';
 
             let daySolutions = [] as SolutionSchema[];
-            if (penalty) {
+            if (penalty && !penalty.is_penalty) {
               daySolutions = penalty.admitted_solutions.concat(penalty.not_admitted_solutions);
+              if (daySolutions.length > 0) type = 'attend';
               if (penalty.coupons.length > 0) type = 'coupon';
             }
 
             return (
               <div key={day.getDay()} className="flex gap-20">
-                <DateCard isHoliday={type === 'holiday'} date={day.getDate()} day={day.getDay()} isToday={dayjs(day).format('YYYY-MM-DD') === today} />
+                <DateCard
+                  isHoliday={holidayName !== '' || type === 'holiday'}
+                  holidayName={holidayName}
+                  date={day.getDate()}
+                  day={day.getDay()}
+                  isToday={dayjs(day).format('YYYY-MM-DD') === today}
+                />
                 {type === 'attend' ? (
                   <div className="flex flex-nowrap gap-4 w-full overflow-x-scroll scroll-hidden">
                     {daySolutions.map(({ id, source_lang, is_correct_answer, score_label, problem }) => (
@@ -155,9 +150,14 @@ function WeekSection({ holidayData, memberId }: Props) {
                     ))}
                   </div>
                 ) : (
-                  <p className="h-[177px] w-full flex flex-col gap-2 items-center justify-center rounded-sm border border-gray-4 bg-white/30">
-                    {ATTEND_CARD[type as 'holiday' | 'coupon' | 'noSolve']}
-                    {dayjs(day).format('YYYY-MM-DD') === today && type === 'noSolve' && (
+                  <p
+                    className={[
+                      'h-[177px] w-full flex flex-col gap-2 items-center justify-center rounded-sm border border-gray-4 bg-white/30',
+                      type === 'holiday' ? 'text-red' : null,
+                    ].join(' ')}
+                  >
+                    {ATTEND_CARD_STR[type as 'holiday' | 'coupon' | 'noSolve']}
+                    {dayjs(day).format('YYYY-MM-DD') === today && (
                       <Link href={'/post'} className="text-12 text-primary border-b border-primary">
                         지금 바로 체크인하기
                       </Link>

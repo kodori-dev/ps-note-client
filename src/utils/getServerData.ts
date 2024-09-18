@@ -7,7 +7,10 @@ import { GetType } from '@/types/api/get';
 /**
  * SSR을 위한 API fetch 함수
  */
-export const getServerData = async <T extends keyof GetType>(url: T, query?: any): Promise<BodyInterfaceType<T>['res']> => {
+export const getServerData = async <T extends keyof GetType>(
+  url: T,
+  query?: BodyInterfaceType<GetType[T]>['query']
+): Promise<BodyInterfaceType<GetType[T]>['res']> => {
   const cookie = cookies();
 
   let queryStr = '';

@@ -5,13 +5,14 @@ import { useState } from 'react';
 import UserEditBox from './UserEditBox';
 import Link from 'next/link';
 import { MemberSchema } from '../../../../models';
+import { useStore } from '@/store';
 
 interface Props {
   userData: MemberSchema;
 }
 
 function UserInfoSection({ userData }: Props) {
-  const [isEdit, setIsEdit] = useState(false);
+  const { isEdit, setIsEdit } = useStore((state) => ({ isEdit: state.isInfoEdit, setIsEdit: state.setIsInfoEdit }));
   const { boj_id, nickname, username, is_off } = userData;
 
   const INFO = [
@@ -28,7 +29,7 @@ function UserInfoSection({ userData }: Props) {
         <UserEditBox defaultValue={userData} />
       ) : (
         <div className="bg-white rounded-md p-9 relative flex flex-col gap-8">
-          <Button disabled={true} onClickFunc={() => setIsEdit(true)} customStyle="w-[174px] absolute top-9 right-9" heightSize="sm" roundSize="sm">
+          <Button onClickFunc={() => setIsEdit(true)} customStyle="w-[174px] absolute top-9 right-9" heightSize="sm" roundSize="sm">
             내 정보 수정하기
           </Button>
           <div>

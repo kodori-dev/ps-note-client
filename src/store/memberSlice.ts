@@ -1,12 +1,11 @@
-import { PostSignUpRes } from '@/types/api/auth';
 import { StateCreator } from 'zustand';
 
-export interface MemberSlice {
-  member: PostSignUpRes | null;
-  setMember: (mem: PostSignUpRes) => void;
+export interface MyPageSlice {
+  isInfoEdit: boolean;
+  setIsInfoEdit: (isEdit: boolean) => void;
 }
 
-export const createMemberSlice: StateCreator<MemberSlice> = (set) => ({
-  member: null,
-  setMember: (mem) => set((state) => ({ ...state, member: mem })),
+export const createMyPageSlice: StateCreator<MyPageSlice> = (set) => ({
+  isInfoEdit: false,
+  setIsInfoEdit: (isEdit) => set((state) => ({ ...state, isInfoEdit: isEdit })),
 });

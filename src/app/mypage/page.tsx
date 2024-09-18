@@ -6,7 +6,7 @@ import { GetType } from '@/types/api/get';
 
 async function Mypage() {
   const user = (await getServerData('/me')) as GetType['/me']['res'];
-  const solutions = (await getServerData('/solutions', { member_id: user.id, order_by: '-submitted_at', page_size: 3 })) as GetType['/solutions']['res'];
+  const solutions = (await getServerData('/solutions', { member_id: user.id, ordering: ['-submitted_at'], size: 3 })) as GetType['/solutions']['res'];
 
   return (
     <div className="flex flex-col gap-9">

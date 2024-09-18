@@ -24,6 +24,7 @@ interface BaseGetType {
   //auth
   '/me': {
     res: MemberSchema;
+    query: undefined;
   };
 
   //member
@@ -33,6 +34,7 @@ interface BaseGetType {
   };
   [key: `/members/${string}`]: {
     res: MemberSchema;
+    query: undefined;
   };
 
   //problem
@@ -42,6 +44,7 @@ interface BaseGetType {
   };
   [key: `/problems/${number}`]: {
     res: ProblemSchema;
+    query: undefined;
   };
   '/problems/search': {
     res: PaginatedProblemSchema;
@@ -57,6 +60,7 @@ interface BaseGetType {
   //solution
   [key: `/solutions/${string}`]: {
     res: SolutionSchema;
+    query: undefined;
   };
   '/solutions': {
     res: PaginatedSolutionSchema;

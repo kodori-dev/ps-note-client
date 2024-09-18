@@ -1,7 +1,6 @@
 import SearchBar from '@/components/Search/SearchBar';
 import { headers } from 'next/headers';
 import CardList from '../../components/CardList/CardList';
-import { GetProblemsRes } from '@/types/api/problem';
 import Button from '@/components/Button';
 import Link from 'next/link';
 import MetaTag from '@/components/MetaTag';
@@ -12,7 +11,7 @@ const PAGE_SIZE = 30;
 async function Search() {
   const keyword = decodeURIComponent(headers().get('x-query-keyword') || '');
   const page = headers().get('x-query-page') || '';
-  const data = (await getServerData('/problems/search', { page: page, page_size: PAGE_SIZE, query: keyword })) as GetProblemsRes | null;
+  const data = await getServerData('/problems/search', { page: Number(page), size: PAGE_SIZE, query: keyword });
 
   return (
     <>
@@ -24,7 +23,7 @@ async function Search() {
         </p>
         {data ? (
           data.count > 0 ? (
-            <CardList type="problem" data={data.results} />
+            <CardList type="problem" data={data.items} />
           ) : (
             <p className="text-gray-2 h-32 flex items-center justify-center">일치하는 데이터가 없어요🥲</p>
           )
@@ -33,7 +32,7 @@ async function Search() {
         )}
         <div className="flex gap-12 items-center justify-center mt-12 mb-20">
           <Link passHref href={`/search?keyword=${keyword}&page=${Number(page) - 1}`}>
-            <Button theme="secondary" disabled={!data?.previous} customStyle="w-20">
+            <Button theme="secondary" disabled={Number(page) <= 1} customStyle="w-20">
               이전
             </Button>
           </Link>
@@ -41,7 +40,7 @@ async function Search() {
             <span className="text-primary">{page}</span> / {data ? Math.ceil(data.count / PAGE_SIZE) : 0}
           </p>
           <Link passHref href={`/search?keyword=${keyword}&page=${Number(page) + 1}`}>
-            <Button theme="secondary" disabled={!data?.next} customStyle="w-20">
+            <Button theme="secondary" disabled={data.count < PAGE_SIZE} customStyle="w-20">
               다음
             </Button>
           </Link>

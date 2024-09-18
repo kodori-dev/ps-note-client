@@ -1,5 +1,6 @@
 'use client';
 
+import Button from '@/components/Button';
 import CardList from '@/components/CardList/CardList';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import Tag from '@/components/Tag';
@@ -7,6 +8,7 @@ import { useGetUserInfo } from '@/hooks/useGetUserInfo';
 import { GetType } from '@/types/api/get';
 import { api } from '@/utils/api';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -55,7 +57,28 @@ function MySolutions() {
           </Tag>
         ))}
       </div>
-      {isSuccess && data && data.count > 0 ? <CardList type="solution" data={data.items} /> : <div className="text-center">제출한 솔루션이 없습니다.</div>}
+      {isSuccess && data && data.count > 0 ? (
+        <>
+          <CardList type="solution" data={data.items} />
+          <div className="flex gap-12 items-center justify-center mt-12 mb-20">
+            <Link passHref href={`/mypage/solutions?page=${Number(page) - 1}`}>
+              <Button theme="secondary" disabled={Number(page) <= 1} customStyle="w-20">
+                이전
+              </Button>
+            </Link>
+            <p className="text-gray-2">
+              <span className="text-primary">{page}</span> / {data ? Math.ceil(data.count / PAGE_SIZE) : 0}
+            </p>
+            <Link passHref href={`/mypage/solutions?page=${Number(page) + 1}`}>
+              <Button theme="secondary" disabled={data.count < PAGE_SIZE} customStyle="w-20">
+                다음
+              </Button>
+            </Link>
+          </div>
+        </>
+      ) : (
+        <div className="text-center">제출한 솔루션이 없습니다.</div>
+      )}
       {isLoading && <ScreenLoading />}
     </div>
   );

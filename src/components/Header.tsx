@@ -32,7 +32,7 @@ function Header() {
     queryFn: async () => {
       if (!user.isLogin) return false;
       const today = getBojTime();
-      const res = await api('GET', '/coupons', null, { date: today, member_id: user.userId, usable: true });
+      const res = await api('GET', '/coupons', undefined, { day: today, member_id: user.userId, usable: true });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },
@@ -55,19 +55,17 @@ function Header() {
       setIsLoading(true);
       if (!coupon || !user.isLogin) throw Error();
       const cur = new Date();
-      const res = await api('PATCH', `/coupons/${coupon.id}`, {
-        name: coupon.name,
-        member: user.userId,
-        used_at: dayjs(cur).format('YYYY-MM-DDTHH:mm:ss'),
-        valid_to: coupon.valid_to,
-        valid_from: coupon.valid_from,
+      const res = await api('POST', `/coupons/use`, {
+        coupon_id: coupon.id,
+        use_date: dayjs(cur).format('YYYY-MM-DDTHH:mm:ss'),
       });
       if (typeof res == 'string') throw Error();
       setIsDropDown(false);
       toast({ title: '면제 티켓 사용 성공!', description: '내일은 더 열심히~!', status: 'success' });
       getCoupon();
-    } catch (err) {
-      toast({ title: '면제 티켓 사용 실패!', description: '잠시 후 다시 시도해 주세요.', status: 'error' });
+    } catch (err: any) {
+      const [code, msg] = err.message.split('/');
+      toast({ title: '면제 티켓 사용 실패!', description: msg, status: 'error' });
     } finally {
       onClose();
       setIsLoading(false);
@@ -107,10 +105,10 @@ function Header() {
             <button className="hover:text-gray-2">체크인</button>
           </Link>
           {isAdmin && (
-              <Link href={'/admin'}>
-                <button className="hover:text-gray-2">관리자</button>
-              </Link>
-            )}
+            <Link href={'/admin'}>
+              <button className="hover:text-gray-2">관리자</button>
+            </Link>
+          )}
           <button onClick={() => setIsDropDown((prev) => !prev)}>
             <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
           </button>

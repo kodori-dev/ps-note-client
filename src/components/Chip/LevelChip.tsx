@@ -1,5 +1,5 @@
 import { STEP } from '@/constants/level';
-import { LevelType } from '@/types/api/problem';
+import { LevelType } from '@/types/problem';
 
 interface Props {
   type: LevelType;

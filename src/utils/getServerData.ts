@@ -1,18 +1,22 @@
 import { cookies } from 'next/headers';
-import { BodyInterfaceType, GetType } from './api';
+import { BodyInterfaceType } from './api';
 import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { redirect } from 'next/navigation';
+import { GetType } from '@/types/api/get';
 
 /**
  * SSR을 위한 API fetch 함수
  */
-export const getServerData = async <T extends keyof GetType>(url: T, query?: any): Promise<BodyInterfaceType<T>['res']> => {
+export const getServerData = async <T extends keyof GetType>(
+  url: T,
+  query?: BodyInterfaceType<GetType[T]>['query']
+): Promise<BodyInterfaceType<GetType[T]>['res']> => {
   const cookie = cookies();
 
   let queryStr = '';
   if (query) {
-    for (let key of Object.keys(query)) {
-      queryStr += `${key}=${query[key]}&`;
+    for (const key of Object.keys(query)) {
+      queryStr += `${key}=${(query as any)[key]}&`;
     }
   }
 
@@ -29,6 +33,6 @@ export const getServerData = async <T extends keyof GetType>(url: T, query?: any
     if (code == UNAUTHORIZED_ERR_CODE) {
       redirect('/login');
     }
-    return null;
+    return err;
   }
 };

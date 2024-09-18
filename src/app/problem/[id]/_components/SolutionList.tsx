@@ -1,14 +1,15 @@
 'use client';
 import Chip from '@/components/Chip';
-import { SolutionType } from '@/types/api/solution';
 import { Fragment } from 'react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { Spinner } from '@chakra-ui/react';
 import { useClientFlag } from '@/hooks/useClientFlag';
+import { SolutionSchema } from '../../../../../models';
+import dayjs from 'dayjs';
 
 interface Props {
-  solutions: SolutionType[];
+  solutions: SolutionSchema[];
 }
 
 const CATEGORY = ['제출일', '채점 결과', '언어', '사람', '백준 연동 여부', '풀이 보기'];
@@ -29,7 +30,7 @@ function SolutionList({ solutions }: Props) {
         {solutions.map((solution) => (
           <Fragment key={solution.id}>
             <div className="grid grid-cols-6 items-center gap-1">
-              <p className="text-gray-2 text-14">{solution.submitted_at}</p>
+              <p className="text-gray-2 text-14">{dayjs(solution.submitted_at).format('YYYY-MM-DD')}</p>
               <Chip type={solution.is_correct_answer ? 'AC' : 'WA'}>{solution.score_label}</Chip>
               <p>{solution.source_lang}</p>
               <Link target="_blank" href={`https://www.acmicpc.net/user/${solution.member.boj_id}`}>

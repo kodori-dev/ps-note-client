@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { createMemberSlice, MemberSlice } from './memberSlice';
+import { MyPageSlice, createMyPageSlice } from './mypageSlice';
 
-type SliceType = MemberSlice;
+type SliceType = MyPageSlice;
 
 export const useStore = create<SliceType>()((...a) => ({
-  ...createMemberSlice(...a),
+  ...createMyPageSlice(...a),
 }));

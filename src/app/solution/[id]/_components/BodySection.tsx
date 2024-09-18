@@ -1,15 +1,15 @@
 'use client';
 
 import { LANGUAGE_FOR_MD } from '@/constants/language';
-import { LanguageType } from '@/types/api/solution';
 import MDEditor from '@uiw/react-md-editor';
 import CommentIcon from '../../../../../public/icon-sol-comment.svg';
 import CodeIcon from '../../../../../public/icon-sol-code.svg';
+import { LanguageType } from '@/types/problem';
 
 interface Props {
   comment: string;
   code: string;
-  language: LanguageType;
+  language: string;
 }
 
 function BodySection({ comment, code, language }: Props) {

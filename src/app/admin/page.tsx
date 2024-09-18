@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const CATEGORY = ['이름', 'M', 'T', 'W', 'T', 'F', '벌금', '납부', '세부'];
+const CATEGORY = ['이름', 'M', 'T', 'W', 'T', 'F', '벌금', '납부'];
 
 function Admin() {
   const isAdmin = useCheckAdmin();
@@ -41,7 +41,7 @@ function Admin() {
   } = useQuery({
     queryKey: ['members'],
     queryFn: async () => {
-      const res = await api('GET', '/members', null, { order_by: 'id', is_off: false });
+      const res = await api('GET', '/members', undefined, { is_off: false });
       return res;
     },
     staleTime: 10 * (60 * 1000),
@@ -59,9 +59,8 @@ function Admin() {
       if (!membersData) return null;
       let res = [] as any[];
       for (const member of membersData) {
-        const memberPenalty = await api('GET', '/penalties', null, {
+        const memberPenalty = await api('GET', '/penalties', undefined, {
           member_id: member.id,
-          order_by: 'day',
           start_date: dayjs(dateArr[0]).format('YYYY-MM-DD'),
           end_date: dayjs(dateArr[4]).format('YYYY-MM-DD'),
         });
@@ -89,12 +88,12 @@ function Admin() {
 
   return (
     <>
-      {!isAdmin && (
+      {isAdmin && (
         <div className="flex flex-col gap-8">
           <div className="w-[386px]">
             <Input label="출석 조회 날짜" description="해당 날짜가 포함된 1주 단위로 조회됩니다." register={register('selectedWeek')} type="date" />
           </div>
-          <div className="grid grid-cols-9">
+          <div className="grid grid-cols-8">
             {CATEGORY.map((item, idx) => (
               <div className="text-gray-3 flex items-center" key={item}>
                 {item}
@@ -107,7 +106,7 @@ function Admin() {
                 data.map((item) => (
                   <>
                     {item[0].length > 0 && (
-                      <Fragment key={item[0][0].member.id}>
+                      <Fragment key={`${item[0][0].member.id}+${item}`}>
                         <Link className="hover:text-primary" href={`/attend/${item[0][0].member.id}`}>
                           {item[0][0].member.nickname}
                         </Link>
@@ -116,9 +115,9 @@ function Admin() {
                         ))}
                         <p>{(item[1] as number).toLocaleString('ko-KR')} 원</p>
                         <p>-</p>
-                        <button onClick={() => handleMemberClick(item[0][0].member.id)} className="text-start py-1 px-4 w-fit rounded-sm hover:text-primary">
+                        {/* <button onClick={() => handleMemberClick(item[0][0].member.id)} className="text-start py-1 px-4 w-fit rounded-sm hover:text-primary">
                           {item[0][0].member.id === isOpen ? '닫기' : '열기'}
-                        </button>
+                        </button> */}
                       </Fragment>
                     )}
                   </>

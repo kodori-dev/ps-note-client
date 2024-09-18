@@ -3,9 +3,8 @@ import StarButton from '../Button/StarButton';
 import Chip from '../Chip';
 import SolutionIcon from '../../../public/icon-card-sol.svg';
 import LanguageIcon from '../../../public/icon-card-lang.svg';
-import { LanguageType } from '@/types/api/solution';
 import LevelChip from '../Chip/LevelChip';
-import { LevelType } from '@/types/api/problem';
+import { LevelType } from '@/types/problem';
 
 interface Props {
   type?: 'problem' | 'solution';
@@ -17,7 +16,7 @@ interface Props {
   stars: number;
   isStar?: boolean;
   solNum?: number;
-  solLang?: LanguageType;
+  solLang?: string;
   customStyle?: string;
   isCorrectAnswer?: boolean;
   resultLabel?: string;

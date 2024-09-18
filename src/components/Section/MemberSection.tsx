@@ -1,16 +1,16 @@
 'use client';
 
+import dayjs from 'dayjs';
+import { MemberSchema, PenaltySchema } from '../../../models';
 import MemberCard from '../Card/MemberCard';
 import HomeLock from '../Lock/HomeLock';
 import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
-import { UserType } from '@/types/api/auth';
-import { PenaltyType } from '@/types/api/penalty';
 import { getBojTime } from '@/utils/getBojTime';
 
 interface Props {
-  members: UserType[];
+  members: MemberSchema[];
   penalty_map: {
-    [k: string]: PenaltyType[];
+    [k: string]: PenaltySchema[];
   };
 }
 
@@ -32,13 +32,13 @@ function MemberSection({ members, penalty_map }: Props) {
 
             let todayPenalty = null;
             for (const item of penaltyArr) {
-              if (item.day === today) todayPenalty = item;
+              if (dayjs(item.day).format('YYYY-MM-DD') === today) todayPenalty = item;
             }
             return (
               <MemberCard
                 key={id}
                 id={id}
-                name={nickname}
+                name={nickname ?? '(알수없음)'}
                 bojId={boj_id}
                 fine={penalty}
                 weekSolved={solveNum - 2}

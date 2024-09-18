@@ -10,7 +10,11 @@ import { Checkbox } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-function ProblemSection() {
+interface Props {
+  type: 'post' | 'edit';
+}
+
+function ProblemSection({ type }: Props) {
   const { register, setValue, watch } = useFormContext();
   const { boj_id, is_correct_answer, isStar } = watch();
   const { data, isLoading, isSuccess, isOpen, setIsOpen } = useDebouncingSearch(boj_id, boj_id && boj_id.split('-').length < 2);
@@ -32,8 +36,14 @@ function ProblemSection() {
   return (
     <PostSectionLayout title="Problem" description="오늘은 어떤 문제를 풀었나요?">
       <div className="flex flex-col gap-5 w-[373px]">
+        <Input label="제출 날짜*" description="실제로 해당 문제를 제출한 날짜를 선택해 주세요." type="date" register={register('submitted_at')} />
         <div className="relative">
-          <Input label="백준 번호*" placeholder="번호 또는 이름 검색" register={register('boj_id', { required: REQUIRED_INPUT })} />
+          <Input
+            disabled={type === 'edit'}
+            label="백준 번호*"
+            placeholder="번호 또는 이름 검색"
+            register={register('boj_id', { required: REQUIRED_INPUT })}
+          />
           {isOpen && <SearchPreview query={boj_id} isLoading={isLoading} isSuccess={isSuccess} data={data} handleListClick={handleListClick} />}
         </div>
         <div className="flex flex-col gap-2 text-14 font-700">

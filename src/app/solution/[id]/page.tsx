@@ -1,16 +1,17 @@
 import ProblemSection from './_components/ProblemSection';
 import InfoSection from './_components/InfoSection';
-import { SolutionType } from '@/types/api/solution';
 import BodySection from './_components/BodySection';
 import { getServerData } from '@/utils/getServerData';
 import MetaTag from '@/components/MetaTag';
 import { getUserSession } from '@/utils/getUserSession';
 import EditSection from './_components/EditSection';
 import { redirect } from 'next/navigation';
+import { GetType } from '@/types/api/get';
+import dayjs from 'dayjs';
 
 async function Solution({ params: { id } }: { params: { id: string } }) {
   const loginUser = await getUserSession();
-  const data = (await getServerData(`/solutions/${id}`)) as SolutionType;
+  const data = (await getServerData(`/solutions/${id}`)) as GetType[`/solutions/${string}`]['res'];
   if (!data) redirect('/404');
   const isMySol = loginUser.userId === data.member.id;
 
@@ -30,12 +31,11 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
         />
 
         <InfoSection
-          nickname={data.member.nickname}
+          nickname={data.member.nickname ?? '(알수없음)'}
           sourceLang={data.source_lang}
           isVerified={data.is_boj_verified}
           solutionId={data.boj_solution_id}
-          submittedAt={data.submitted_at}
-          createdAt={data.created_at}
+          submittedAt={dayjs(data.submitted_at).format('YYYY-MM-DD')}
         />
         {isMySol && <EditSection solutionId={id} />}
         <BodySection language={data.source_lang} code={data.source_code} comment={data.comment} />

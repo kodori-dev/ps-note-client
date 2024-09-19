@@ -10,12 +10,14 @@ import PostLayout from '@/components/Layout/PostLayout';
 import { PostFormType } from '@/types/input';
 import { useToast } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
+import { getBojTime } from '@/utils/getBojTime';
 
 function Post() {
   const param = useSearchParams();
+  const today = getBojTime();
 
   const DEFAULT_INPUT: PostFormType = {
-    submitted_at: '',
+    submitted_at: today,
     boj_id: param.get('boj_id') || '',
     is_correct_answer: '',
     isStar: false,

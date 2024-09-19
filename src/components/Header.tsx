@@ -53,7 +53,7 @@ function Header() {
   const handleCouponClick = async () => {
     try {
       setIsLoading(true);
-      if (!coupon || !user.isLogin) throw Error();
+      if (!coupon || !user.isLogin) throw Error('/이미 이번 주 티켓을 사용했어요');
       const cur = new Date();
       const res = await api('POST', `/coupons/use`, {
         coupon_id: coupon.id,

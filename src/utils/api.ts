@@ -5,7 +5,7 @@ import { GetType } from '@/types/api/get';
 import { PatchType } from '@/types/api/patch';
 import { PostType } from '@/types/api/post';
 
-const RES_BODY_NULL = ['/auth/login', '/auth/logout'];
+const RES_BODY_NULL = ['/auth/login', '/auth/logout', '/coupons/use'];
 
 interface BodyType {
   GET: GetType;

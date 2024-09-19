@@ -2,27 +2,50 @@
 
 import { InternalPenaltyType } from '@/types/api/admin';
 import dayjs from 'dayjs';
-import { Fragment, useState } from 'react';
-import { PenaltySchema } from '../../../../models';
+import { Fragment, useEffect, useState } from 'react';
+import { PenaltySchema, SolutionSchema } from '../../../../models';
 import Link from 'next/link';
 import { defaultMember, defaultPenalty } from '@/constants/defaultValue';
+import { useDisclosure, useToast } from '@chakra-ui/react';
+import CustomModal from '@/components/Modal';
 
 interface Props {
+  me: number;
   startDate: string;
   data: InternalPenaltyType[];
 }
 
 const CATEGORY = ['이름', 'M', 'T', 'W', 'T', 'F', '벌금', '납부', '상세보기'];
 
-function AttendList({ startDate, data }: Props) {
+function AttendList({ startDate, data, me }: Props) {
   const [detailMem, setDetailMem] = useState(-1);
   const [isAllOpen, setIsAllOpen] = useState(false);
+  const [validateSol, setValidateSol] = useState<SolutionSchema | null>(null);
 
   const getDate = (diff: number) => {
     const start = new Date(startDate);
     const target = new Date(start.setDate(start.getDate() + diff));
     return dayjs(target).format('MM/DD');
   };
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const toast = useToast();
+  const handleReValidateClick = async () => {
+    try {
+      if (!validateSol) throw Error('선택된 솔루션이 없습니다.');
+      window.location.href = `/validate/${validateSol.id}`;
+    } catch (err: any) {
+      toast({
+        title: `재검증에 실패했어요.`,
+        description: err.message,
+        status: 'error',
+      });
+    }
+  };
+
+  useEffect(() => {
+    setIsAllOpen(false);
+  }, []);
 
   return (
     <div>
@@ -35,6 +58,7 @@ function AttendList({ startDate, data }: Props) {
               setIsAllOpen((prev) => !prev);
               if (isAllOpen) setDetailMem(-1);
             }}
+            defaultChecked={isAllOpen}
           />
           상세 정보 모두 열기
         </label>
@@ -70,12 +94,20 @@ function AttendList({ startDate, data }: Props) {
                           {id} ✓
                         </Link>
                       ))}
-                      {not_admitted_solutions.map(({ id }) => (
+                      {not_admitted_solutions.map((sol) => (
                         <div className="flex justify-between text-14 mb-2">
-                          <Link key={id} className="hover:opacity-70 text-red-500 font-700" href={`/solution/${id}`}>
-                            {id} ✕
+                          <Link key={sol.id} className="hover:opacity-70 text-red-500 font-700" href={`/solution/${sol.id}`}>
+                            {sol.id} ✕
                           </Link>
-                          <button className="text-gray-2 hover:text-gray-1">재검증</button>
+                          <button
+                            onClick={() => {
+                              onOpen();
+                              setValidateSol(sol);
+                            }}
+                            className="text-gray-2 hover:text-gray-1"
+                          >
+                            재검증
+                          </button>
                         </div>
                       ))}
                     </>
@@ -94,6 +126,23 @@ function AttendList({ startDate, data }: Props) {
           );
         })}
       </div>
+
+      {validateSol && (
+        <CustomModal
+          clickBtnFunc={handleReValidateClick}
+          isOpen={isOpen}
+          onClose={onClose}
+          leftBtn="안할래용"
+          rightBtn="재검증! 레츠고~"
+          title="이 솔루션을 재검증할까요?"
+        >
+          <div className="flex flex-col items-start">
+            <p>솔루션 ID: {validateSol.id}</p>
+            <p>문제 이름: {validateSol.problem.name}</p>
+            <p>제출자: {validateSol.member.nickname}</p>
+          </div>
+        </CustomModal>
+      )}
     </div>
   );
 }

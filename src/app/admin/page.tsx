@@ -7,6 +7,7 @@ import { AdminPageRes } from '@/types/api/admin';
 async function Admin() {
   const session = await getUserSession();
   const memberId = session.isLogin ? session.userId : undefined;
+  if (!memberId) redirect('/login');
 
   const bojDay = getBojTime();
   const getAdminData = async () => {
@@ -19,7 +20,6 @@ async function Admin() {
       else throw Error();
     } catch (err) {
       redirect('/404');
-      return null;
     }
   };
 
@@ -27,7 +27,7 @@ async function Admin() {
 
   return (
     <div>
-      <AttendList startDate={data.start_date} data={data.member_penalties} />
+      <AttendList me={memberId} startDate={data.start_date} data={data.member_penalties} />
     </div>
   );
 }

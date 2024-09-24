@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { BodyInterfaceType } from './api';
-import { UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
+import { NOT_FOUND_SOL_ERR_CODE, UNAUTHORIZED_ERR_CODE } from '@/constants/errorCode';
 import { redirect } from 'next/navigation';
 import { GetType } from '@/types/api/get';
 
@@ -30,6 +30,7 @@ export const getServerData = async <T extends keyof GetType>(
     throw Error(`${resObj.code}/${resObj.message}`);
   } catch (err: any) {
     const [code, msg] = err.message.split('/');
+    if (code == NOT_FOUND_SOL_ERR_CODE) redirect('/404');
     if (code == UNAUTHORIZED_ERR_CODE) {
       redirect('/login');
     }

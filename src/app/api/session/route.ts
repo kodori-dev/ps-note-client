@@ -14,6 +14,11 @@ export async function GET() {
 export async function DELETE() {
   const session = await getUserSession();
   session.destroy();
+
+  const cookie = cookies();
+  const past = new Date('2000-01-01');
+  cookie.set('sessionid', '', { expires: past });
+  cookie.set('csrftoken', '', { expires: past });
   revalidatePath('/', 'layout');
 
   return NextResponse.json({ ok: true });

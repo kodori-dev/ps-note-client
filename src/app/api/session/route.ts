@@ -14,6 +14,7 @@ export async function GET() {
 export async function DELETE() {
   const session = await getUserSession();
   session.destroy();
+
   revalidatePath('/', 'layout');
 
   return NextResponse.json({ ok: true });

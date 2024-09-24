@@ -21,9 +21,21 @@ export function middleware(req: NextRequest) {
     return res;
   }
 
+  if (path === '/admin') {
+    const reqHeaders = new Headers(req.headers);
+    const day = req.nextUrl.searchParams.get('day') || '';
+    const res = NextResponse.next({
+      request: {
+        headers: reqHeaders,
+      },
+    });
+    res.headers.set('x-query-day', day);
+    return res;
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/attend/:path*', '/problem/:path*', '/solution/:path*', '/post/:path*', '/search/:path*'],
+  matcher: ['/attend/:path*', '/problem/:path*', '/solution/:path*', '/post/:path*', '/search/:path*', '/admin/:path'],
 };

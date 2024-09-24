@@ -7,13 +7,13 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { Spinner, useDisclosure, useToast } from '@chakra-ui/react';
-import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import ScreenLoading from './Loading/ScreenLoading';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
 import { logout } from '@/utils/logout';
 import dayjs from 'dayjs';
 import { useCheckAdmin } from '@/hooks/useCheckAdmin';
+import CustomModal from './Modal';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
@@ -141,29 +141,16 @@ function Header() {
         </>
       )}
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col gap-3 items-center pt-9 pb-5">
-              <p className="font-700 text-24">정말 오늘 놀기를 스킵하시겠어요?</p>
-              <p className="text-gray-2">면제 티켓은 1주에 1번밖에 쓸 수 없어요.</p>
-            </div>
-          </ModalBody>
-
-          <ModalFooter>
-            <div className="flex gap-11 w-full">
-              <Button theme="secondary" customStyle="w-full" heightSize="lg" onClickFunc={onClose} roundSize="sm">
-                고민할래요
-              </Button>
-              <Button heightSize="lg" customStyle="w-full" onClickFunc={handleCouponClick} roundSize="sm">
-                스킵할래요
-              </Button>
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <CustomModal
+        clickBtnFunc={handleCouponClick}
+        title="정말 오늘 놀기를 스킵하시겠어요?"
+        isOpen={isOpen}
+        onClose={onClose}
+        leftBtn="고민할래요"
+        rightBtn="스킵할래요"
+      >
+        <>면제 티켓은 1주에 1번밖에 쓸 수 없어요.</>
+      </CustomModal>
     </header>
   );
 }

@@ -5,8 +5,7 @@ import { api } from '@/utils/api';
 import { useDisclosure, useToast } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-import Button from '@/components/Button';
+import CustomModal from '@/components/Modal';
 
 interface Props {
   solutionId: string;
@@ -52,33 +51,20 @@ function EditSection({ solutionId }: Props) {
         </button>
       </div>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody>
-            <div className="flex flex-col gap-3 items-center pt-9 pb-4">
-              <p className="font-700 text-24">정말 이 솔루션을 삭제할까요?</p>
-              <p className="text-gray-2 text-center">
-                한 번 삭제하면 돌이킬 수 없어요.
-                <br />
-                (복구해달라고 하기 금지입니다 🤚)
-              </p>
-            </div>
-          </ModalBody>
-
-          <ModalFooter>
-            <div className="flex gap-11 w-full">
-              <Button theme="secondary" customStyle="w-full" heightSize="lg" onClickFunc={onClose} roundSize="sm">
-                고민할래요
-              </Button>
-              <Button heightSize="lg" customStyle="w-full" onClickFunc={handleDeleteClick} roundSize="sm">
-                삭제할게요
-              </Button>
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <CustomModal
+        title="정말 이 솔루션을 삭제할까요?"
+        isOpen={isOpen}
+        onClose={onClose}
+        clickBtnFunc={handleDeleteClick}
+        leftBtn="고민할래요"
+        rightBtn="삭제할게요"
+      >
+        <p className="text-gray-2 text-center">
+          한 번 삭제하면 돌이킬 수 없어요.
+          <br />
+          (복구해달라고 하기 금지입니다 🤚)
+        </p>
+      </CustomModal>
     </>
   );
 }

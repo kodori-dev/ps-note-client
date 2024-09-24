@@ -5,14 +5,11 @@ import { getServerData } from '@/utils/getServerData';
 import MetaTag from '@/components/MetaTag';
 import { getUserSession } from '@/utils/getUserSession';
 import EditSection from './_components/EditSection';
-import { redirect } from 'next/navigation';
-import { GetType } from '@/types/api/get';
 import dayjs from 'dayjs';
 
 async function Solution({ params: { id } }: { params: { id: string } }) {
   const loginUser = await getUserSession();
-  const data = (await getServerData(`/solutions/${id}`)) as GetType[`/solutions/${string}`]['res'];
-  if (!data) redirect('/404');
+  const data = await getServerData(`/solutions/${id}`);
   const isMySol = loginUser.userId === data.member.id;
 
   return (

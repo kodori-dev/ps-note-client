@@ -15,6 +15,10 @@ export interface PostType {
     req: LoginRequestSchema;
     res: LoginSchema;
   };
+  '/auth/logout': {
+    req: null;
+    res: null;
+  };
   '/auth/signup': {
     req: SignupRequestSchema;
     res: MemberSchema;

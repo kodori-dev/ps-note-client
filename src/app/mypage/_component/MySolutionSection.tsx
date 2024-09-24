@@ -25,12 +25,13 @@ function MySolutionSection({ solutionsData }: Props) {
           </div>
           <div className="grid grid-cols-3 gap-4">
             {solutionsData && solutionsData.length > 0 ? (
-              solutionsData.map(({ id, problem, is_correct_answer, score_label }) => (
+              solutionsData.map(({ id, problem, is_correct_answer, score_label, source_lang }) => (
                 <ProblemCard
                   key={id}
                   type="solution"
                   bojId={problem.boj_id}
                   isSolved={problem.is_solved ?? false}
+                  solLang={source_lang}
                   level={problem.level}
                   problemId={problem.id}
                   stars={problem.stars}

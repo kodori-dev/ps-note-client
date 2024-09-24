@@ -3,16 +3,19 @@ import { getUserSession } from '@/utils/getUserSession';
 import AttendList from './_component/AttendList';
 import { redirect } from 'next/navigation';
 import { AdminPageRes } from '@/types/api/admin';
+import { headers } from 'next/headers';
+import SelectDay from './_component/SelectDay';
 
 async function Admin() {
   const session = await getUserSession();
   const memberId = session.isLogin ? session.userId : undefined;
   if (!memberId) redirect('/login');
 
+  const day = headers().get('x-query-day') || '';
   const bojDay = getBojTime();
   const getAdminData = async () => {
     try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_SERVER_URL}/api-internal/v2/admin-page?day=2024-09-05`, {
+      const res = await fetch(`http://${process.env.NEXT_PUBLIC_SERVER_URL}/api-internal/v2/admin-page?day=${day || bojDay}`, {
         headers: memberId ? { 'X-Member-Id': memberId.toString() } : {},
         cache: 'no-store',
       });
@@ -27,6 +30,7 @@ async function Admin() {
 
   return (
     <div>
+      <SelectDay defaultDay={day || bojDay} />
       <AttendList me={memberId} startDate={data.start_date} data={data.member_penalties} />
     </div>
   );

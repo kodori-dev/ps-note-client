@@ -13,6 +13,7 @@ interface Props {
   isActive?: boolean;
   isCoupon?: boolean;
   isRest?: boolean;
+  attend: number;
 }
 
 const PROGRESS_COLOR = ['bg-progress-blue', 'bg-progress-pink', 'bg-progress-yellow', 'bg-progress-purple', 'bg-progress-green'];
@@ -28,8 +29,8 @@ const PROGRESS_SIZE = {
  * @param weekSolved 이번 주 등록한 solution 수
  * @param todaySolve 오늘 등록한 solution의 title || 면제 티켓 || noSolve
  */
-function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActive = true, isCoupon = false, isRest = false }: Props) {
-  const progressStyle = [PROGRESS_COLOR[id % 5], weekSolved >= 5 ? `w-full` : PROGRESS_SIZE[weekSolved as 0 | 1 | 2 | 3 | 4]].join(' ');
+function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActive = true, isCoupon = false, isRest = false, attend }: Props) {
+  const progressStyle = [PROGRESS_COLOR[id % 5], weekSolved >= 5 ? `w-full` : PROGRESS_SIZE[attend as 0 | 1 | 2 | 3 | 4]].join(' ');
 
   return (
     <div

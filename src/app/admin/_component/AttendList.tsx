@@ -95,8 +95,8 @@ function AttendList({ startDate, data, me }: Props) {
                         </Link>
                       ))}
                       {not_admitted_solutions.map((sol) => (
-                        <div className="flex justify-between text-14 mb-2">
-                          <Link key={sol.id} className="hover:opacity-70 text-red-500 font-700" href={`/solution/${sol.id}`}>
+                        <div key={sol.id} className="flex justify-between text-14 mb-2">
+                          <Link className="hover:opacity-70 text-red-500 font-700" href={`/solution/${sol.id}`}>
                             {sol.id} ✕
                           </Link>
                           <button

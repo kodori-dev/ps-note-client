@@ -18,8 +18,9 @@ function EditForm({ defaultValue, solutionId }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm({ mode: 'onSubmit', defaultValues: defaultValue });
   const { handleSubmit, getValues, watch } = methods;
-  const { is_correct_answer, source_lang, source_code, comment, isStar } = watch();
+  const { is_correct_answer, source_lang, source_code, comment, isStar, submitted_at } = watch();
   const isNotDefault =
+    defaultValue.submitted_at !== submitted_at ||
     defaultValue.is_correct_answer !== is_correct_answer ||
     defaultValue.source_lang !== source_lang ||
     defaultValue.source_code !== source_code ||

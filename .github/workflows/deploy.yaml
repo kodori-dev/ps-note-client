@@ -20,7 +20,7 @@ env:
   CONTAINER_NAME: ps-note-client
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   NEXT_PUBLIC_API_BASE_URL: ${{ secrets.API_BASE_URL }}
-  NEXT_PUBLIC_SERVER_URL: ${{ secrets.SERVER_URL }}
+  NEXT_PUBLIC_SERVER_URL: "ps-note-client:3000"
   NEXT_PUBLIC_FRONT_URL: ${{ secrets.FRONT_URL }}
   NEXT_PUBLIC_SESSION_PW: ${{ secrets.FRONT_SESSION_PW }}
   NEXT_PUBLIC_ADMIN_ID1: 4
@@ -165,44 +165,6 @@ jobs:
 
   deploy:
     needs: [prepare, build-and-push]
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
-          tags: |
-            type=sha
-
-      - name: Extract tag
-        id: extract-tag
-        run: echo "TAG=$(echo '${{ steps.meta.outputs.tags }}' | head -n 1)" >> "$GITHUB_OUTPUT"
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ env.AWS_ROLE }}
-
-      - name: Update kube config
-        run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
-
-      - name: Deploy to EKS
-        run: |
-          kubectl set image --namespace ${{ env.NAMESPACE }} ${{ env.DEPLOYMENT_NAME }} ${{ env.CONTAINER_NAME }}=${{ steps.extract-tag.outputs.TAG }}
-
-      - name: Verify Deployment Status
-        run: |
-          kubectl rollout status --namespace ${{ env.NAMESPACE }} --timeout 10m ${{ env.DEPLOYMENT_NAME }}
-
-  deploy-cloudfront:
-    needs: [deploy]
     runs-on: ubuntu-latest
 
     permissions:
@@ -385,7 +347,7 @@ jobs:
             }
 
   notify-deploy-result:
-    needs: [prepare, notify-start, build-and-push, deploy, deploy-cloudfront]
+    needs: [prepare, notify-start, build-and-push, deploy]
     if: ${{ always() && needs.build-and-push.result == 'success' && needs.deploy.result != 'skipped'  }}
 
     runs-on: ubuntu-latest

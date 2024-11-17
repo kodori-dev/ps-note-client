@@ -62,7 +62,7 @@ function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActi
               >
                 {todaySolve[0].problem.name}
               </Link>
-              <span className="text-12 text-gray-2 font-400"> 말고 무려 {weekSolved - 1}개!</span>
+              <span className="text-12 text-gray-2 font-400"> 말고도 이번주 무려 {weekSolved - 1}개!</span>
             </>
           ) : (
             <p className="text-gray-1">{isCoupon ? '🎟️ 면제 티켓 사용' : '오늘 문제를 풀지 않았어요 😓'}</p>

@@ -1,4 +1,4 @@
-export const LANGUAGE = ['C', 'C++', 'Python', 'Java', 'JavaScript', 'Kotlin', 'Rust'] as const;
+export const LANGUAGE = ['C', 'C++', 'Python', 'Java', 'JavaScript', 'Kotlin', 'Rust', 'Brainf**k'] as const;
 
 export const LANGUAGE_FOR_MD = {
   c: 'c',
@@ -8,4 +8,5 @@ export const LANGUAGE_FOR_MD = {
   javascript: 'js',
   python: 'python',
   rust: 'rust',
+  'Brainf**k': 'brainfuck'
 };

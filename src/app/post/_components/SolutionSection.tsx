@@ -57,11 +57,9 @@ function SolutionSection() {
           <MenuTrigger asChild>
             <Button
               // rightIcon={<ChevronDownIcon w={6} h={6} />}
-              fontSize={'small'}
-              textAlign={'start'}
+
               width="373px"
               size="lg"
-              backgroundColor={'white'}
               rounded={'16px'}
               h={54}
               as={Button}

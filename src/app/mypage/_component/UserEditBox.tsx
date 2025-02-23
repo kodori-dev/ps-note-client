@@ -5,11 +5,11 @@ import Input from '@/components/Input';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { REQUIRED_INPUT } from '@/constants/errorMsg';
 import { api } from '@/utils/api';
-import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MemberSchema } from '../../../../models';
 import { NOT_USER_PW_ERR_CODE } from '@/constants/errorCode';
+import { toaster } from '@/components/ui/toaster';
 
 interface Props {
   defaultValue: MemberSchema;
@@ -23,12 +23,14 @@ function UserEditBox({ defaultValue }: Props) {
     getValues,
     watch,
     setError,
-  } = useForm({ mode: 'onSubmit', defaultValues: { ...defaultValue, cur_password: '' } });
+  } = useForm({
+    mode: 'onSubmit',
+    defaultValues: { ...defaultValue, cur_password: '' },
+  });
   const { boj_id, cur_password } = watch();
 
   const isEdit = boj_id !== defaultValue.boj_id && cur_password;
 
-  const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const handleEditSubmit = async () => {
     setIsLoading(true);
@@ -45,10 +47,10 @@ function UserEditBox({ defaultValue }: Props) {
         body: JSON.stringify({ userId: res.id, nickname: res.nickname }),
       });
 
-      toast({
+      toaster.create({
         title: `정보 변경 완료`,
         description: '문제 풀고 부자되세요😎',
-        status: 'success',
+        type: 'success',
       });
 
       window.location.reload();
@@ -59,11 +61,10 @@ function UserEditBox({ defaultValue }: Props) {
         setError('cur_password', { message: msg });
       }
 
-      toast({
+      toaster.create({
         title: '변경 실패!',
         description: msg,
-        status: 'error',
-        isClosable: true,
+        type: 'error',
       });
     } finally {
       setIsLoading(false);
@@ -73,9 +74,14 @@ function UserEditBox({ defaultValue }: Props) {
   return (
     <>
       {isLoading && <ScreenLoading />}
-      <form className="flex flex-col gap-5 w-[400px]" onSubmit={handleSubmit(handleEditSubmit)}>
+      <form
+        className="flex flex-col gap-5 w-[400px]"
+        onSubmit={handleSubmit(handleEditSubmit)}
+      >
         <h2 className="text-32 font-700">내 정보 변경</h2>
-        <p className="text-gray-3 text-14">* 상태 변경은 관리자에게 문의해 주세요.</p>
+        <p className="text-gray-3 text-14">
+          * 상태 변경은 관리자에게 문의해 주세요.
+        </p>
         <Input register={register('username')} disabled label="ID" />
         <Input register={register('nickname')} disabled label="닉네임" />
         <Input

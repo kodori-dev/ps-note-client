@@ -6,14 +6,14 @@ import Button from './Button';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/utils/api';
 import { useEffect, useState } from 'react';
-import { Spinner, useDisclosure, useToast } from '@chakra-ui/react';
+import { Spinner, useDisclosure } from '@chakra-ui/react';
 import ScreenLoading from './Loading/ScreenLoading';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
 import { logout } from '@/utils/logout';
 import dayjs from 'dayjs';
 import { useCheckAdmin } from '@/hooks/useCheckAdmin';
-import CustomModal from './Modal';
+import CustomDialog from './Dialog';
+import { toaster } from '@/components/ui/toaster';
 
 function Header() {
   const [isDropdown, setIsDropDown] = useState(false);
@@ -32,7 +32,11 @@ function Header() {
     queryFn: async () => {
       if (!user.isLogin) return false;
       const today = getBojTime();
-      const res = await api('GET', '/coupons', undefined, { day: today, member_id: user.userId, usable: true });
+      const res = await api('GET', '/coupons', undefined, {
+        day: today,
+        member_id: user.userId,
+        usable: true,
+      });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },
@@ -47,13 +51,13 @@ function Header() {
     }
   }, [isUserSuccess]);
 
-  const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
 
   const handleCouponClick = async () => {
     try {
       setIsLoading(true);
-      if (!coupon || !user.isLogin) throw Error('/이미 이번 주 티켓을 사용했어요');
+      if (!coupon || !user.isLogin)
+        throw Error('/이미 이번 주 티켓을 사용했어요');
       const cur = new Date();
       const res = await api('POST', `/coupons/use`, {
         coupon_id: coupon.id,
@@ -61,11 +65,19 @@ function Header() {
       });
       if (typeof res == 'string') throw Error();
       setIsDropDown(false);
-      toast({ title: '면제 티켓 사용 성공!', description: '내일은 더 열심히~!', status: 'success' });
+      toaster.create({
+        title: '면제 티켓 사용 성공!',
+        description: '내일은 더 열심히~!',
+        type: 'success',
+      });
       getCoupon();
     } catch (err: any) {
       const [code, msg] = err.message.split('/');
-      toast({ title: '면제 티켓 사용 실패!', description: msg, status: 'error' });
+      toaster.create({
+        title: '면제 티켓 사용 실패!',
+        description: msg,
+        type: 'error',
+      });
     } finally {
       onClose();
       setIsLoading(false);
@@ -73,7 +85,10 @@ function Header() {
   };
 
   const DROPDOWN_BTN = [
-    { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${user.userId}`) },
+    {
+      type: '꼬박꼬박 일지',
+      onClick: () => (window.location.href = `/attend/${user.userId}`),
+    },
     { type: '마이페이지', onClick: () => (window.location.href = `/mypage`) },
     {
       type: '로그아웃',
@@ -96,7 +111,11 @@ function Header() {
       {user.isLogin ? (
         <div className="flex gap-12">
           {isSuccess && (
-            <button disabled={isUsed} onClick={onOpen} className="active:hover:text-gray-2 disabled:opacity-30 disabled:cursor-not-allowed">
+            <button
+              disabled={isUsed}
+              onClick={onOpen}
+              className="active:hover:text-gray-2 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
               면제 티켓
             </button>
           )}
@@ -110,7 +129,12 @@ function Header() {
             </Link>
           )}
           <button onClick={() => setIsDropDown((prev) => !prev)}>
-            <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
+            <span className="font-700">{user.nickname}</span> 님
+            {isDropdown
+              ? // <ChevronUpIcon boxSize={6} />
+                '^'
+              : // <ChevronDownIcon boxSize={6} />
+                'v'}
           </button>
         </div>
       ) : (
@@ -123,7 +147,10 @@ function Header() {
 
       {isDropdown && (
         <>
-          <div className="w-full h-svh z-20 fixed top-0 left-0" onClick={() => setIsDropDown(false)} />
+          <div
+            className="w-full h-svh z-20 fixed top-0 left-0"
+            onClick={() => setIsDropDown(false)}
+          />
           <div className="absolute z-modal -bottom-[124px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
             {DROPDOWN_BTN.map(({ onClick, type }) => (
               <button
@@ -141,16 +168,16 @@ function Header() {
         </>
       )}
 
-      <CustomModal
+      <CustomDialog
         clickBtnFunc={handleCouponClick}
         title="정말 오늘 놀기를 스킵하시겠어요?"
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         leftBtn="고민할래요"
         rightBtn="스킵할래요"
       >
         <>면제 티켓은 1주에 1번밖에 쓸 수 없어요.</>
-      </CustomModal>
+      </CustomDialog>
     </header>
   );
 }

@@ -1,7 +1,11 @@
 'use client';
-import React, { ComponentPropsWithRef, useCallback, useEffect, useState } from 'react';
+import React, {
+  ComponentPropsWithRef,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { EmblaCarouselType } from 'embla-carousel';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 type UsePrevNextButtonsType = {
   prevBtnDisabled: boolean;
@@ -10,7 +14,9 @@ type UsePrevNextButtonsType = {
   onNextButtonClick: () => void;
 };
 
-export const usePrevNextButtons = (emblaApi: EmblaCarouselType | undefined): UsePrevNextButtonsType => {
+export const usePrevNextButtons = (
+  emblaApi: EmblaCarouselType | undefined
+): UsePrevNextButtonsType => {
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
 
@@ -50,8 +56,13 @@ export const PrevButton: React.FC<PropType> = (props) => {
   const { children, ...restProps } = props;
 
   return (
-    <button className="embla__button embla__button--prev disabled:opacity-20" type="button" {...restProps}>
-      <ChevronLeftIcon boxSize={6} />
+    <button
+      className="embla__button embla__button--prev disabled:opacity-20"
+      type="button"
+      {...restProps}
+    >
+      {/* <ChevronLeftIcon boxSize={6} /> */}
+
       {children}
     </button>
   );
@@ -61,8 +72,12 @@ export const NextButton: React.FC<PropType> = (props) => {
   const { children, ...restProps } = props;
 
   return (
-    <button className="embla__button embla__button--next disabled:opacity-20" type="button" {...restProps}>
-      <ChevronRightIcon boxSize={6} />
+    <button
+      className="embla__button embla__button--next disabled:opacity-20"
+      type="button"
+      {...restProps}
+    >
+      {/* <ChevronRightIcon boxSize={6} /> */}
       {children}
     </button>
   );

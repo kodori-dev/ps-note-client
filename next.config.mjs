@@ -38,6 +38,9 @@ const nextConfig = {
       },
     ];
   },
+  experimental: {
+    optimizePackageImports: ["@chakra-ui/react"],
+  },
 };
 
 const sentryWebpackPluginOptions = {

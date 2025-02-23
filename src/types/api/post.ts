@@ -41,4 +41,14 @@ export interface PostType {
     req: UseCouponRequestSchema;
     res: void;
   };
+
+  //vacation
+  '/vacations': {
+    req: {
+      memo: string;
+      start_date: string;
+      end_date: string;
+    };
+    res: any;
+  };
 }

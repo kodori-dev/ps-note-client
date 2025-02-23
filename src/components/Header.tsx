@@ -2,37 +2,50 @@
 
 import Link from 'next/link';
 import { useGetUserInfo } from '@/hooks/useGetUserInfo';
-import Button from './Button';
+// import Button from './Button';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/utils/api';
-import { useEffect, useState } from 'react';
-import { Spinner, useDisclosure, useToast } from '@chakra-ui/react';
+import { useEffect, useId, useState } from 'react';
+import {
+  Avatar,
+  Button,
+  Field,
+  Input,
+  Spinner,
+  useDisclosure,
+} from '@chakra-ui/react';
 import ScreenLoading from './Loading/ScreenLoading';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { getBojTime } from '@/utils/getBojTime';
 import { logout } from '@/utils/logout';
 import dayjs from 'dayjs';
 import { useCheckAdmin } from '@/hooks/useCheckAdmin';
-import CustomModal from './Modal';
+import CustomDialog from './Dialog';
+import { toaster } from '@/components/ui/toaster';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from './ui/menu';
+import { Tooltip } from './ui/tooltip';
+import { useForm } from 'react-hook-form';
 
 function Header() {
-  const [isDropdown, setIsDropDown] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const isAdmin = useCheckAdmin();
+  const id = useId(); //뭐하는애지?
 
   const { data: user, isSuccess: isUserSuccess } = useGetUserInfo();
   const {
     data: coupon,
     refetch: getCoupon,
-    isSuccess,
+    isSuccess: isCouponSuccess,
     isLoading: isCouponLoading,
   } = useQuery({
     queryKey: ['coupon', user.userId],
     queryFn: async () => {
       if (!user.isLogin) return false;
       const today = getBojTime();
-      const res = await api('GET', '/coupons', undefined, { day: today, member_id: user.userId, usable: true });
+      const res = await api('GET', '/coupons', undefined, {
+        day: today,
+        member_id: user.userId,
+        usable: true,
+      });
       setIsUsed(res.length === 0 ? true : false);
       return res.length > 0 ? res[0] : null;
     },
@@ -47,110 +60,206 @@ function Header() {
     }
   }, [isUserSuccess]);
 
-  const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
 
   const handleCouponClick = async () => {
     try {
-      setIsLoading(true);
-      if (!coupon || !user.isLogin) throw Error('/이미 이번 주 티켓을 사용했어요');
+      if (!coupon || !user.isLogin)
+        throw Error('/이미 이번 주 티켓을 사용했어요');
       const cur = new Date();
       const res = await api('POST', `/coupons/use`, {
         coupon_id: coupon.id,
         use_date: dayjs(cur).format('YYYY-MM-DDTHH:mm:ss'),
       });
       if (typeof res == 'string') throw Error();
-      setIsDropDown(false);
-      toast({ title: '면제 티켓 사용 성공!', description: '내일은 더 열심히~!', status: 'success' });
+      toaster.create({
+        title: '면제 티켓 사용 성공!',
+        description: '내일은 더 열심히~!',
+        type: 'success',
+      });
       getCoupon();
     } catch (err: any) {
       const [code, msg] = err.message.split('/');
-      toast({ title: '면제 티켓 사용 실패!', description: msg, status: 'error' });
+      toaster.create({
+        title: '면제 티켓 사용 실패!',
+        description: msg,
+        type: 'error',
+      });
     } finally {
       onClose();
-      setIsLoading(false);
     }
   };
 
-  const DROPDOWN_BTN = [
-    { type: '꼬박꼬박 일지', onClick: () => (window.location.href = `/attend/${user.userId}`) },
-    { type: '마이페이지', onClick: () => (window.location.href = `/mypage`) },
-    {
-      type: '로그아웃',
-      onClick: async () => {
-        setIsLoading(true);
-        await logout();
-        setIsLoading(false);
-        window.location.reload();
-      },
-    },
-  ];
+  const handleLogoutClick = async () => {
+    await logout();
+    window.location.reload();
+  };
+
+  const { register, getValues } = useForm();
+  const [isVacationOpen, setIsVacationOpen] = useState(false);
+  const handleVacationClick = async () => {
+    try {
+      const { vacation_start, vacation_end, vacation_memo } = getValues();
+      const res = await api('POST', `/vacations`, {
+        start_date: vacation_start,
+        end_date: vacation_end,
+        memo: vacation_memo,
+      });
+      if (typeof res == 'string') {
+        const [code, msg] = res.split('/');
+        throw Error(msg);
+      }
+      toaster.create({
+        title: '휴가 신청 성공😎',
+        description: '푹 쉬고 빠르게 돌아오세요!',
+        type: 'success',
+      });
+      setIsVacationOpen(false);
+      window.location.href = '/mypage';
+    } catch (err: any) {
+      toaster.create({
+        title: '휴가 신청 실패',
+        description: err.message,
+        type: 'error',
+      });
+    }
+  };
 
   return (
     <header className="relative flex items-center justify-between h-[72px]">
-      {isLoading && <ScreenLoading />}
       <Link href="/" className="text-14">
         $$합법 PS 놀이터$$
       </Link>
 
-      {user.isLogin ? (
-        <div className="flex gap-12">
-          {isSuccess && (
-            <button disabled={isUsed} onClick={onOpen} className="active:hover:text-gray-2 disabled:opacity-30 disabled:cursor-not-allowed">
-              면제 티켓
-            </button>
-          )}
-          {isCouponLoading && <Spinner boxSize={'24px'} />}
-          <Link href={'/post'}>
-            <button className="hover:text-gray-2">체크인</button>
-          </Link>
-          {isAdmin && (
-            <Link href={'/admin'}>
-              <button className="hover:text-gray-2">관리자</button>
-            </Link>
-          )}
-          <button onClick={() => setIsDropDown((prev) => !prev)}>
-            <span className="font-700">{user.nickname}</span> 님{isDropdown ? <ChevronUpIcon boxSize={6} /> : <ChevronDownIcon boxSize={6} />}
-          </button>
-        </div>
-      ) : (
-        <Link href="/login">
-          <Button theme="secondary" heightSize="sm" customStyle="w-[100px]">
-            로그인
-          </Button>
-        </Link>
-      )}
+      <div className="flex gap-5">
+        {user.isLogin && (
+          <>
+            <Button
+              onClick={onOpen}
+              loading={isCouponLoading}
+              loadingText="Loading..."
+              disabled={isUsed}
+              colorPalette={'blue'}
+              variant="outline"
+              size="md"
+            >
+              면제티켓
+            </Button>
 
-      {isDropdown && (
-        <>
-          <div className="w-full h-svh z-20 fixed top-0 left-0" onClick={() => setIsDropDown(false)} />
-          <div className="absolute z-modal -bottom-[124px] right-0 bg-white shadow-md overflow-hidden rounded-md flex flex-col">
-            {DROPDOWN_BTN.map(({ onClick, type }) => (
-              <button
-                key={type}
-                onClick={() => {
-                  onClick();
-                  setIsDropDown(false);
-                }}
-                className="enabled:hover:text-primary enabled:hover:bg-primary/10 py-3 px-6 disabled:opacity-20 disabled:cursor-not-allowed"
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+            <Button
+              onClick={() => (window.location.href = '/post')}
+              colorPalette={'blue'}
+              variant="outline"
+              size="md"
+            >
+              Check-In
+            </Button>
 
-      <CustomModal
+            <MenuRoot>
+              <MenuTrigger asChild>
+                <Button colorPalette={'blue'} variant="outline" size="md">
+                  MENU
+                </Button>
+              </MenuTrigger>
+              <MenuContent>
+                <MenuItem
+                  value="꼬박꼬박 일지"
+                  onClick={() =>
+                    (window.location.href = `/attend/${user.userId}`)
+                  }
+                >
+                  📆 꼬박꼬박 일지
+                </MenuItem>
+                <MenuItem value="휴가" onClick={() => setIsVacationOpen(true)}>
+                  🏖️ 휴가 떠나기
+                </MenuItem>
+                <MenuItem
+                  value="마이페이지"
+                  onClick={() => (window.location.href = `/mypage`)}
+                >
+                  ⚙️ 마이페이지
+                </MenuItem>
+                {isAdmin && (
+                  <MenuItem
+                    value="관리자"
+                    onClick={() => (window.location.href = `/admin`)}
+                  >
+                    🧑‍🏫 관리자
+                  </MenuItem>
+                )}
+                <MenuItem
+                  value="로그아웃"
+                  color={'blue.600'}
+                  _hover={{ bg: 'blue.50' }}
+                  onClick={handleLogoutClick}
+                >
+                  🚪 로그아웃
+                </MenuItem>
+              </MenuContent>
+            </MenuRoot>
+          </>
+        )}
+
+        <Tooltip
+          content={user.isLogin ? `${user.nickname} 님 출석 보기` : '로그인'}
+          ids={{ trigger: id }}
+          openDelay={300}
+          closeDelay={300}
+        >
+          <Avatar.Root
+            ids={{ root: id }}
+            as={'button'}
+            className="cursor-pointer"
+            onClick={() =>
+              (window.location.href = user.isLogin
+                ? `/attend/${user.userId}`
+                : '/login')
+            }
+          >
+            <Avatar.Fallback name={user.nickname} />
+          </Avatar.Root>
+        </Tooltip>
+      </div>
+
+      {/* 면제 티켓 모달 */}
+      <CustomDialog
         clickBtnFunc={handleCouponClick}
         title="정말 오늘 놀기를 스킵하시겠어요?"
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         leftBtn="고민할래요"
         rightBtn="스킵할래요"
       >
         <>면제 티켓은 1주에 1번밖에 쓸 수 없어요.</>
-      </CustomModal>
+      </CustomDialog>
+
+      {/* 면제 티켓 모달 */}
+      <CustomDialog
+        clickBtnFunc={handleVacationClick}
+        title="휴가를 신청할 기간을 입력하세요."
+        isOpen={isVacationOpen}
+        onClose={() => setIsVacationOpen(false)}
+        leftBtn="고민할래요"
+        rightBtn="휴가쓸게요"
+      >
+        <div className="w-full mt-5 flex flex-col gap-2 px-10">
+          <Field.Root required orientation="horizontal">
+            <Field.Label>휴가명</Field.Label>
+            <Input {...register('vacation_memo')} />
+          </Field.Root>
+          <Field.Root required orientation="horizontal">
+            <Field.Label>시작일</Field.Label>
+            <Input type="date" {...register('vacation_start')} />
+          </Field.Root>
+          <Field.Root required orientation="horizontal">
+            <Field.Label>종료일</Field.Label>
+            <Input type="date" {...register('vacation_end')} />
+          </Field.Root>
+          <p className="text-gray-3 text-14 mt-3">
+            ! 휴가 반영 상태는 마이 페이지에서 확인할 수 있어요.
+          </p>
+        </div>
+      </CustomDialog>
     </header>
   );
 }

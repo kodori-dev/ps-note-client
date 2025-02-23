@@ -1,13 +1,13 @@
 import Input from '@/components/Input';
 import ScreenLoading from '@/components/Loading/ScreenLoading';
 import { api } from '@/utils/api';
-import { useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MemberSchema } from '../../../../models';
 import { NOT_USER_PW_ERR_CODE } from '@/constants/errorCode';
 import { REQUIRED_INPUT } from '@/constants/errorMsg';
 import Button from '@/components/Button';
+import { toaster } from '@/components/ui/toaster';
 
 interface Props {
   defaultValue: MemberSchema;
@@ -23,9 +23,9 @@ function PasswordEditBox({ defaultValue }: Props) {
     setError,
   } = useForm({ mode: 'onSubmit' });
   const { cur_password, new_password, new_password_check } = watch();
-  const isEdit = cur_password && new_password !== '' && new_password === new_password_check;
+  const isEdit =
+    cur_password && new_password !== '' && new_password === new_password_check;
 
-  const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleEditSubmit = async () => {
@@ -42,10 +42,10 @@ function PasswordEditBox({ defaultValue }: Props) {
         body: JSON.stringify({ userId: res.id, nickname: res.nickname }),
       });
 
-      toast({
+      toaster.create({
         title: `정보 변경 완료`,
         description: '문제 풀고 부자되세요😎',
-        status: 'success',
+        type: 'success',
       });
 
       window.location.reload();
@@ -55,11 +55,10 @@ function PasswordEditBox({ defaultValue }: Props) {
         msg = '비밀번호가 일치하지 않습니다.';
         setError('cur_password', { message: msg });
       }
-      toast({
+      toaster.create({
         title: '변경 실패!',
         description: msg,
-        status: 'error',
-        isClosable: true,
+        type: 'error',
       });
     } finally {
       setIsLoading(false);
@@ -69,7 +68,10 @@ function PasswordEditBox({ defaultValue }: Props) {
   return (
     <>
       {isLoading && <ScreenLoading />}
-      <form className="flex flex-col gap-5 w-[400px]" onSubmit={handleSubmit(handleEditSubmit)}>
+      <form
+        className="flex flex-col gap-5 w-[400px]"
+        onSubmit={handleSubmit(handleEditSubmit)}
+      >
         <h2 className="text-32 font-700">비밀번호 변경</h2>
         <Input
           register={register('cur_password', { required: REQUIRED_INPUT })}
@@ -86,7 +88,9 @@ function PasswordEditBox({ defaultValue }: Props) {
           error={errors.new_password}
         />
         <Input
-          register={register('new_password_check', { required: REQUIRED_INPUT })}
+          register={register('new_password_check', {
+            required: REQUIRED_INPUT,
+          })}
           label="새로운 비밀번호 확인"
           placeholder="새로운 비밀번호를 다시 입력해 주세요."
           type="password"

@@ -4,6 +4,7 @@ import { DeleteType } from '@/types/api/delete';
 import { GetType } from '@/types/api/get';
 import { PatchType } from '@/types/api/patch';
 import { PostType } from '@/types/api/post';
+import { logout } from './logout';
 
 const RES_BODY_NULL = ['/coupons/use', '/auth/logout'];
 
@@ -50,7 +51,8 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
     if (code == 500) alert(msg);
     if (code == UNAUTHORIZED_ERR_CODE) {
       alert('세션이 만료됐어요!\n다시 로그인해 주세요.');
-      window.location.href = '/login';
+      await logout();
+      if(window.location.pathname !== '/login') window.location.href = '/login';
     }
     return err.message;
   }

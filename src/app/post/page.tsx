@@ -8,9 +8,9 @@ import ScreenLoading from '@/components/Loading/ScreenLoading';
 import MetaTag from '@/components/MetaTag';
 import PostLayout from '@/components/Layout/PostLayout';
 import { PostFormType } from '@/types/input';
-import { useToast } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { getBojTime } from '@/utils/getBojTime';
+import { toaster } from '@/components/ui/toaster';
 
 function Post() {
   const param = useSearchParams();
@@ -30,14 +30,34 @@ function Post() {
 
   const methods = useForm({ mode: 'onSubmit', defaultValues: DEFAULT_INPUT });
   const { watch, getValues, handleSubmit } = methods;
-  const { pid, boj_id, is_correct_answer, source_lang, source_code, submitted_at } = watch();
-  const isSave = submitted_at && pid && boj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
+  const {
+    pid,
+    boj_id,
+    is_correct_answer,
+    source_lang,
+    source_code,
+    submitted_at,
+  } = watch();
+  const isSave =
+    submitted_at &&
+    pid &&
+    boj_id &&
+    is_correct_answer &&
+    source_lang !== DEFAULT_INPUT.source_lang &&
+    source_code;
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
 
   const handleCheckIn = async () => {
     setIsLoading(true);
-    const { pid, isStar, is_correct_answer, source_code, source_lang, comment, submitted_at } = getValues();
+    const {
+      pid,
+      isStar,
+      is_correct_answer,
+      source_code,
+      source_lang,
+      comment,
+      submitted_at,
+    } = getValues();
 
     try {
       const res = await api('POST', '/solutions', {
@@ -50,18 +70,18 @@ function Post() {
         submitted_at: submitted_at,
       });
       if (typeof res === 'string') throw Error(res);
-      toast({
+      toaster.create({
         title: `체크인 완료!`,
         description: '내일도 화이팅❤️‍🔥!',
-        status: 'success',
+        type: 'success',
       });
       window.location.href = `/solution/${res.id}`;
     } catch (err: any) {
       const [code, msg] = err.message.split('/');
-      toast({
+      toaster.create({
         title: `체크인 실패!`,
         description: msg,
-        status: 'error',
+        type: 'error',
       });
     } finally {
       setIsLoading(false);
@@ -70,9 +90,15 @@ function Post() {
 
   return (
     <>
-      <MetaTag title="체크인" description="오늘 푼 문제의 솔루션을 등록하세요. 아이디어 섹션을 통해 자유롭게 문제 풀이 방법을 기록해 보세요." />
+      <MetaTag
+        title="체크인"
+        description="오늘 푼 문제의 솔루션을 등록하세요. 아이디어 섹션을 통해 자유롭게 문제 풀이 방법을 기록해 보세요."
+      />
       <PostLayout methods={methods} onSubmitFunc={handleSubmit(handleCheckIn)}>
-        <Button customStyle="w-[120px]" disabled={!Boolean(isSave) || isLoading}>
+        <Button
+          customStyle="w-[120px]"
+          disabled={!Boolean(isSave) || isLoading}
+        >
           Save
         </Button>
       </PostLayout>

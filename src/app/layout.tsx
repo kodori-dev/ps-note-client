@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
 import ReactQueryProvider from '@/providers/ReactQueryProvider';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import AuthProvider from '@/providers/AuthProvider';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/toaster';
+import { Provider } from '@/components/ui/provider';
 
 export const metadata: Metadata = {
   title: '$$합법 PS 놀이터$$',
@@ -24,18 +27,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <body>
-        <ChakraProvider disableGlobalStyle toastOptions={{ defaultOptions: { position: 'top' } }}>
+        <Provider>
           <ReactQueryProvider>
             <AuthProvider>
               <div className="w-[1024px] mx-auto px-6 mb-24">
+                <Toaster />
                 <Header />
                 {children}
               </div>
             </AuthProvider>
           </ReactQueryProvider>
-        </ChakraProvider>
+        </Provider>
       </body>
     </html>
   );

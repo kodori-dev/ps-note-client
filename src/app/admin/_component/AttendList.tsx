@@ -6,8 +6,9 @@ import { Fragment, useEffect, useState } from 'react';
 import { PenaltySchema, SolutionSchema } from '../../../../models';
 import Link from 'next/link';
 import { defaultMember, defaultPenalty } from '@/constants/defaultValue';
-import { useDisclosure, useToast } from '@chakra-ui/react';
-import CustomModal from '@/components/Modal';
+import { useDisclosure } from '@chakra-ui/react';
+import CustomDialog from '@/components/Dialog';
+import { toaster } from '@/components/ui/toaster';
 
 interface Props {
   me: number;
@@ -28,17 +29,16 @@ function AttendList({ startDate, data, me }: Props) {
     return dayjs(target).format('MM/DD');
   };
 
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const toast = useToast();
+  const { open, onClose, onOpen } = useDisclosure();
   const handleReValidateClick = async () => {
     try {
       if (!validateSol) throw Error('선택된 솔루션이 없습니다.');
       window.location.href = `/validate/${validateSol.id}`;
     } catch (err: any) {
-      toast({
+      toaster.create({
         title: `재검증에 실패했어요.`,
         description: err.message,
-        status: 'error',
+        type: 'error',
       });
     }
   };
@@ -67,11 +67,19 @@ function AttendList({ startDate, data, me }: Props) {
         {CATEGORY.map((item, idx) => (
           <div className="text-14 text-gray-3 flex items-center" key={item}>
             {item}
-            {item.length < 2 && <p className="text-12">{`(${getDate(idx - 1)})`}</p>}
+            {item.length < 2 && (
+              <p className="text-12">{`(${getDate(idx - 1)})`}</p>
+            )}
           </div>
         ))}
         {data.map(({ member, penalties, penalty_amount, is_deposit }) => {
-          let attend: PenaltySchema[] = [defaultPenalty, defaultPenalty, defaultPenalty, defaultPenalty, defaultPenalty];
+          let attend: PenaltySchema[] = [
+            defaultPenalty,
+            defaultPenalty,
+            defaultPenalty,
+            defaultPenalty,
+            defaultPenalty,
+          ];
           for (const penalty of penalties) {
             const startDay = new Date(startDate);
             const attendDay = new Date(penalty.day);
@@ -81,43 +89,75 @@ function AttendList({ startDate, data, me }: Props) {
 
           return (
             <Fragment key={member.id}>
-              <Link className="hover:text-primary font-700" href={`/attend/${member.id}`}>
+              <Link
+                className="hover:text-primary font-700"
+                href={`/attend/${member.id}`}
+              >
                 {member.nickname} {member.is_off && '💤'}
               </Link>
-              {attend.map(({ id, coupons, is_penalty, admitted_solutions, not_admitted_solutions }, idx) => (
-                <div key={id} className="flex flex-col">
-                  {id < 0 ? '😋' : coupons.length > 0 ? `🎟️` : is_penalty ? '✖️' : '✅'}
-                  {(isAllOpen || member.id === detailMem) && (
-                    <>
-                      {admitted_solutions.map(({ id }) => (
-                        <Link key={id} className="hover:opacity-70 text-14 text-blue-500 mb-2" href={`/solution/${id}`}>
-                          {id} ✓
-                        </Link>
-                      ))}
-                      {not_admitted_solutions.map((sol) => (
-                        <div key={sol.id} className="flex justify-between text-14 mb-2">
-                          <Link className="hover:opacity-70 text-red-500 font-700" href={`/solution/${sol.id}`}>
-                            {sol.id} ✕
-                          </Link>
-                          <button
-                            onClick={() => {
-                              onOpen();
-                              setValidateSol(sol);
-                            }}
-                            className="text-gray-2 hover:text-gray-1"
+              {attend.map(
+                (
+                  {
+                    id,
+                    coupons,
+                    is_penalty,
+                    admitted_solutions,
+                    not_admitted_solutions,
+                  },
+                  idx
+                ) => (
+                  <div key={id} className="flex flex-col">
+                    {id < 0
+                      ? '😋'
+                      : coupons.length > 0
+                      ? `🎟️`
+                      : is_penalty
+                      ? '✖️'
+                      : '✅'}
+                    {(isAllOpen || member.id === detailMem) && (
+                      <>
+                        {admitted_solutions.map(({ id }) => (
+                          <Link
+                            key={id}
+                            className="hover:opacity-70 text-14 text-blue-500 mb-2"
+                            href={`/solution/${id}`}
                           >
-                            재검증
-                          </button>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
-              ))}
+                            {id} ✓
+                          </Link>
+                        ))}
+                        {not_admitted_solutions.map((sol) => (
+                          <div
+                            key={sol.id}
+                            className="flex justify-between text-14 mb-2"
+                          >
+                            <Link
+                              className="hover:opacity-70 text-red-500 font-700"
+                              href={`/solution/${sol.id}`}
+                            >
+                              {sol.id} ✕
+                            </Link>
+                            <button
+                              onClick={() => {
+                                onOpen();
+                                setValidateSol(sol);
+                              }}
+                              className="text-gray-2 hover:text-gray-1"
+                            >
+                              재검증
+                            </button>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )
+              )}
               <p>{Number(penalty_amount).toLocaleString('ko-KR')} 원</p>
               <p>{is_deposit ? '✔️' : '✖️'}</p>
               <button
-                onClick={() => setDetailMem(member.id === detailMem ? -1 : member.id)}
+                onClick={() =>
+                  setDetailMem(member.id === detailMem ? -1 : member.id)
+                }
                 className="font-700 text-start flex justify-start py-1 px-4 hover:text-primary"
               >
                 {isAllOpen || member.id === detailMem ? '∧' : '∨'}
@@ -128,9 +168,9 @@ function AttendList({ startDate, data, me }: Props) {
       </div>
 
       {validateSol && (
-        <CustomModal
+        <CustomDialog
           clickBtnFunc={handleReValidateClick}
-          isOpen={isOpen}
+          isOpen={open}
           onClose={onClose}
           leftBtn="안할래용"
           rightBtn="재검증! 레츠고~"
@@ -141,7 +181,7 @@ function AttendList({ startDate, data, me }: Props) {
             <p>문제 이름: {validateSol.problem.name}</p>
             <p>제출자: {validateSol.member.nickname}</p>
           </div>
-        </CustomModal>
+        </CustomDialog>
       )}
     </div>
   );

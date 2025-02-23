@@ -78,5 +78,8 @@ const config: Config = {
     },
   },
   plugins: [],
+  corePlugins: {
+    preflight: false, // Tailwind의 기본 스타일 리셋 비활성화
+  },
 };
 export default config;

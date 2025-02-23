@@ -28,6 +28,7 @@ env:
   SENTRY_RELEASE_AUTH_TOKEN: ${{ secrets.SENTRY_RELEASE_AUTH_TOKEN }}
   SENTRY_ORG: "kodori"
   SENTRY_PROJECT: "ps-note-client"
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
 jobs:
   prepare:
@@ -193,7 +194,7 @@ jobs:
         id: send_start_notification
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           payload: |
@@ -212,7 +213,7 @@ jobs:
       - name: Notify Trigger User
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           payload: |
@@ -262,7 +263,7 @@ jobs:
         if: ${{ needs.build-and-push.result == 'cancelled' || needs.build-and-push.result == 'failure' }}
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           update-ts: ${{ needs.notify-start.outputs.thread_ts }}
@@ -284,7 +285,7 @@ jobs:
         if: ${{ needs.build-and-push.result == 'success' }}
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           update-ts: ${{ needs.notify-start.outputs.thread_ts }}
@@ -306,7 +307,7 @@ jobs:
         if: ${{ needs.build-and-push.result == 'cancelled' || needs.build-and-push.result == 'failure' }}
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           payload: |
@@ -328,7 +329,7 @@ jobs:
         if: ${{ needs.build-and-push.result == 'success' }}
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           payload: |
@@ -378,7 +379,7 @@ jobs:
       - name: Notify Overall Result
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           update-ts: ${{ needs.notify-start.outputs.thread_ts }}
@@ -400,7 +401,7 @@ jobs:
         if: ${{ needs.deploy.result == 'cancelled' || needs.deploy.result == 'failure' }}
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           payload: |
@@ -422,7 +423,7 @@ jobs:
         if: ${{ needs.deploy.result == 'success' }}
         uses: slackapi/slack-github-action@v1.26.0
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_BOT_TOKEN: ${{ env.SLACK_BOT_TOKEN }}
         with:
           channel-id: ${{ env.DEPLOY_ALERT_CHANNEL }}
           payload: |

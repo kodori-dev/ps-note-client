@@ -4,5 +4,5 @@
  */
 export const logout = async () => {
   await fetch(`/proxy/auth/logout`, { method: 'POST' });
-  await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/front/session`, { method: 'DELETE' });
+  await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/session`, { method: 'DELETE' });
 };

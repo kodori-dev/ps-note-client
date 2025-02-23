@@ -1,10 +1,10 @@
-import Button from "@/components/Button";
-import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
+import Button from '@/components/Button';
+// import { CircularProgress, CircularProgressLabel } from "@chakra-ui/react";
 
 interface Props {
   all: number;
   todayAttendNum: number;
-  attend: "already" | "notYet" | "coupon";
+  attend: 'already' | 'notYet' | 'coupon';
   nickname: string;
   isCoupon?: boolean;
   isMe?: boolean;
@@ -12,9 +12,9 @@ interface Props {
 }
 
 const TODAY_RESULT = {
-  already: "문제를 이미 풀었어요.",
-  notYet: "문제를 풀지 않았어요.",
-  coupon: "면제 티켓을 사용했어요.",
+  already: '문제를 이미 풀었어요.',
+  notYet: '문제를 풀지 않았어요.',
+  coupon: '면제 티켓을 사용했어요.',
 };
 
 /**
@@ -41,7 +41,7 @@ function AllTodaySection({
         <p className="text-12 text-gray-4 text-end">기준: {today}</p>
       </div>
       <div className="flex justify-center">
-        <CircularProgress
+        {/* <CircularProgress
           color="#0090fe"
           value={(todayAttendNum / all) * 100}
           size="216px"
@@ -56,10 +56,10 @@ function AllTodaySection({
               /{all}
             </div>
           </CircularProgressLabel>
-        </CircularProgress>
+        </CircularProgress> */}
       </div>
       <p className="text-center mb-3">
-        <span className="font-700">{nickname}</span> 님은 오늘{" "}
+        <span className="font-700">{nickname}</span> 님은 오늘{' '}
         {TODAY_RESULT[attend]}
       </p>
       <div className="flex gap-6">

@@ -36,7 +36,7 @@ function CustomDialog({
         <DialogBody>
           <div className="flex flex-col gap-3 items-center pt-9 pb-5">
             <p className="font-700 text-24">{title}</p>
-            <p className="text-gray-2">{children}</p>
+            <div className=" mt-5 w-full text-center">{children}</div>
           </div>
         </DialogBody>
 

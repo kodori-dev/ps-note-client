@@ -24,6 +24,7 @@ import { toaster } from '@/components/ui/toaster';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from './ui/menu';
 import { Tooltip } from './ui/tooltip';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 function Header() {
   const [isUsed, setIsUsed] = useState(false);
@@ -153,6 +154,15 @@ function Header() {
               size="md"
             >
               Check-In
+            </Button>
+
+            <Button
+              onClick={() => window.open('https://forms.gle/pJodnUMUpXciL6Hs5')}
+              colorPalette={'blue'}
+              variant="outline"
+              size="md"
+            >
+              버그제보
             </Button>
 
             <MenuRoot>

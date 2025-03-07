@@ -14,10 +14,13 @@ export default async function Home() {
   const bojDay = getBojTime();
   const getHomePage = async () => {
     try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_SERVER_URL}/api-internal/v2/home-page?day=${bojDay}`, {
-        headers: memberId ? { 'X-Member-Id': memberId.toString() } : {},
-        cache: 'no-store',
-      });
+      const res = await fetch(
+        `http://${process.env.NEXT_PUBLIC_SERVER_URL}/api-internal/v2/home-page?day=${bojDay}`,
+        {
+          headers: memberId ? { 'X-Member-Id': memberId.toString() } : {},
+          cache: 'no-store',
+        }
+      );
       if (res.ok) return await res.json();
       else throw Error();
     } catch (err) {
@@ -39,9 +42,25 @@ export default async function Home() {
   }
 
   const SECTION_LIST = [
-    { title: '이런 문제를 추천해요!', children: <ProblemSection problems={homePage.current_week_starred_problems} /> },
-    { title: '오늘은 누가 먼저 놀았을까요?', children: <ProblemSection problems={homePage.today_problems} /> },
-    { title: '놀이의 전당', children: <MemberSection members={homePage.members} penalty_map={homePage.penalty_map} /> },
+    {
+      title: '이런 문제를 추천해요!',
+      children: (
+        <ProblemSection problems={homePage.current_week_starred_problems} />
+      ),
+    },
+    {
+      title: '오늘은 누가 먼저 놀았을까요?',
+      children: <ProblemSection problems={homePage.today_problems} />,
+    },
+    {
+      title: '놀이의 전당',
+      children: (
+        <MemberSection
+          members={homePage.members}
+          penalty_map={homePage.penalty_map}
+        />
+      ),
+    },
   ];
 
   return (

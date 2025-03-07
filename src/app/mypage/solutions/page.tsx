@@ -29,7 +29,7 @@ function MySolutions() {
   const [order, setOrder] = useState<orderType>('최신순');
 
   const { data, isLoading, isSuccess, refetch } = useQuery({
-    queryKey: ['my_solutions'],
+    queryKey: ['my_solutions', order, page],
     queryFn: async () => {
       const res = await api('GET', '/solutions', undefined, {
         member_id: user.userId,
@@ -40,10 +40,6 @@ function MySolutions() {
       return res;
     },
   });
-
-  useEffect(() => {
-    refetch();
-  }, [order]);
 
   return (
     <div className="flex flex-col gap-5">

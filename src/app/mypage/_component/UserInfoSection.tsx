@@ -32,7 +32,7 @@ function UserInfoSection({ userData }: Props) {
       {isEdit ? (
         <>{EDIT_BOX[isEdit as 'info' | 'pw']}</>
       ) : (
-        <div className="bg-white rounded-md p-9 relative flex flex-col gap-8">
+        <div className="rounded-md p-9 relative flex flex-col gap-8">
           <div className="flex gap-4 absolute top-9 right-9 text-14">
             <button onClick={() => setIsEdit('info')} className="text-primary border-b border-primary hover:opacity-50">
               내 정보 수정

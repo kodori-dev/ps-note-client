@@ -57,7 +57,7 @@ function ProblemCard({
   return (
     <div
       className={
-        'group hover:shadow-lg hover:border-primary relative shrink-0 w-[296px] h-[177px] px-3 py-5 flex flex-col justify-between bg-white rounded-sm border border-gray-4' +
+        'group hover:shadow-lg text-black hover:border-primary relative shrink-0 w-[296px] h-[177px] px-3 py-5 flex flex-col justify-between bg-white rounded-sm border border-gray-4' +
         customStyle
       }
     >

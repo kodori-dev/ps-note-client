@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { FormEvent, useEffect } from 'react';
-import SearchIcon from '../../../public/icon-search.svg';
-import { useForm } from 'react-hook-form';
-import SearchPreview from './SearchPreview';
-import { useDebouncingSearch } from '@/hooks/useDebouncingSearch';
+import { FormEvent, useEffect } from "react";
+import SearchIcon from "../../../public/icon-search.svg";
+import { useForm } from "react-hook-form";
+import SearchPreview from "./SearchPreview";
+import { useDebouncingSearch } from "@/hooks/useDebouncingSearch";
+import { Input } from "@chakra-ui/react";
+import { InputGroup } from "../ui/input-group";
 
 interface Props {
   initialValue?: string;
@@ -22,7 +24,7 @@ function SearchBar({ initialValue }: Props) {
   const { isLoading, isSuccess, data, isOpen, setIsOpen } = useDebouncingSearch(searchBar, searchBar && searchBar !== initialValue);
 
   useEffect(() => {
-    if (initialValue) setValue('searchBar', initialValue);
+    if (initialValue) setValue("searchBar", initialValue);
   }, []);
 
   const handleListClick = (id: number, bojId: string, name: string) => {
@@ -32,13 +34,9 @@ function SearchBar({ initialValue }: Props) {
 
   return (
     <form className="relative max-w-[700px] mx-auto w-full" onSubmit={handleSearchSubmit}>
-      <SearchIcon className="absolute top-4 left-3" alt="검색 아이콘" />
-      <input
-        {...register('searchBar')}
-        className="border border-primary rounded-md w-full placeholder:text-gray-2 pl-[42px] py-4 pr-14 focus:outline-none focus:shadow-md"
-        placeholder="백준 번호 또는 이름으로 문제를 검색해 보세요."
-      />
-      <button className="text-primary absolute top-4 right-5">검색</button>
+      <InputGroup width={"full"} flex="1" startElement={<SearchIcon alt="검색 아이콘" className="absolute left-1" />}>
+        <Input {...register("searchBar")} css={{ "--focus-color": "colors.blue.500" }} variant={"flushed"} placeholder="백준 번호 또는 이름으로 문제를 검색해 보세요." />
+      </InputGroup>
       {isOpen && <SearchPreview type="home" query={searchBar} handleListClick={handleListClick} isLoading={isLoading} isSuccess={isSuccess} data={data} />}
     </form>
   );

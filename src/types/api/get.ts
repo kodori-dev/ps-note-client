@@ -14,7 +14,15 @@ import {
   PsNoteServerAppsCoreViewsV2ProblemSearchProblemsRequest,
   PsNoteServerAppsCoreViewsV2SolutionGetRequest,
   SolutionSchema,
-} from '../../../models';
+} from "../../../models";
+
+export interface VacationSchema {
+  id: number;
+  member: MemberSchema;
+  start_date: string;
+  end_date: string;
+  memo: string;
+}
 
 interface BodyGetType {
   req: void;
@@ -22,13 +30,13 @@ interface BodyGetType {
 
 interface BaseGetType {
   //auth
-  '/me': {
+  "/me": {
     res: MemberSchema;
     query: undefined;
   };
 
   //member
-  '/members': {
+  "/members": {
     res: MemberSchema[];
     query: PsNoteServerAppsCoreViewsV2MemberGetRequest;
   };
@@ -38,7 +46,7 @@ interface BaseGetType {
   };
 
   //problem
-  '/problems': {
+  "/problems": {
     res: PaginatedProblemSchema;
     query: PsNoteServerAppsCoreViewsV2ProblemGetRequest;
   };
@@ -46,13 +54,13 @@ interface BaseGetType {
     res: ProblemSchema;
     query: undefined;
   };
-  '/problems/search': {
+  "/problems/search": {
     res: PaginatedProblemSchema;
     query: PsNoteServerAppsCoreViewsV2ProblemSearchProblemsRequest;
   };
 
   //penalty
-  '/penalties': {
+  "/penalties": {
     res: PenaltySchema[];
     query: PsNoteServerAppsCoreViewsV2PenaltyGetRequest;
   };
@@ -62,21 +70,30 @@ interface BaseGetType {
     res: SolutionSchema;
     query: undefined;
   };
-  '/solutions': {
+  "/solutions": {
     res: PaginatedSolutionSchema;
     query: PsNoteServerAppsCoreViewsV2SolutionGetRequest;
   };
 
   //coupon
-  '/coupons': {
+  "/coupons": {
     res: CouponSchema[];
     query: PsNoteServerAppsCoreViewsV2CouponGetRequest;
   };
 
   //holiday
-  '/holidays': {
+  "/holidays": {
     res: HolidaySchema[];
     query: PsNoteServerAppsCoreViewsV2HolidayGetRequest;
+  };
+
+  //vacation
+  "/vacations": {
+    res: VacationSchema[];
+    query: {
+      start_date: string;
+      end_date: string;
+    };
   };
 }
 

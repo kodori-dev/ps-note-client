@@ -5,8 +5,8 @@ import { useGetUserInfo } from "@/hooks/useGetUserInfo";
 // import Button from './Button';
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
-import { useEffect, useId, useState } from "react";
-import { Avatar, Button, Field, Input, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Fragment, useEffect, useId, useState } from "react";
+import { Avatar, Button, Field, Icon, IconButton, Input, Spinner, useDisclosure } from "@chakra-ui/react";
 import ScreenLoading from "./Loading/ScreenLoading";
 import { getBojTime } from "@/utils/getBojTime";
 import { logout } from "@/utils/logout";
@@ -14,10 +14,11 @@ import dayjs from "dayjs";
 import { useCheckAdmin } from "@/hooks/useCheckAdmin";
 import CustomDialog from "./Dialog";
 import { toaster } from "@/components/ui/toaster";
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "./ui/menu";
+import { MenuContent, MenuItem, MenuItemGroup, MenuRoot, MenuTrigger } from "./ui/menu";
 import { Tooltip } from "./ui/tooltip";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { IoMenu } from "react-icons/io5";
 
 function Header() {
   const [isUsed, setIsUsed] = useState(false);
@@ -127,47 +128,96 @@ function Header() {
       <div className="flex gap-5">
         {user.isLogin && (
           <>
-            <Button onClick={onOpen} loading={isCouponLoading} loadingText="Loading..." disabled={isUsed} colorPalette={"blue"} variant="ghost" size="sm">
-              면제티켓
-            </Button>
+            {/* pc menu */}
+            <div className="flex gap-5 mobile:hidden">
+              <Button onClick={onOpen} loading={isCouponLoading} loadingText="Loading..." disabled={isUsed} colorPalette={"blue"} variant="ghost" size="sm">
+                면제티켓
+              </Button>
+              <Button onClick={() => (window.location.href = "/post")} colorPalette={"blue"} variant="ghost" size="sm">
+                Check-In
+              </Button>
+              <Button onClick={() => window.open("https://forms.gle/pJodnUMUpXciL6Hs5")} colorPalette={"blue"} variant="ghost" size="sm">
+                버그제보
+              </Button>
 
-            <Button onClick={() => (window.location.href = "/post")} colorPalette={"blue"} variant="ghost" size="sm">
-              Check-In
-            </Button>
+              <MenuRoot>
+                <MenuTrigger asChild>
+                  <Button colorPalette={"blue"} variant="ghost" size="sm">
+                    MENU
+                  </Button>
+                </MenuTrigger>
+                <MenuContent>
+                  <MenuItem value="꼬박꼬박 일지" onClick={() => (window.location.href = `/attend/${user.userId}`)}>
+                    꼬박꼬박 일지
+                  </MenuItem>
+                  <MenuItem value="휴가" onClick={() => setIsVacationOpen(true)}>
+                    휴가 떠나기
+                  </MenuItem>
+                  <MenuItem value="마이페이지" onClick={() => (window.location.href = `/mypage`)}>
+                    마이페이지
+                  </MenuItem>
+                  {isAdmin && (
+                    <MenuItem value="관리자" onClick={() => (window.location.href = `/admin`)}>
+                      관리자
+                    </MenuItem>
+                  )}
+                  <MenuItem value="로그아웃" color={"blue.600"} _hover={{ bg: "blue.50" }} onClick={handleLogoutClick}>
+                    로그아웃
+                  </MenuItem>
+                </MenuContent>
+              </MenuRoot>
+            </div>
 
-            <Button onClick={() => window.open("https://forms.gle/pJodnUMUpXciL6Hs5")} colorPalette={"blue"} variant="ghost" size="sm">
-              버그제보
-            </Button>
-
+            {/* mobile menu */}
             <MenuRoot>
-              <MenuTrigger asChild>
-                <Button colorPalette={"blue"} variant="ghost" size="sm">
-                  MENU
-                </Button>
+              <MenuTrigger asChild className="hidden mobile:block">
+                <IconButton aria-label="메뉴 열기" variant={"ghost"}>
+                  <Icon size={"xl"} color={"gray.400"}>
+                    <IoMenu />
+                  </Icon>
+                </IconButton>
               </MenuTrigger>
               <MenuContent>
-                <MenuItem value="꼬박꼬박 일지" onClick={() => (window.location.href = `/attend/${user.userId}`)}>
-                  📆 꼬박꼬박 일지
-                </MenuItem>
-                <MenuItem value="휴가" onClick={() => setIsVacationOpen(true)}>
-                  🏖️ 휴가 떠나기
-                </MenuItem>
-                <MenuItem value="마이페이지" onClick={() => (window.location.href = `/mypage`)}>
-                  ⚙️ 마이페이지
-                </MenuItem>
-                {isAdmin && (
-                  <MenuItem value="관리자" onClick={() => (window.location.href = `/admin`)}>
-                    🧑‍🏫 관리자
+                <MenuItemGroup title="출석" className="hidden mobile:block">
+                  <MenuItem value="체크인" onClick={() => (window.location.href = "/post")}>
+                    Check-In
                   </MenuItem>
-                )}
-                <MenuItem value="로그아웃" color={"blue.600"} _hover={{ bg: "blue.50" }} onClick={handleLogoutClick}>
-                  🚪 로그아웃
-                </MenuItem>
+                  <MenuItem value="면제티켓" onClick={onOpen} disabled={isUsed}>
+                    면제티켓
+                  </MenuItem>
+                </MenuItemGroup>
+                <MenuItemGroup title="당신의 UX를 위해··♡">
+                  <MenuItem value="꼬박꼬박 일지" onClick={() => (window.location.href = `/attend/${user.userId}`)}>
+                    꼬박꼬박 일지
+                  </MenuItem>
+                  <MenuItem value="휴가" onClick={() => setIsVacationOpen(true)}>
+                    휴가 떠나기
+                  </MenuItem>
+                  <MenuItem value="마이페이지" onClick={() => (window.location.href = `/mypage`)}>
+                    마이페이지
+                  </MenuItem>
+                </MenuItemGroup>
+                <MenuItemGroup title="개발자를 위해">
+                  <MenuItem className="hidden mobile:block" value="버그제보" onClick={() => window.open("https://forms.gle/pJodnUMUpXciL6Hs5")}>
+                    버그제보
+                  </MenuItem>
+                  {isAdmin && (
+                    <MenuItem value="관리자" onClick={() => (window.location.href = `/admin`)}>
+                      관리자
+                    </MenuItem>
+                  )}
+                </MenuItemGroup>
+                <MenuItemGroup title="---">
+                  <MenuItem value="로그아웃" color={"blue.600"} _hover={{ bg: "blue.50" }} onClick={handleLogoutClick}>
+                    로그아웃
+                  </MenuItem>
+                </MenuItemGroup>
               </MenuContent>
             </MenuRoot>
           </>
         )}
 
+        {/* 프로필 영역 */}
         <Tooltip content={user.isLogin ? `${user.nickname} 님 출석 보기` : "로그인"} ids={{ trigger: id }} openDelay={300} closeDelay={300}>
           <Avatar.Root
             ids={{ root: id }}
@@ -180,7 +230,6 @@ function Header() {
           </Avatar.Root>
         </Tooltip>
       </div>
-
       {/* 면제 티켓 모달 */}
       <CustomDialog clickBtnFunc={handleCouponClick} title="정말 오늘 놀기를 스킵하시겠어요?" isOpen={open} onClose={onClose} leftBtn="고민할래요" rightBtn="스킵할래요">
         <>면제 티켓은 1주에 1번밖에 쓸 수 없어요.</>

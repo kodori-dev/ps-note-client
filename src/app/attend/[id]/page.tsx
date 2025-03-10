@@ -28,7 +28,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
         <span className="font-700">{member?.nickname}</span> 님의 꼬박꼬박 PS일지
       </h1>
 
-      <MonthlySection initialDate={lastDay} data={penalties} holidays={holidays} vacations={vacations} />
+      <MonthlySection memberId={id} initialDate={lastDay} data={penalties} holidays={holidays} vacations={vacations} />
     </>
   );
 }

@@ -37,8 +37,6 @@ RUN chown nextjs:nodejs .next
 COPY --chown=nextjs:nodejs .next/standalone ./
 COPY --chown=nextjs:nodejs .next/static ./.next/static
 
-RUN addgroup -S nextjs && adduser -S nextjs -G nextjs -u 1001
-
 RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
     --mount=type=secret,id=NEXT_PUBLIC_SERVER_URL \
     --mount=type=secret,id=NEXT_PUBLIC_FRONT_URL \
@@ -50,7 +48,6 @@ RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
     --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
     chown nextjs:nodejs /run/secrets/* && \
     chmod 400 /run/secrets/*
-
 
 USER nextjs
 

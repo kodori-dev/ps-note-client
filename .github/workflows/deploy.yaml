@@ -142,7 +142,7 @@ jobs:
         with:
           context: .
           file: docker/Dockerfile
-          build-args: |
+          secrets: |
             NEXT_PUBLIC_RELEASE=${{ needs.prepare.outputs.version_name }}
             NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
             NEXT_PUBLIC_SERVER_URL=${{ env.NEXT_PUBLIC_SERVER_URL }}

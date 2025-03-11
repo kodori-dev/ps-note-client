@@ -37,6 +37,7 @@ RUN chown nextjs:nodejs .next
 COPY --chown=nextjs:nodejs .next/standalone ./
 COPY --chown=nextjs:nodejs .next/static ./.next/static
 
+# 🔹 secrets을 ENV로 저장 (root에서 설정한 후 유지됨)
 RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
     --mount=type=secret,id=NEXT_PUBLIC_SERVER_URL \
     --mount=type=secret,id=NEXT_PUBLIC_FRONT_URL \
@@ -46,8 +47,16 @@ RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
     --mount=type=secret,id=NEXT_PUBLIC_RELEASE \
     --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
-    chown nextjs:nodejs /run/secrets/* && \
-    chmod 400 /run/secrets/*
+    sh -c 'echo "ENV NEXT_PUBLIC_API_BASE_URL=$(cat /run/secrets/NEXT_PUBLIC_API_BASE_URL)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_SERVER_URL=$(cat /run/secrets/NEXT_PUBLIC_SERVER_URL)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_FRONT_URL=$(cat /run/secrets/NEXT_PUBLIC_FRONT_URL)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_SESSION_PW=$(cat /run/secrets/NEXT_PUBLIC_SESSION_PW)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_ADMIN_ID1=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID1)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_ADMIN_ID2=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID2)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_RELEASE=$(cat /run/secrets/NEXT_PUBLIC_RELEASE)" >> /etc/environment && \
+           echo "ENV SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> /etc/environment && \
+           echo "ENV NEXT_PUBLIC_CDN_URL=$(cat /run/secrets/NEXT_PUBLIC_CDN_URL)" >> /etc/environment && \
+           echo "Secrets loaded successfully"'
 
 USER nextjs
 
@@ -58,42 +67,8 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
-    export NEXT_PUBLIC_API_BASE_URL=$(cat /run/secrets/NEXT_PUBLIC_API_BASE_URL) && \
-    echo "API URL Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_SERVER_URL \
-    export NEXT_PUBLIC_SERVER_URL=$(cat /run/secrets/NEXT_PUBLIC_SERVER_URL) && \
-    echo "Server URL Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_FRONT_URL \
-    export NEXT_PUBLIC_FRONT_URL=$(cat /run/secrets/NEXT_PUBLIC_FRONT_URL) && \
-    echo "Front URL Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_SESSION_PW \
-    export NEXT_PUBLIC_SESSION_PW=$(cat /run/secrets/NEXT_PUBLIC_SESSION_PW) && \
-    echo "Session PW Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID1 \
-    export NEXT_PUBLIC_ADMIN_ID1=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID1) && \
-    echo "Admin ID1 Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID2 \
-    export NEXT_PUBLIC_ADMIN_ID2=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID2) && \
-    echo "Admin ID2 Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_RELEASE \
-    export NEXT_PUBLIC_RELEASE=$(cat /run/secrets/NEXT_PUBLIC_RELEASE) && \
-    echo "Release Loaded"
-
-RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
-    echo "Sentry Auth Token Loaded"
-
-RUN --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
-    export NEXT_PUBLIC_CDN_URL=$(cat /run/secrets/NEXT_PUBLIC_CDN_URL) && \
-    echo "CDN URL Loaded"
+RUN sh -c "cat /etc/environment >> ~/.profile"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "source ~/.profile && exec node server.js"]

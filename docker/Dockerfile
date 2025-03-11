@@ -48,7 +48,7 @@ RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
     --mount=type=secret,id=NEXT_PUBLIC_RELEASE \
     --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
-    chown nextjs:nextjs /run/secrets/* && \
+    chown nextjs:nodejs /run/secrets/* && \
     chmod 400 /run/secrets/*
 
 

@@ -37,6 +37,19 @@ RUN chown nextjs:nodejs .next
 COPY --chown=nextjs:nodejs .next/standalone ./
 COPY --chown=nextjs:nodejs .next/static ./.next/static
 
+RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
+    --mount=type=secret,id=NEXT_PUBLIC_SERVER_URL \
+    --mount=type=secret,id=NEXT_PUBLIC_FRONT_URL \
+    --mount=type=secret,id=NEXT_PUBLIC_SESSION_PW \
+    --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID1 \
+    --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID2 \
+    --mount=type=secret,id=NEXT_PUBLIC_RELEASE \
+    --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+    --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
+    chown nextjs:nextjs /run/secrets/* && \
+    chmod 400 /run/secrets/*
+
+
 USER nextjs
 
 EXPOSE 3000

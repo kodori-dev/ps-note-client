@@ -46,26 +46,41 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-ARG NEXT_PUBLIC_API_BASE_URL
-ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
+    export NEXT_PUBLIC_API_BASE_URL=$(cat /run/secrets/NEXT_PUBLIC_API_BASE_URL) && \
+    echo "API URL Loaded"
 
-ARG NEXT_PUBLIC_SERVER_URL
-ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
+RUN --mount=type=secret,id=NEXT_PUBLIC_SERVER_URL \
+    export NEXT_PUBLIC_SERVER_URL=$(cat /run/secrets/NEXT_PUBLIC_SERVER_URL) && \
+    echo "Server URL Loaded"
 
-ARG NEXT_PUBLIC_FRONT_URL
-ENV NEXT_PUBLIC_FRONT_URL=${NEXT_PUBLIC_FRONT_URL}
+RUN --mount=type=secret,id=NEXT_PUBLIC_FRONT_URL \
+    export NEXT_PUBLIC_FRONT_URL=$(cat /run/secrets/NEXT_PUBLIC_FRONT_URL) && \
+    echo "Front URL Loaded"
 
-ARG NEXT_PUBLIC_SESSION_PW
-ENV NEXT_PUBLIC_SESSION_PW=${NEXT_PUBLIC_SESSION_PW}
+RUN --mount=type=secret,id=NEXT_PUBLIC_SESSION_PW \
+    export NEXT_PUBLIC_SESSION_PW=$(cat /run/secrets/NEXT_PUBLIC_SESSION_PW) && \
+    echo "Session PW Loaded"
 
-ARG NEXT_PUBLIC_ADMIN_ID1
-ENV NEXT_PUBLIC_ADMIN_ID1=${NEXT_PUBLIC_ADMIN_ID1}
+RUN --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID1 \
+    export NEXT_PUBLIC_ADMIN_ID1=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID1) && \
+    echo "Admin ID1 Loaded"
 
-ARG NEXT_PUBLIC_ADMIN_ID2
-ENV NEXT_PUBLIC_ADMIN_ID2=${NEXT_PUBLIC_ADMIN_ID2}
+RUN --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID2 \
+    export NEXT_PUBLIC_ADMIN_ID2=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID2) && \
+    echo "Admin ID2 Loaded"
 
-ARG NEXT_PUBLIC_RELEASE
-ENV NEXT_PUBLIC_RELEASE=${NEXT_PUBLIC_RELEASE}
+RUN --mount=type=secret,id=NEXT_PUBLIC_RELEASE \
+    export NEXT_PUBLIC_RELEASE=$(cat /run/secrets/NEXT_PUBLIC_RELEASE) && \
+    echo "Release Loaded"
+
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+    export SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) && \
+    echo "Sentry Auth Token Loaded"
+
+RUN --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
+    export NEXT_PUBLIC_CDN_URL=$(cat /run/secrets/NEXT_PUBLIC_CDN_URL) && \
+    echo "CDN URL Loaded"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output

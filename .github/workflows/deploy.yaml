@@ -1,4 +1,4 @@
-name: Build, Push, and Deploy to GKE
+name: Build, Push, and Deploy to Elastic Beanstalk
 
 on:
   push:
@@ -18,13 +18,6 @@ env:
   NAMESPACE: ps-note
   DEPLOYMENT_NAME: deployment/ps-note-client
   CONTAINER_NAME: ps-note-client
-  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  NEXT_PUBLIC_API_BASE_URL: ${{ secrets.API_BASE_URL }}
-  NEXT_PUBLIC_SERVER_URL: "ps-note-server:8000"
-  NEXT_PUBLIC_FRONT_URL: ${{ secrets.FRONT_URL }}
-  NEXT_PUBLIC_SESSION_PW: ${{ secrets.FRONT_SESSION_PW }}
-  NEXT_PUBLIC_ADMIN_ID1: 4
-  NEXT_PUBLIC_ADMIN_ID2: 12
   SENTRY_RELEASE_AUTH_TOKEN: ${{ secrets.SENTRY_RELEASE_AUTH_TOKEN }}
   SENTRY_ORG: "kodori"
   SENTRY_PROJECT: "ps-note-client"
@@ -172,6 +165,18 @@ jobs:
       - name: CloudFront Invalidation
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'
+
+      - name: Trigger Server Deploy
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PAT_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: "kodori-dev",
+              repo: "ps-note-server",
+              workflow_id: "deploy.yml",
+              ref: "deploy",
+            });
 
   notify-start:
     needs: [prepare]
@@ -363,7 +368,7 @@ jobs:
           elif [[ "${{ needs.deploy.result }}" == "failure" ]]; then
             echo "MESSAGE=배포에 실패했습니다" >> "$GITHUB_OUTPUT"
           else
-            echo "MESSAGE=배포 준비가 완료되었습니다. 서버 레포에서 배포 트리거를 해주세요." >> "$GITHUB_OUTPUT"
+            echo "MESSAGE=배포 준비가 완료되었습니다. 서버 레포 배포 트리거가 자동으로 이루어지니 확인해주세요." >> "$GITHUB_OUTPUT"
           fi
 
       - name: Notify Overall Result

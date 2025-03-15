@@ -15,6 +15,26 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
+
+# Rebuild the source code only when needed
+FROM base AS builder
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry during the build.
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN \
+    if [ -f yarn.lock ]; then yarn run build; \
+    elif [ -f package-lock.json ]; then npm run build; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+    else echo "Lockfile not found." && exit 1; \
+    fi
+
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -26,6 +46,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+COPY --from=builder /app/public ./public
 COPY /public ./public
 
 # Set the correct permission for prerender cache
@@ -34,29 +55,10 @@ RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --chown=nextjs:nodejs .next/standalone ./
 COPY --chown=nextjs:nodejs .next/static ./.next/static
-
-# 🔹 secrets을 ENV로 저장 (root에서 설정한 후 유지됨)
-RUN --mount=type=secret,id=NEXT_PUBLIC_API_BASE_URL \
-    --mount=type=secret,id=NEXT_PUBLIC_SERVER_URL \
-    --mount=type=secret,id=NEXT_PUBLIC_FRONT_URL \
-    --mount=type=secret,id=NEXT_PUBLIC_SESSION_PW \
-    --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID1 \
-    --mount=type=secret,id=NEXT_PUBLIC_ADMIN_ID2 \
-    --mount=type=secret,id=NEXT_PUBLIC_RELEASE \
-    --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    --mount=type=secret,id=NEXT_PUBLIC_CDN_URL \
-    sh -c 'echo "ENV NEXT_PUBLIC_API_BASE_URL=$(cat /run/secrets/NEXT_PUBLIC_API_BASE_URL)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_SERVER_URL=$(cat /run/secrets/NEXT_PUBLIC_SERVER_URL)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_FRONT_URL=$(cat /run/secrets/NEXT_PUBLIC_FRONT_URL)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_SESSION_PW=$(cat /run/secrets/NEXT_PUBLIC_SESSION_PW)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_ADMIN_ID1=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID1)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_ADMIN_ID2=$(cat /run/secrets/NEXT_PUBLIC_ADMIN_ID2)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_RELEASE=$(cat /run/secrets/NEXT_PUBLIC_RELEASE)" >> /etc/environment && \
-           echo "ENV SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> /etc/environment && \
-           echo "ENV NEXT_PUBLIC_CDN_URL=$(cat /run/secrets/NEXT_PUBLIC_CDN_URL)" >> /etc/environment && \
-           echo "Secrets loaded successfully"'
 
 USER nextjs
 
@@ -67,8 +69,6 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-RUN sh -c "cat /etc/environment >> ~/.profile"
-
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["sh", "-c", "source ~/.profile && exec node server.js"]
+CMD ["node", "server.js"]

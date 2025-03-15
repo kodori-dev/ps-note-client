@@ -91,9 +91,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
           tags: |
-            type=sha
             latest
-            batch
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -142,16 +140,6 @@ jobs:
         with:
           context: .
           file: docker/Dockerfile
-          secrets: |
-            NEXT_PUBLIC_RELEASE=${{ needs.prepare.outputs.version_name }}
-            NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
-            NEXT_PUBLIC_SERVER_URL=${{ env.NEXT_PUBLIC_SERVER_URL }}
-            NEXT_PUBLIC_FRONT_URL=${{ env.NEXT_PUBLIC_FRONT_URL }}
-            NEXT_PUBLIC_SESSION_PW=${{ env.NEXT_PUBLIC_SESSION_PW }}
-            NEXT_PUBLIC_ADMIN_ID1=${{ env.NEXT_PUBLIC_ADMIN_ID1 }}
-            NEXT_PUBLIC_ADMIN_ID2=${{ env.NEXT_PUBLIC_ADMIN_ID2 }}
-            SENTRY_AUTH_TOKEN=${{ env.SENTRY_AUTH_TOKEN }}
-            NEXT_PUBLIC_CDN_URL=${{ env.NEXT_PUBLIC_CDN_URL }}
           push: true
           platforms: |
             linux/arm64

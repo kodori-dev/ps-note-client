@@ -141,6 +141,8 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: true
+          build-args: |
+              NEXT_PUBLIC_RELEASE=${{ needs.prepare.outputs.version_name }}
           platforms: |
             linux/arm64
           tags: ${{ steps.meta.outputs.tags }}

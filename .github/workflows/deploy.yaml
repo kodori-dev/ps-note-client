@@ -174,7 +174,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: "kodori-dev",
               repo: "ps-note-server",
-              workflow_id: "deploy.yml",
+              workflow_id: "deploy.yaml",
               ref: "deploy",
             });
 

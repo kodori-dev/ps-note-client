@@ -21,7 +21,7 @@ export const getServerData = async <T extends keyof GetType>(
   }
 
   try {
-    const res = await fetch(`http://${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_API_BASE_URL}${url}?${queryStr}`, {
+    const res = await fetch(`${process.env.SERVER_URL}${url}?${queryStr}`, {
       headers: { Cookie: cookie.toString() || '' },
     });
     if (res.ok) return await res.json();

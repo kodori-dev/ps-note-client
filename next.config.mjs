@@ -3,23 +3,6 @@ import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  serverRuntimeConfig: {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
-    NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
-    NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
-    NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
-    NEXT_PUBLIC_RELEASE: process.env.NEXT_PUBLIC_RELEASE
-  },
-  publicRuntimeConfig: {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
-    NEXT_PUBLIC_FRONT_URL: process.env.NEXT_PUBLIC_FRONT_URL,
-    NEXT_PUBLIC_SESSION_PW: process.env.NEXT_PUBLIC_SESSION_PW,
-    NEXT_PUBLIC_ADMIN_ID1: process.env.NEXT_PUBLIC_ADMIN_ID1,
-    NEXT_PUBLIC_ADMIN_ID2: process.env.NEXT_PUBLIC_ADMIN_ID2,
-    NEXT_PUBLIC_RELEASE: process.env.NEXT_PUBLIC_RELEASE
-  },
   output: 'standalone',
   assetPrefix: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_CDN_URL : undefined,
   webpack: (config) => {
@@ -34,7 +17,7 @@ const nextConfig = {
     return [
       {
         source: '/proxy/:path*',
-        destination: `http://${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
+        destination: `${process.env.SERVER_URL}/:path*`,
       },
     ];
   },

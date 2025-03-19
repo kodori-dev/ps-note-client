@@ -7,6 +7,7 @@ import AuthProvider from "@/providers/AuthProvider";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "@/components/ui/provider";
+import {PublicEnvScript} from "next-runtime-env";
 
 export const metadata: Metadata = {
   title: "$$합법 PS 놀이터$$",
@@ -27,20 +28,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+      <html lang="ko" suppressHydrationWarning>
+      <head>
+        <PublicEnvScript/>
+      </head>
       <body>
-        <Provider>
-          <ReactQueryProvider>
-            <AuthProvider>
-              <div className="max-w-[1024px] mx-auto px-6 mb-24">
-                <Toaster />
-                <Header />
-                {children}
-              </div>
-            </AuthProvider>
-          </ReactQueryProvider>
-        </Provider>
+      <Provider>
+        <ReactQueryProvider>
+          <AuthProvider>
+            <div className="max-w-[1024px] mx-auto px-6 mb-24">
+              <Toaster/>
+              <Header/>
+              {children}
+            </div>
+          </AuthProvider>
+        </ReactQueryProvider>
+      </Provider>
       </body>
-    </html>
+      </html>
   );
 }

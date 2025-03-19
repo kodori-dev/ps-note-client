@@ -25,6 +25,8 @@ env:
   SENTRY_ORG: "kodori"
   SENTRY_PROJECT: "ps-note-client"
   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  ADMIN_ID1: 4
+  ADMIN_ID2: 12
 
 jobs:
   prepare:
@@ -133,6 +135,8 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_RELEASE_AUTH_TOKEN }}
           SERVER_URL: ${{ env.SERVER_URL }}
           API_BASE_PATH: ${{ env.API_BASE_PATH }}
+          ADMIN_ID1: ${{ env.ADMIN_ID1 }}
+          ADMIN_ID2: ${{ env.ADMIN_ID2 }}
         run: |
           npm run build
 

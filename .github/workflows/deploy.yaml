@@ -11,6 +11,7 @@ env:
   NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
   NEXT_PUBLIC_FRONT_URL: "https://ps-note.kodori.dev"
   SERVER_URL: "http://ps-note-server:8000"
+  API_BASE_PATH: "/api/v2"
   DEPLOY_ALERT_CHANNEL: C07J1U691R6
   AWS_ROLE: ${{ secrets.AWS_ROLE }}
   AWS_REGION: 'ap-northeast-2'
@@ -131,6 +132,7 @@ jobs:
           NEXT_PUBLIC_FRONT_URL: ${{ env.NEXT_PUBLIC_FRONT_URL }}
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_RELEASE_AUTH_TOKEN }}
           SERVER_URL: ${{ env.SERVER_URL }}
+          API_BASE_PATH: ${{ env.API_BASE_PATH }}
         run: |
           npm run build
 

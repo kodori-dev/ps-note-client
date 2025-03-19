@@ -21,7 +21,7 @@ export const getServerData = async <T extends keyof GetType>(
   }
 
   try {
-    const res = await fetch(`${process.env.SERVER_URL}${url}?${queryStr}`, {
+    const res = await fetch(`${process.env.SERVER_URL}${process.env.API_BASE_PATH}${url}?${queryStr}`, {
       headers: { Cookie: cookie.toString() || '' },
     });
     if (res.ok) return await res.json();

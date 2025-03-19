@@ -17,7 +17,7 @@ const nextConfig = {
     return [
       {
         source: '/proxy/:path*',
-        destination: `${process.env.SERVER_URL}/:path*`,
+        destination: `${process.env.SERVER_URL}${process.env.API_BASE_PATH}/:path*`,
       },
     ];
   },

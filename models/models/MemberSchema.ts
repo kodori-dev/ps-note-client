@@ -57,6 +57,12 @@ export interface MemberSchema {
   is_off: boolean;
   /**
    *
+   * @type {boolean}
+   * @memberof MemberSchema
+   */
+  is_admin: boolean;
+  /**
+   *
    * @type {Date}
    * @memberof MemberSchema
    */
@@ -85,6 +91,7 @@ export function instanceOfMemberSchema(value: object): value is MemberSchema {
   if (!('boj_id' in value) || value['boj_id'] === undefined) return false;
   if (!('is_active' in value) || value['is_active'] === undefined) return false;
   if (!('is_off' in value) || value['is_off'] === undefined) return false;
+  if (!('is_admin' in value) || value['is_admin'] === undefined) return false;
   if (!('created_at' in value) || value['created_at'] === undefined) return false;
   if (!('updated_at' in value) || value['updated_at'] === undefined) return false;
   if (!('deleted_at' in value) || value['deleted_at'] === undefined) return false;
@@ -106,6 +113,7 @@ export function MemberSchemaFromJSONTyped(json: any, ignoreDiscriminator: boolea
     boj_id: json['boj_id'],
     is_active: json['is_active'],
     is_off: json['is_off'],
+    is_admin: json['is_admin'],
     created_at: new Date(json['created_at']),
     updated_at: new Date(json['updated_at']),
     deleted_at: json['deleted_at'] == null ? null : new Date(json['deleted_at']),

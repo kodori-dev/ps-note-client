@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
   session.nickname = body.nickname;
   session.userId = body.userId;
   session.isLogin = true;
+  session.isAdmin = body.isAdmin;
 
   await session.save();
   revalidatePath('/', 'layout');

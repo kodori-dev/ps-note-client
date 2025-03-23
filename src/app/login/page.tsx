@@ -41,7 +41,7 @@ function Login() {
 
       await fetch(`${process.env.NEXT_PUBLIC_FRONT_URL}/api/session`, {
         method: 'POST',
-        body: JSON.stringify({ userId: member.id, nickname: member.nickname }),
+        body: JSON.stringify({ userId: member.id, nickname: member.nickname, isAdmin: member.is_admin }),
       });
 
       window.location.href = '/';

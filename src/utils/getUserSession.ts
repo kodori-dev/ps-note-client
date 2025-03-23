@@ -12,6 +12,7 @@ export const getUserSession = async () => {
     session.isLogin = defaultUserSession.isLogin;
     session.nickname = defaultUserSession.nickname;
     session.userId = defaultUserSession.userId;
+    session.isAdmin = defaultUserSession.isAdmin;
   }
 
   return session;

@@ -15,13 +15,14 @@ async function Admin() {
   const bojDay = getBojTime();
   const getAdminData = async () => {
     try {
-      const res = await fetch(`http://${process.env.NEXT_PUBLIC_SERVER_URL}/api-internal/v2/admin-page?day=${day || bojDay}`, {
+      const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/api-internal/v2/admin-page?day=${day || bojDay}`, {
         headers: memberId ? { 'X-Member-Id': memberId.toString() } : {},
         cache: 'no-store',
       });
       if (res.ok) return await res.json();
       else throw Error();
     } catch (err) {
+      console.log(err);
       redirect('/404');
     }
   };

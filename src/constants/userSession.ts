@@ -5,6 +5,7 @@ export const defaultUserSession: UserSessionType = {
   isLogin: false,
   nickname: '',
   userId: -1,
+  isAdmin: false,
 };
 
 export const sessionOptions: SessionOptions = {

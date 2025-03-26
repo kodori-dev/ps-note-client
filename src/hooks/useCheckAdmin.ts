@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useGetUserInfo } from './useGetUserInfo';
+import { useGetUserInfo } from "./useGetUserInfo";
 
 export const useCheckAdmin = () => {
   const { data: user, isSuccess } = useGetUserInfo();

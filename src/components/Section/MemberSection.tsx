@@ -21,13 +21,6 @@ function MemberSection({ members, penalty_map }: Props) {
         <div className="flex gap-7 flex-wrap">
           {members.map(({ id, nickname, boj_id, is_active, is_off }) => {
             const penaltyArr = penalty_map[id.toString()];
-            // if (!penaltyArr)
-            //   return (
-            //     <div key={id} className="w-[276px] h-[276px] shrink-0">
-            //       오류가 발생했습니다.
-            //     </div>
-            //   );
-
             const { penalty, solveNum, attend } = calcSimplePenalty(penaltyArr);
             const today = getBojTime();
 

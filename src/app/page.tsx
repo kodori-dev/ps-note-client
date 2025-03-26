@@ -4,17 +4,12 @@ import HomeSectionLayout from "@/components/Layout/HomeSectionLayout";
 import ProblemSection from "@/components/Section/ProblemSection";
 import MemberSection from "@/components/Section/MemberSection";
 import { getBojTime } from "@/utils/getBojTime";
-import { getUserSession } from "@/utils/getUserSession";
 
 export default async function Home() {
-  const session = await getUserSession();
-  const memberId = session.isLogin ? session.userId : undefined;
-
   const bojDay = getBojTime();
   const getHomePage = async () => {
     try {
       const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/api-internal/v2/home-page?day=${bojDay}`, {
-        headers: memberId ? { "X-Member-Id": memberId.toString() } : {},
         cache: "no-store",
       });
       if (res.ok) return await res.json();

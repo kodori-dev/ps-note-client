@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import dayjs from 'dayjs';
-import { MemberSchema, PenaltySchema } from '../../../models';
-import MemberCard from '../Card/MemberCard';
-import HomeLock from '../Lock/HomeLock';
-import { calcSimplePenalty } from '@/utils/calcSimplePenalty';
-import { getBojTime } from '@/utils/getBojTime';
+import dayjs from "dayjs";
+import { MemberSchema, PenaltySchema } from "../../../models";
+import MemberCard from "../Card/MemberCard";
+import HomeLock from "../Lock/HomeLock";
+import { calcSimplePenalty } from "@/utils/calcSimplePenalty";
+import { getBojTime } from "@/utils/getBojTime";
 
 interface Props {
   members: MemberSchema[];
@@ -21,25 +21,28 @@ function MemberSection({ members, penalty_map }: Props) {
         <div className="flex gap-7 flex-wrap">
           {members.map(({ id, nickname, boj_id, is_active, is_off }) => {
             const penaltyArr = penalty_map[id.toString()];
-            if (!penaltyArr)
-              return (
-                <div key={id} className="w-[276px] h-[276px] shrink-0">
-                  오류가 발생했습니다.
-                </div>
-              );
+            // if (!penaltyArr)
+            //   return (
+            //     <div key={id} className="w-[276px] h-[276px] shrink-0">
+            //       오류가 발생했습니다.
+            //     </div>
+            //   );
 
             const { penalty, solveNum, attend } = calcSimplePenalty(penaltyArr);
             const today = getBojTime();
 
             let todayPenalty = null;
-            for (const item of penaltyArr) {
-              if (dayjs(item.day).format('YYYY-MM-DD') === today) todayPenalty = item;
+            if (penaltyArr) {
+              for (const item of penaltyArr) {
+                if (dayjs(item.day).format("YYYY-MM-DD") === today) todayPenalty = item;
+              }
             }
+
             return (
               <MemberCard
                 key={id}
                 id={id}
-                name={nickname ?? '(알수없음)'}
+                name={nickname ?? "(알수없음)"}
                 bojId={boj_id}
                 fine={penalty}
                 weekSolved={solveNum - 1}

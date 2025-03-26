@@ -1,11 +1,11 @@
-import { PenaltySchema } from '../../models';
+import { PenaltySchema } from "../../models";
 
 export const calcSimplePenalty = (penalties: PenaltySchema[]) => {
   let penalty = 0;
   let solveNum = 0;
-  let attend = -2; //주말 제외
+  let attend = 0;
   let isUsedCoupon = false;
-  if (penalties.length > 0) {
+  if (penalties) {
     for (let item of penalties) {
       if (item.coupons.length > 0) isUsedCoupon = true;
       penalty += Number(item.amount);

@@ -38,7 +38,7 @@ function MemberSection({ members, penalty_map }: Props) {
                 name={nickname ?? "(알수없음)"}
                 bojId={boj_id}
                 fine={penalty}
-                weekSolved={solveNum - 1}
+                weekSolved={solveNum}
                 attend={attend}
                 isActive={is_active}
                 isCoupon={todayPenalty ? todayPenalty?.coupons.length > 0 : false}

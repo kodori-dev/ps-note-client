@@ -35,14 +35,14 @@ function MemberCard({ id, name, bojId, weekSolved, todaySolve = [], fine, isActi
   return (
     <div
       className={[
-        "up-card hover:cursor-pointer relative overflow-hidden w-[298px] h-[298px] shrink-0 bg-white border border-gray-4 rounded-lg flex flex-col justify-between pt-6 px-6",
+        "up-card hover:cursor-pointer relative overflow-hidden w-[298px] h-[298px] bg-white shrink-0 border border-gray-4 rounded-lg flex flex-col justify-between pt-6 px-6",
         isActive ? "" : "opacity-20",
       ].join(" ")}
       tabIndex={0}
       onClick={() => (window.location.href = `/attend/${id}`)}
     >
       <div className="flex flex-col">
-        <p className="text-48 font-700">{name}</p>
+        <p className="text-black text-48 font-700">{name}</p>
         {bojId && (
           <Link href={`https://www.acmicpc.net/user/${bojId}`} className="text-gray-3 hover:border-b hover:text-gray-1 border-gray-1 w-fit">
             @{bojId}

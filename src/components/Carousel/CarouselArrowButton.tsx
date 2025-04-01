@@ -1,11 +1,8 @@
-'use client';
-import React, {
-  ComponentPropsWithRef,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { EmblaCarouselType } from 'embla-carousel';
+"use client";
+import React, { ComponentPropsWithRef, useCallback, useEffect, useState } from "react";
+import { EmblaCarouselType } from "embla-carousel";
+import { Icon } from "@chakra-ui/react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 type UsePrevNextButtonsType = {
   prevBtnDisabled: boolean;
@@ -14,9 +11,7 @@ type UsePrevNextButtonsType = {
   onNextButtonClick: () => void;
 };
 
-export const usePrevNextButtons = (
-  emblaApi: EmblaCarouselType | undefined
-): UsePrevNextButtonsType => {
+export const usePrevNextButtons = (emblaApi: EmblaCarouselType | undefined): UsePrevNextButtonsType => {
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
 
@@ -39,7 +34,7 @@ export const usePrevNextButtons = (
     if (!emblaApi) return;
 
     onSelect(emblaApi);
-    emblaApi.on('reInit', onSelect).on('select', onSelect);
+    emblaApi.on("reInit", onSelect).on("select", onSelect);
   }, [emblaApi, onSelect]);
 
   return {
@@ -50,20 +45,16 @@ export const usePrevNextButtons = (
   };
 };
 
-type PropType = ComponentPropsWithRef<'button'>;
+type PropType = ComponentPropsWithRef<"button">;
 
 export const PrevButton: React.FC<PropType> = (props) => {
-  const { children, ...restProps } = props;
+  const { ...restProps } = props;
 
   return (
-    <button
-      className="embla__button embla__button--prev disabled:opacity-20"
-      type="button"
-      {...restProps}
-    >
-      {/* <ChevronLeftIcon boxSize={6} /> */}
-
-      {children}
+    <button className="embla__button embla__button--prev disabled:opacity-20 disabled:cursor-not-allowed" type="button" {...restProps}>
+      <Icon size={"lg"}>
+        <HiChevronLeft />
+      </Icon>
     </button>
   );
 };
@@ -72,13 +63,10 @@ export const NextButton: React.FC<PropType> = (props) => {
   const { children, ...restProps } = props;
 
   return (
-    <button
-      className="embla__button embla__button--next disabled:opacity-20"
-      type="button"
-      {...restProps}
-    >
-      {/* <ChevronRightIcon boxSize={6} /> */}
-      {children}
+    <button className="embla__button embla__button--next disabled:opacity-20 disabled:cursor-not-allowed" type="button" {...restProps}>
+      <Icon size={"lg"}>
+        <HiChevronRight />
+      </Icon>
     </button>
   );
 };

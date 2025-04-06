@@ -41,7 +41,7 @@ function ProblemSection({ type }: Props) {
 
   return (
     <PostSectionLayout title="Problem" description="오늘은 어떤 문제를 풀었나요?">
-      <div className="flex flex-col gap-5 w-[373px]">
+      <div className="flex flex-col gap-5 w-[373px] mobile:w-full">
         <Field.Root required>
           <Field.Label>
             제출 날짜

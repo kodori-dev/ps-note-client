@@ -8,7 +8,7 @@ interface Props {
   solutions: SolutionSchema[];
 }
 
-const CATEGORY = ["제출일", "채점 결과", "언어", "사람", "백준 연동 여부"];
+const CATEGORY = ["제출일", "채점 결과", "언어", "사람", "검증 여부"];
 
 function SolutionList({ solutions }: Props) {
   return (

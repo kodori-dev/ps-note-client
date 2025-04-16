@@ -18,7 +18,7 @@ async function Problem({ params: { id } }: { params: { id: string } }) {
             title={problem.name}
             isSolved={problem.is_solved ? "AC" : null}
             level={problem.level}
-            number={problem.oj_id}
+            ojId={problem.oj_id}
             stars={problem.stars}
             isStar={problem.is_starred ?? false}
             tags={problem.tags}

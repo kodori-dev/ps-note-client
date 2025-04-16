@@ -12,7 +12,7 @@ import { OJ_TYPE_STRING } from "@/constants/ojType";
 
 interface Props {
   id: number;
-  number: string;
+  ojId: string;
   isSolved?: "AC" | "WA" | null;
   title: string;
   level: string;
@@ -22,7 +22,7 @@ interface Props {
   ojType: string;
 }
 
-function ProblemInfo({ id, number, isSolved = null, title, level, isStar = false, stars, tags, ojType }: Props) {
+function ProblemInfo({ id, ojId, isSolved = null, title, level, isStar = false, stars, tags, ojType }: Props) {
   const INFO_GRID = [
     { icon: <GoodIcon fill="#ACACAC" />, head: "이 문제를 추천한 사람", body: <p className="text-20">{stars}</p> },
     {
@@ -45,9 +45,14 @@ function ProblemInfo({ id, number, isSolved = null, title, level, isStar = false
     },
   ];
 
+  const OJ_LINK = {
+    boj: "https://www.acmicpc.net/problem",
+    programmers: "https://school.programmers.co.kr/learn/courses/30/lessons",
+  };
+
   return (
     <div className="relative">
-      <Link href={`/post?id=${id}&boj_id=${number} - ${title}`}>
+      <Link href={`/post?id=${id}&boj_id=${ojId} - ${title}`}>
         <Button heightSize="sm" roundSize="sm" customStyle="px-4 absolute top-0 right-0">
           이 문제 바로 체크인하기
         </Button>
@@ -58,10 +63,10 @@ function ProblemInfo({ id, number, isSolved = null, title, level, isStar = false
           title="문제 링크로 이동"
           aria-label="클릭 시 프로그래머스 링크로 이동"
           target="_blank"
-          href={`https://www.acmicpc.net/problem/${number}`}
+          href={`${OJ_LINK[ojType]}/${ojId}`}
           className="group relative hover:text-black text-gray-2 border-b border-gray-3"
         >
-          {OJ_TYPE_STRING[ojType]}({number})
+          {OJ_TYPE_STRING[ojType]}({ojId})
           <LinkIcon fill="#ACACAC" className="absolute top-[6px] -right-3" />
         </Link>
         {isSolved && <Chip type={isSolved} />}

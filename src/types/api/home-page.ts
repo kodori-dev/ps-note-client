@@ -1,4 +1,5 @@
-import { MemberSchema, PenaltySchema, ProblemSchema } from '../../../models';
+import { MemberSchema, PenaltySchema } from "../../../models";
+import { ProblemSchema } from "../../../types/models/data-contracts";
 export interface HomePageRes {
   members: MemberSchema[];
   today_problems: ProblemSchema[];

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import ProblemCard from '@/components/Card/ProblemCard';
-import Link from 'next/link';
-import { SolutionSchema } from '../../../../models';
-import { useStore } from '@/store';
+import ProblemCard from "@/components/Card/ProblemCard";
+import Link from "next/link";
+import { useStore } from "@/store";
+import { SolutionSchema } from "../../../../types/models/data-contracts";
 
 interface Props {
   solutionsData: SolutionSchema[];
@@ -29,7 +29,8 @@ function MySolutionSection({ solutionsData }: Props) {
                 <ProblemCard
                   key={id}
                   type="solution"
-                  bojId={problem.boj_id}
+                  ojId={problem.oj_id}
+                  ojType={problem.oj_type}
                   isSolved={problem.is_solved ?? false}
                   solLang={source_lang}
                   level={problem.level}

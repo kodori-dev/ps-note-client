@@ -1,9 +1,9 @@
 import { getServerData } from "@/utils/getServerData";
 import MetaTag from "@/components/MetaTag";
-import MonthlySection from "./_component/MonthlySection";
 import dayjs from "dayjs";
 import { headers } from "next/headers";
 import { BiMoneyWithdraw } from "react-icons/bi";
+import MonthlySection from "./_component/MonthlySection";
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
   const today = new Date();

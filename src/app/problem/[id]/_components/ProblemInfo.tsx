@@ -52,7 +52,7 @@ function ProblemInfo({ id, ojId, isSolved = null, title, level, isStar = false, 
 
   return (
     <div className="relative">
-      <Link href={`/post?id=${id}&boj_id=${ojId} - ${title}`}>
+      <Link href={`/post?id=${id}&oj_id=${ojId} - ${title}`}>
         <Button heightSize="sm" roundSize="sm" customStyle="px-4 absolute top-0 right-0">
           이 문제 바로 체크인하기
         </Button>

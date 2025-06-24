@@ -22,8 +22,8 @@ const OJ_TYPE = createListCollection({
 
 function ProblemSection({ type }: Props) {
   const { register, setValue, watch } = useFormContext();
-  const { boj_id, is_correct_answer, isStar, oj_type } = watch();
-  const { data, isLoading, isSuccess, isOpen, setIsOpen } = useDebouncingSearch(boj_id, boj_id && boj_id.split("-").length < 2);
+  const { oj_id, is_correct_answer, isStar, oj_type } = watch();
+  const { data, isLoading, isSuccess, isOpen, setIsOpen } = useDebouncingSearch(oj_id, oj_id && oj_id.split("-").length < 2);
 
   const handleTagClick = (state: "WA" | "AC") => {
     setValue("is_correct_answer", state === is_correct_answer ? "" : state);
@@ -34,7 +34,7 @@ function ProblemSection({ type }: Props) {
   };
 
   const handleListClick = (id: number, bojId: string, name: string) => {
-    setValue("boj_id", `${bojId} - ${name}`);
+    setValue("oj_id", `${bojId} - ${name}`);
     setValue("pid", id);
     setIsOpen(false);
   };
@@ -87,9 +87,9 @@ function ProblemSection({ type }: Props) {
               문제 검색
               <Field.RequiredIndicator />
             </Field.Label>
-            <Input disabled={type === "edit"} placeholder="번호 또는 이름 검색" {...register("boj_id", { required: REQUIRED_INPUT })} />
+            <Input disabled={type === "edit"} placeholder="번호 또는 이름 검색" {...register("oj_id", { required: REQUIRED_INPUT })} />
           </Field.Root>
-          {isOpen && <SearchPreview query={boj_id} isLoading={isLoading} isSuccess={isSuccess} data={data} handleListClick={handleListClick} />}
+          {isOpen && <SearchPreview query={oj_id} isLoading={isLoading} isSuccess={isSuccess} data={data} handleListClick={handleListClick} />}
         </div>
 
         <div className="flex flex-col gap-2 text-14">

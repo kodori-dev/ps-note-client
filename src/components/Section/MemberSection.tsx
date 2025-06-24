@@ -1,11 +1,11 @@
 "use client";
 
 import dayjs from "dayjs";
-import { MemberSchema, PenaltySchema } from "../../../models";
 import MemberCard from "../Card/MemberCard";
 import HomeLock from "../Lock/HomeLock";
 import { calcSimplePenalty } from "@/utils/calcSimplePenalty";
 import { getBojTime } from "@/utils/getBojTime";
+import { MemberSchema, PenaltySchema } from "../../../types/models/data-contracts";
 
 interface Props {
   members: MemberSchema[];

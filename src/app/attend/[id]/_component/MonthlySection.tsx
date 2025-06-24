@@ -2,9 +2,9 @@
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { HolidaySchema, PenaltySchema } from "../../../../../models";
 import { VacationSchema } from "@/types/api/get";
 import dayjs from "dayjs";
+import { HolidaySchema, PenaltySchema } from "../../../../../types/models/data-contracts";
 
 interface Props {
   data: PenaltySchema[];
@@ -13,6 +13,16 @@ interface Props {
   initialDate: Date;
   memberId: string;
 }
+
+const BG_COLOR = {
+  unrated: "bg-black",
+  bronze: "bg-chip-bronze",
+  silver: "bg-chip-silver",
+  gold: "bg-chip-gold",
+  platinum: "bg-chip-platinum",
+  diamond: "bg-chip-diamond",
+  ruby: "bg-chip-ruby",
+};
 
 /**
  * 꼬박꼬박 PS일지 - 먼슬리 뷰
@@ -26,10 +36,10 @@ function MonthlySection({ data, holidays, vacations, initialDate, memberId }: Pr
       title: `⛱️ ${vacation.memo}`,
       date: vacation.start_date,
       end: `${dayjs(new_endDate).format("YYYY-MM-DD")}`,
-      // backgroundColor: "rgba(255, 236, 178)",
-      backgroundColor: "rgba(207, 235, 245)",
-      borderColor: "rgba(207, 235, 245)",
+      backgroundColor: "rgb(184, 236, 255)",
       textColor: "#7e7e7e",
+      display: "background",
+      className: "text-14",
     };
   });
 
@@ -45,20 +55,25 @@ function MonthlySection({ data, holidays, vacations, initialDate, memberId }: Pr
 
   data.forEach(({ day, admitted_solutions, not_admitted_solutions, coupons }) => {
     const sol1 = admitted_solutions.map((sol) => ({
-      title: sol.problem.name,
+      title: `${sol.problem.name}`,
       date: day,
-      backgroundColor: "#DDEEDE",
-      borderColor: "rgba(187, 220, 189, 0.3)",
-      textColor: "#7a7a7a",
+      // backgroundColor: "#DDEEDE",
+      borderColor: "rgba(187, 220, 189, 0.1)",
+      textColor: "#ffffff",
       url: `/solution/${sol.id}`,
+      extendedProps: {
+        department: "BioChemistry",
+      },
+      description: "Lecture",
+      className: `cal-event ${BG_COLOR[sol.problem.level.split("_")[0]]}`,
     }));
 
     const sol2 = not_admitted_solutions.map((sol) => ({
-      title: sol.problem.name,
+      title: `${sol.problem.name}`,
       date: day,
       backgroundColor: "#FFE0DF",
       borderColor: "#FFE0DF",
-      textColor: "#7a7a7a",
+      textColor: "#3e3e3e",
       url: `/solution/${sol.id}`,
     }));
 
@@ -74,7 +89,7 @@ function MonthlySection({ data, holidays, vacations, initialDate, memberId }: Pr
   });
 
   return (
-    <>
+    <div className="py-5 px-6 bg-white rounded-sm">
       <FullCalendar
         customButtons={{
           myPrevBtn: {
@@ -104,8 +119,10 @@ function MonthlySection({ data, holidays, vacations, initialDate, memberId }: Pr
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         events={[...penaltyEvents, ...holidayEvents, ...vacationEvents]}
+        height={"auto"}
+        contentHeight={"auto"}
       />
-    </>
+    </div>
   );
 }
 

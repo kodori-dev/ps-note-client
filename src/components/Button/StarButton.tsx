@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { MouseEvent, useEffect, useState } from 'react';
-import NoStarIcon from '../../../public/icon-star-f.svg';
-import StarIcon from '../../../public/icon-star-t.svg';
-import { api } from '@/utils/api';
-import { useGetUserInfo } from '@/hooks/useGetUserInfo';
+import { MouseEvent, useEffect, useState } from "react";
+import { api } from "@/utils/api";
+import { useGetUserInfo } from "@/hooks/useGetUserInfo";
+import { IoHeartOutline } from "react-icons/io5";
+import { IoHeartSharp } from "react-icons/io5";
 
 interface Props {
   problemId: number;
@@ -29,9 +29,9 @@ function StarButton({ problemId, isStar, stars, isSolve }: Props) {
         if (!user.data) throw Error();
         if (star.state === isStar) return;
         if (star.state) {
-          const res = await api('POST', '/problem-stars', { problem_id: problemId, star: true });
+          const res = await api("POST", "/problem-stars", { problem_id: problemId, star: true });
         } else {
-          const res = await api('POST', '/problem-stars', { problem_id: problemId, star: false });
+          const res = await api("POST", "/problem-stars", { problem_id: problemId, star: false });
         }
       } catch (err) {}
     }, 2000);
@@ -40,18 +40,14 @@ function StarButton({ problemId, isStar, stars, isSolve }: Props) {
   }, [star]);
 
   return (
-    <button
-      disabled={!isSolve}
-      onClick={handleClickStar}
-      className="group/star disabled:cursor-not-allowed z-10 absolute top-2 right-2 flex flex-col items-center hover:cursor-pointer"
-    >
-      {star.state ? <StarIcon /> : <NoStarIcon className="group-disabled/star:opacity-20" />}
+    <button onClick={handleClickStar} className="group/star z-10 absolute top-2 right-2 flex flex-col items-center hover:cursor-pointer">
+      {star.state ? <IoHeartSharp size={24} fill="#FF4547" /> : <IoHeartOutline size={24} />}
       <p className="text-12 text-gray-3">{star.num}</p>
-      {!isSolve && (
+      {/* {!isSolve && (
         <span className="hidden group-hover/star:inline-block text-12 absolute whitespace-nowrap -right-44 -top-[6px] px-2 py-[2px] bg-black/30 text-white rounded-md z-modal">
           문제를 풀어야 추천할 수 있어요.
         </span>
-      )}
+      )} */}
     </button>
   );
 }

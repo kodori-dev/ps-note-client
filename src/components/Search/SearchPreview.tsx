@@ -1,5 +1,5 @@
-import { Spinner } from '@chakra-ui/react';
-import { PaginatedProblemSchema } from '../../../models';
+import { Spinner } from "@chakra-ui/react";
+import { PaginatedProblemSchema } from "../../../types/models/data-contracts";
 
 interface Props {
   query: string;
@@ -7,22 +7,22 @@ interface Props {
   isSuccess: boolean;
   handleListClick: (id: number, bojId: string, name: string) => void;
   data?: PaginatedProblemSchema;
-  type?: 'post' | 'home';
+  type?: "post" | "home";
 }
 
 const POSTION = {
-  post: 'top-[91px]',
-  home: 'top-16',
+  post: "top-[91px]",
+  home: "top-16",
 };
 
-function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, type = 'post' }: Props) {
+function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, type = "post" }: Props) {
   return (
-    <div className={['w-full absolute bg-white rounded-md shadow-xl p-4 z-modal', POSTION[type]].join(' ')}>
+    <div className={["w-full absolute bg-white rounded-md shadow-xl p-4 z-modal", POSTION[type]].join(" ")}>
       <div className="h-[380px] flex flex-col items-center overflow-y-scroll">
         {isLoading ? (
           <Spinner color="blue.500" />
         ) : isSuccess && data && data.count > 0 ? (
-          data.items.map(({ id, boj_id: bojId, name }) => (
+          data.items.map(({ id, oj_id: bojId, name }) => (
             <div
               onClick={() => handleListClick(id, bojId, name)}
               key={id}

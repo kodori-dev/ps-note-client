@@ -1,6 +1,5 @@
 import {
   MemberSchema,
-  PaginatedProblemSchema,
   PaginatedSolutionSchema,
   PsNoteServerAppsCoreViewsV2CouponGetRequest,
   PsNoteServerAppsCoreViewsV2HolidayGetRequest,
@@ -10,7 +9,7 @@ import {
   PsNoteServerAppsCoreViewsV2ProblemSearchProblemsRequest,
   PsNoteServerAppsCoreViewsV2SolutionGetRequest,
 } from "../../../models";
-import { CouponSchema, HolidaySchema, PenaltySchema, ProblemSchema, SolutionSchema } from "../../../types/models/data-contracts";
+import { CouponSchema, HolidaySchema, PaginatedProblemSchema, PenaltySchema, ProblemSchema, SolutionSchema } from "../../../types/models/data-contracts";
 
 export interface VacationSchema {
   id: number;

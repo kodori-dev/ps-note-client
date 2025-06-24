@@ -107,9 +107,12 @@ function ProblemSection({ type }: Props) {
           <input hidden {...register("is_correct_answer", { required: REQUIRED_INPUT })} />
         </div>
 
-        <Checkbox checked={isStar} onCheckedChange={(e) => handleStarCheck(e)}>
-          이 문제를 추천할까요?
-        </Checkbox>
+        <div>
+          <Checkbox checked={isStar} onCheckedChange={(e) => handleStarCheck(e)}>
+            이 문제를 찜할까요?
+          </Checkbox>
+          <p className="text-12 text-gray-3">문제를 찜하고, 나중에 다시 풀어보세요.</p>
+        </div>
 
         <input hidden {...register("isStar")} />
         <input hidden {...register("pid")} />

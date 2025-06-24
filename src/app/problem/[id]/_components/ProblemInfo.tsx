@@ -24,7 +24,7 @@ interface Props {
 
 function ProblemInfo({ id, ojId, isSolved = null, title, level, isStar = false, stars, tags, ojType }: Props) {
   const INFO_GRID = [
-    { icon: <GoodIcon fill="#ACACAC" />, head: "이 문제를 추천한 사람", body: <p className="text-20">{stars}</p> },
+    { icon: <GoodIcon fill="#ACACAC" />, head: "이 문제를 찜한 사람", body: <p className="text-20">{stars}</p> },
     {
       icon: <LevelIcon fill="#ACACAC" />,
       head: "난이도",

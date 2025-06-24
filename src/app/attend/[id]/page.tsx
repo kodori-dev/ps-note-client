@@ -3,6 +3,7 @@ import MetaTag from "@/components/MetaTag";
 import MonthlySection from "./_component/MonthlySection";
 import dayjs from "dayjs";
 import { headers } from "next/headers";
+import { BiMoneyWithdraw } from "react-icons/bi";
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
   const today = new Date();
@@ -18,6 +19,11 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
   const penalties = await getServerData("/penalties", { start_date: dayjs(startDay).format("YYYY-MM-DD"), end_date: dayjs(lastDay).format("YYYY-MM-DD"), member_id: member.id });
   const vacations = await getServerData("/vacations", { start_date: dayjs(startDay).format("YYYY-MM-DD"), end_date: dayjs(lastDay).format("YYYY-MM-DD") });
 
+  let totalPenalty = 0;
+  penalties.forEach((item) => {
+    totalPenalty += Number(item.amount);
+  });
+
   return (
     <>
       <MetaTag
@@ -27,6 +33,17 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
       <h1 className="text-36 my-12 mobile:text-24 mobile:my-6">
         <span className="font-700">{member?.nickname}</span> 님의 꼬박꼬박 PS일지
       </h1>
+
+      <section className="mb-6">
+        <div className="flex gap-1 items-center tablet:text-14" aria-label="이번 달 벌금">
+          <BiMoneyWithdraw />
+          {totalPenalty.toLocaleString("ko-kr")}원
+          <p className="text-14 tablet:text-12">
+            {`<< `}
+            {totalPenalty == 0 ? "잘하고 있어요!" : "ㅠ,ㅠ"}
+          </p>
+        </div>
+      </section>
 
       <MonthlySection memberId={id} initialDate={lastDay} data={penalties} holidays={holidays} vacations={vacations} />
     </>

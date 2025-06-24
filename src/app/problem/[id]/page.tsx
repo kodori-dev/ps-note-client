@@ -13,11 +13,12 @@ async function Problem({ params: { id } }: { params: { id: string } }) {
       <div className="flex flex-col gap-16">
         {problem && (
           <ProblemInfo
+            ojType={problem.oj_type}
             id={problem.id}
             title={problem.name}
             isSolved={problem.is_solved ? "AC" : null}
             level={problem.level}
-            number={problem.boj_id}
+            ojId={problem.oj_id}
             stars={problem.stars}
             isStar={problem.is_starred ?? false}
             tags={problem.tags}

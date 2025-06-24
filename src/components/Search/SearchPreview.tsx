@@ -1,5 +1,6 @@
-import { Spinner } from '@chakra-ui/react';
-import { PaginatedProblemSchema } from '../../../models';
+import { Spinner } from "@chakra-ui/react";
+import { PaginatedProblemSchema } from "../../../types/models/data-contracts";
+import { OJ_TYPE_STRING } from "@/constants/ojType";
 
 interface Props {
   query: string;
@@ -7,28 +8,28 @@ interface Props {
   isSuccess: boolean;
   handleListClick: (id: number, bojId: string, name: string) => void;
   data?: PaginatedProblemSchema;
-  type?: 'post' | 'home';
+  type?: "post" | "home";
 }
 
 const POSTION = {
-  post: 'top-[91px]',
-  home: 'top-16',
+  post: "top-[91px]",
+  home: "top-16",
 };
 
-function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, type = 'post' }: Props) {
+function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, type = "post" }: Props) {
   return (
-    <div className={['w-full absolute bg-white rounded-md shadow-xl p-4 z-modal', POSTION[type]].join(' ')}>
+    <div className={["w-full absolute bg-white rounded-md shadow-xl p-4 z-modal", POSTION[type]].join(" ")}>
       <div className="h-[380px] flex flex-col items-center overflow-y-scroll">
         {isLoading ? (
           <Spinner color="blue.500" />
         ) : isSuccess && data && data.count > 0 ? (
-          data.items.map(({ id, boj_id: bojId, name }) => (
+          data.items.map(({ id, oj_id: bojId, name, oj_type }) => (
             <div
               onClick={() => handleListClick(id, bojId, name)}
               key={id}
-              className="w-full flex gap-5 border-b text-gray-1 border-gray-4 text-14 p-3 hover:bg-primary-background hover:text-black cursor-pointer"
+              className="w-full flex justify-between border-b text-gray-1 border-gray-4 text-14 p-3 hover:bg-primary-background hover:text-black cursor-pointer"
             >
-              <p className="w-20">
+              <p className="w-[62px]">
                 {bojId.includes(query) ? (
                   <>
                     {bojId.slice(0, bojId.indexOf(query))}
@@ -39,7 +40,7 @@ function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, typ
                   bojId
                 )}
               </p>
-              <p className="truncate min-w-[223px]">
+              <p className={`truncate ${type === "post" ? "min-w-[180px]" : "w-full"}`}>
                 {name.includes(query) ? (
                   <>
                     {name.slice(0, name.indexOf(query))}
@@ -50,6 +51,11 @@ function SearchPreview({ query, isLoading, isSuccess, handleListClick, data, typ
                   name
                 )}
               </p>
+              <div className="w-[78px] flex items-center justify-end">
+                <span className={`rounded-md flex items-center text-12 ${oj_type === "boj" ? "bg-blue-300/30" : "bg-yellow-400/30"} px-2 whitespace-nowrap text-gray-1`}>
+                  {OJ_TYPE_STRING[oj_type]}
+                </span>
+              </div>
             </div>
           ))
         ) : (

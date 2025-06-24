@@ -1,14 +1,14 @@
 import Chip from "@/components/Chip";
 import Link from "next/link";
 import { Spinner } from "@chakra-ui/react";
-import { SolutionSchema } from "../../../../../models";
 import dayjs from "dayjs";
+import { SolutionSchema } from "../../../../../types/models/data-contracts";
 
 interface Props {
   solutions: SolutionSchema[];
 }
 
-const CATEGORY = ["제출일", "채점 결과", "언어", "사람", "백준 연동 여부"];
+const CATEGORY = ["제출일", "채점 결과", "언어", "사람", "검증 여부"];
 
 function SolutionList({ solutions }: Props) {
   return (
@@ -30,10 +30,10 @@ function SolutionList({ solutions }: Props) {
               <p>{solution.source_lang}</p>
               <p>{solution.member.nickname}</p>
               <div className="group relative flex items-center z-star">
-                {solution.is_boj_verified === null ? (
+                {solution.is_oj_verified === null ? (
                   <Spinner color="blue.200" size="md" borderWidth="3px" />
                 ) : (
-                  <input className="w-4 h-4 cursor-pointer" type="checkbox" defaultChecked={solution.is_boj_verified} readOnly />
+                  <input className="w-4 h-4 cursor-pointer" type="checkbox" defaultChecked={solution.is_oj_verified} readOnly />
                 )}
               </div>
             </div>

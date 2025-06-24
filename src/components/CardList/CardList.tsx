@@ -1,21 +1,21 @@
-import ProblemCard from '@/components/Card/ProblemCard';
-import React from 'react';
-import { ProblemSchema, SolutionSchema } from '../../../models';
+import ProblemCard from "@/components/Card/ProblemCard";
+import React from "react";
+import { ProblemSchema, SolutionSchema } from "../../../types/models/data-contracts";
 
 interface Props {
   data: ProblemSchema[] | SolutionSchema[];
-  type: 'problem' | 'solution';
+  type: "problem" | "solution";
 }
 
 function CardList({ type, data }: Props) {
   return (
     <div className="grid grid-cols-3 gap-5">
-      {type === 'problem' &&
-        (data as ProblemSchema[]).map(({ boj_id, id, is_solved, is_starred, name, stars, solutions, level }) => (
+      {type === "problem" &&
+        (data as ProblemSchema[]).map(({ oj_type, oj_id, id, is_solved, is_starred, name, stars, solutions, level }) => (
           <ProblemCard
             key={id}
             customStyle=" w-full"
-            bojId={boj_id}
+            ojId={oj_id}
             problemId={id}
             stars={stars}
             title={name}
@@ -23,14 +23,16 @@ function CardList({ type, data }: Props) {
             isSolved={is_solved ?? false}
             solNum={solutions}
             level={level}
+            ojType={oj_type}
           />
         ))}
-      {type === 'solution' &&
+      {type === "solution" &&
         (data as SolutionSchema[]).map(({ id, problem, is_correct_answer, score_label, source_lang }) => (
           <ProblemCard
             key={id}
             type="solution"
-            bojId={problem.boj_id}
+            ojId={problem.oj_id}
+            ojType={problem.oj_type}
             isSolved={problem.is_solved ?? false}
             level={problem.level}
             problemId={problem.id}

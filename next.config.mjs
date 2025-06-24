@@ -1,14 +1,14 @@
-import { withSentryConfig } from '@sentry/nextjs';
+import { withSentryConfig } from "@sentry/nextjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  output: 'standalone',
+  output: "standalone",
   assetPrefix: process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_CDN_URL : undefined,
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack'],
+      use: ["@svgr/webpack"],
     });
 
     return config;
@@ -16,8 +16,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/proxy/:path*',
-        destination: `${process.env.SERVER_URL}${process.env.API_BASE_PATH}/:path*`,
+        source: "/proxy/:path*",
+        destination: `https://${process.env.SERVER_URL}${process.env.API_BASE_PATH}/:path*`,
       },
     ];
   },
@@ -30,8 +30,8 @@ const sentryWebpackPluginOptions = {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  org: 'kodori',
-  project: 'ps-note-client',
+  org: "kodori",
+  project: "ps-note-client",
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
@@ -72,9 +72,4 @@ const sentryOptions = {
   release: process.env.NEXT_PUBLIC_RELEASE,
 };
 
-
-export default withSentryConfig(
-  nextConfig,
-  sentryWebpackPluginOptions,
-  sentryOptions
-);
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions);

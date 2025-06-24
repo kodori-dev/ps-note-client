@@ -61,8 +61,8 @@ function SolutionSection() {
         {/* 코드 입력 창 */}
         <CodeMirror
           value={source_code}
-          width="668px"
-          height="330px"
+          className="w-[668px] tablet:w-full"
+          height="480px"
           onChange={handleCodeChange}
           theme={vscodeDark}
           lang="java"

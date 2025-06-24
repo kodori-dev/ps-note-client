@@ -1,4 +1,4 @@
-import { PenaltySchema } from "../../models";
+import { PenaltySchema } from "../../types/models/data-contracts";
 
 export const calcSimplePenalty = (penalties: PenaltySchema[]) => {
   let penalty = 0; //벌금

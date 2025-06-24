@@ -4,6 +4,7 @@ import HomeSectionLayout from "@/components/Layout/HomeSectionLayout";
 import ProblemSection from "@/components/Section/ProblemSection";
 import MemberSection from "@/components/Section/MemberSection";
 import { getBojTime } from "@/utils/getBojTime";
+import { getServerData } from "@/utils/getServerData";
 
 export default async function Home() {
   const bojDay = getBojTime();
@@ -18,13 +19,13 @@ export default async function Home() {
       return null;
     }
   };
-
+  const myStarProblem = await getServerData("/problems", { is_starred: true });
   const homePage = (await getHomePage()) as HomePageRes;
 
   const SECTION_LIST = [
     {
-      title: "이런 문제를 추천해요!",
-      children: <ProblemSection problems={homePage?.current_week_starred_problems} />,
+      title: "내가 찜한 문제",
+      children: <ProblemSection problems={myStarProblem.items ?? []} />,
     },
     {
       title: "오늘은 누가 먼저 놀았을까요?",
@@ -45,7 +46,7 @@ export default async function Home() {
           나만의 <span className="text-primary">PS-NOTE</span>를 만들어 보세요!
         </h1>
         {/* <p className="text-14 text-gray-6">팀을 만들고 팀원을 초대해, 함께 문제를 풀며 성장하세요.</p> */}
-        <p className="text-14 text-gray-6">팀 기능 Coming Soon!</p>
+        <p className="text-14 text-gray-6">📌 프로그래머스 연동이 완료되었어요!</p>
       </div>
       <SearchBar />
       {homePage &&

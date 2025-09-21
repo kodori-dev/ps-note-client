@@ -151,6 +151,16 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:cache
           cache-to: type=registry,mode=max,image-manifest=true,oci-mediatypes=true,ref=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:cache
 
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+          unzip -q /tmp/awscliv2.zip -d /tmp
+          sudo /tmp/aws/install --update
+          rm -rf /tmp/aws/ /tmp/awscliv2.zip
+          
+      - name: Verify AWS CLI version
+        run: aws --version
+
       - name: Upload to S3
         run: |
           aws s3 sync --metadata RELEASE="${{ needs.prepare.outputs.version_name }}" ./.next/static s3://${{ env.S3_BUCKET_NAME }}/_next/static

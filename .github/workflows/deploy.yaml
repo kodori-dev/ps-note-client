@@ -29,7 +29,7 @@ env:
 
 jobs:
   prepare:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       version_name: ${{ steps.get_sha.outputs.SHA }}
       slack_mention: ${{ steps.set-mention.outputs.MENTION }}
@@ -57,7 +57,7 @@ jobs:
 
   build-and-push:
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     permissions:
       contents: 'read'
@@ -157,7 +157,7 @@ jobs:
 
   deploy:
     needs: [prepare, build-and-push]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     permissions:
       contents: read
@@ -188,7 +188,7 @@ jobs:
 
   notify-start:
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       thread_ts: ${{ steps.send_start_notification.outputs.ts }}
 
@@ -237,7 +237,7 @@ jobs:
     needs: [prepare, notify-start, build-and-push]
     if: ${{ always() }}
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Set Emoji
@@ -354,7 +354,7 @@ jobs:
     needs: [prepare, notify-start, build-and-push, deploy]
     if: ${{ always() && needs.build-and-push.result == 'success' && needs.deploy.result != 'skipped'  }}
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Set Emoji

@@ -30,10 +30,14 @@ async function Admin() {
   };
 
   const data = (await getAdminData()) as AdminPageRes;
+  const month = new Date(day || bojDay);
+  console.log(month.getMonth());
 
   return (
-    <div>
-      <SelectDay defaultDay={day || bojDay} />
+    <div className="my-5">
+      <SelectDay defaultDay={day || bojDay} startDate={data.start_date} />
+      <hr className="my-5 border-4" />
+      <h6 className="text-24">{month.getMonth() + 1}월</h6>
       <AttendList me={memberId} startDate={data.start_date} data={data.member_penalties} />
     </div>
   );

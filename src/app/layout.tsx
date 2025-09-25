@@ -34,7 +34,7 @@ export default async function RootLayout({
         <Provider>
           <ReactQueryProvider>
             <AuthProvider>
-              <div className="max-w-[1024px] min-h-dvh mx-auto px-6 mb-24">
+              <div className="max-w-[1200px] min-h-dvh mx-auto px-6 mb-24">
                 <Toaster />
                 <Header />
                 {children}

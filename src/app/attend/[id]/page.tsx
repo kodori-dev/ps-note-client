@@ -4,8 +4,13 @@ import dayjs from "dayjs";
 import { headers } from "next/headers";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import MonthlySection from "./_component/MonthlySection";
+import dynamic from "next/dynamic";
+import { GetType } from "@/types/api/get";
+
+const ViewTab = dynamic(() => import("./_component/ViewTab"), { ssr: false });
 
 async function Attend({ params: { id } }: { params: { id: string } }) {
+  const loginUser = (await getServerData("/me")) as GetType["/me"]["res"];
   const today = new Date();
   const year = headers().get("x-attend-yy") || `${today.getFullYear()}`;
   const month = headers().get("x-attend-mm") || `${today.getMonth() + 1}`;
@@ -24,6 +29,10 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
     totalPenalty += Number(item.amount);
   });
 
+  const CONTENT = {
+    calendar: <MonthlySection memberId={id} initialDate={lastDay} data={penalties} holidays={holidays} vacations={loginUser.id != member.id ? undefined : vacations} />,
+  };
+
   return (
     <>
       <MetaTag
@@ -34,18 +43,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
         <span className="font-700">{member?.nickname}</span> 님의 꼬박꼬박 PS일지
       </h1>
 
-      <section className="mb-6">
-        <div className="flex gap-1 items-center tablet:text-14" aria-label="이번 달 벌금">
-          <BiMoneyWithdraw />
-          {totalPenalty.toLocaleString("ko-kr")}원
-          <p className="text-14 tablet:text-12">
-            {`<< `}
-            {totalPenalty == 0 ? "잘하고 있어요!" : "ㅠ,ㅠ"}
-          </p>
-        </div>
-      </section>
-
-      <MonthlySection memberId={id} initialDate={lastDay} data={penalties} holidays={holidays} vacations={vacations} />
+      <ViewTab content={CONTENT} />
     </>
   );
 }

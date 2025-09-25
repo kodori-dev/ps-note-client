@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { EmblaOptionsType } from 'embla-carousel';
-import { PrevButton, NextButton, usePrevNextButtons } from './CarouselArrowButton';
-import useEmblaCarousel from 'embla-carousel-react';
-import './embla.css';
-import { useClientFlag } from '@/hooks/useClientFlag';
+import { ReactNode } from "react";
+import { EmblaOptionsType } from "embla-carousel";
+import { PrevButton, NextButton, usePrevNextButtons } from "./CarouselArrowButton";
+import useEmblaCarousel from "embla-carousel-react";
+import "./embla.css";
+import { useClientFlag } from "@/hooks/useClientFlag";
 
 interface Props {
   children: ReactNode;
@@ -19,7 +19,7 @@ function Carousel({ children, options }: Props) {
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
 
   return (
-    <section className="embla flex items-center w-full">
+    <section className="embla flex items-center w-full justify-center">
       {isClient && <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />}
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container gap-2 w-[910px]">{children}</div>

@@ -9,7 +9,7 @@ import { HolidaySchema, PenaltySchema } from "../../../../../types/models/data-c
 interface Props {
   data: PenaltySchema[];
   holidays: HolidaySchema[];
-  vacations: VacationSchema[];
+  vacations?: VacationSchema[];
   initialDate: Date;
   memberId: string;
 }
@@ -28,20 +28,21 @@ const BG_COLOR = {
  * 꼬박꼬박 PS일지 - 먼슬리 뷰
  */
 function MonthlySection({ data, holidays, vacations, initialDate, memberId }: Props) {
-  const vacationEvents = vacations.map((vacation) => {
-    const endDate = new Date(vacation.end_date);
-    const new_endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1);
+  const vacationEvents =
+    vacations?.map((vacation) => {
+      const endDate = new Date(vacation.end_date);
+      const new_endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() + 1);
 
-    return {
-      title: `⛱️ ${vacation.memo}`,
-      date: vacation.start_date,
-      end: `${dayjs(new_endDate).format("YYYY-MM-DD")}`,
-      backgroundColor: "rgb(184, 236, 255)",
-      textColor: "#7e7e7e",
-      display: "background",
-      className: "text-14",
-    };
-  });
+      return {
+        title: `⛱️ ${vacation.memo}`,
+        date: vacation.start_date,
+        end: `${dayjs(new_endDate).format("YYYY-MM-DD")}`,
+        backgroundColor: "rgb(184, 236, 255)",
+        textColor: "#7e7e7e",
+        display: "background",
+        className: "text-14",
+      };
+    }) ?? [];
 
   const holidayEvents = holidays.map((holiday) => ({
     title: holiday.name,

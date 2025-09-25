@@ -122,7 +122,7 @@ function Header() {
 
   return (
     <header className="relative flex items-center justify-between h-[60px]">
-      <Link href="/" className="text-14 font-bold">
+      <Link href="/" className="font-bold">
         PS-NOTE
       </Link>
 

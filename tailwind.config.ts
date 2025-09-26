@@ -86,5 +86,6 @@ const config: Config = {
   corePlugins: {
     preflight: false, // Tailwind의 기본 스타일 리셋 비활성화
   },
+  darkMode: "class",
 };
 export default config;

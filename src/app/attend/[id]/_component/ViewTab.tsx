@@ -1,6 +1,7 @@
 "use client";
 
 import { Tabs } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FaListUl } from "react-icons/fa6";
 import { IoCalendarNumberOutline } from "react-icons/io5";
 import { MdOutlineViewAgenda } from "react-icons/md";
@@ -10,8 +11,22 @@ interface Props {
 }
 
 function ViewTab({ content }: Props) {
+  const [activeTab, setActiveTab] = useState("calendar");
+
+  useEffect(() => {
+    const savedTab = localStorage.getItem("psnote-attend-view");
+    if (savedTab) {
+      setActiveTab(savedTab);
+    }
+  }, []);
+
+  const handleTabChange = (value) => {
+    setActiveTab(value.value);
+    localStorage.setItem("psnote-attend-view", value.value);
+  };
+
   return (
-    <Tabs.Root defaultValue="calendar">
+    <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
       <Tabs.List>
         <Tabs.Trigger value="calendar">
           <IoCalendarNumberOutline />

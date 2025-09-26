@@ -1,10 +1,12 @@
-import SearchBar from "@/components/Search/SearchBar";
 import { HomePageRes } from "@/types/api/home-page";
 import HomeSectionLayout from "@/components/Layout/HomeSectionLayout";
 import ProblemSection from "@/components/Section/ProblemSection";
 import MemberSection from "@/components/Section/MemberSection";
 import { getBojTime } from "@/utils/getBojTime";
 import { getServerData } from "@/utils/getServerData";
+import dynamic from "next/dynamic";
+
+const SearchBar = dynamic(() => import("@/components/Search/SearchBar"), { ssr: false });
 
 export default async function Home() {
   const bojDay = getBojTime();
@@ -19,7 +21,7 @@ export default async function Home() {
       return null;
     }
   };
-  const myStarProblem = await getServerData("/problems", { is_starred: true });
+  const myStarProblem = await getServerData("/problems", { is_starred: true, ordering: ["solutions"] });
   const homePage = (await getHomePage()) as HomePageRes;
 
   const SECTION_LIST = [

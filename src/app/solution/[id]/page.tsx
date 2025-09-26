@@ -15,7 +15,7 @@ async function Solution({ params: { id } }: { params: { id: string } }) {
   return (
     <>
       <MetaTag title={`[ ${data.problem.name} ] by ${data.member.nickname}`} description={`${data.member.nickname} 님이 등록한 ${data.problem.name} 문제 솔루션을 확인하세요.`} />
-      <main className="flex flex-col gap-9">
+      <main className="flex flex-col gap-11 mt-5">
         <ProblemSection
           type={data.problem.oj_type}
           problemId={data.problem.id}

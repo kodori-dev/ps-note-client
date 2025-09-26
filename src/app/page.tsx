@@ -40,13 +40,13 @@ export default async function Home() {
   return (
     <div className="my-8 flex flex-col gap-12">
       <div className="text-center">
-        <h1 className="mt-24 mb-2 text-4xl font-bold">
+        <h1 className="mt-24 mb-3 text-4xl font-bold">
           팀원들과 목표를 설정하고
           <br />
           나만의 <span className="text-primary">PS-NOTE</span>를 만들어 보세요!
         </h1>
         {/* <p className="text-14 text-gray-6">팀을 만들고 팀원을 초대해, 함께 문제를 풀며 성장하세요.</p> */}
-        <p className="text-14 text-gray-6">📌 프로그래머스 연동이 완료되었어요!</p>
+        <p className="text-14 text-gray-6">📌 꼬박이 UI가 업데이트됐어요 🥳 | PS-NOTE는 light모드가 훨,, 예쁘답니다,,😉</p>
       </div>
       <SearchBar />
       {homePage &&

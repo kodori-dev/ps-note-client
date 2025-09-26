@@ -1,17 +1,72 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import SolutionCard from "@/components/Card/SolutionCard";
-import { PaginatedSolutionSchema } from "../../../../../types/models/data-contracts";
+import { PaginatedSolutionSchema, SolutionSchema } from "../../../../../types/models/data-contracts";
+import { api } from "@/utils/api";
+import { Spinner } from "@chakra-ui/react";
 
 interface Props {
-  data: PaginatedSolutionSchema;
+  initData: PaginatedSolutionSchema;
+  memberId: number;
 }
 
-function CardSection({ data }: Props) {
-  console.log(data.count, data.page, data.size);
+const PAGE_SIZE = 30;
+
+async function fetchSolutions(memberId: number, page: number, size: number = PAGE_SIZE): Promise<PaginatedSolutionSchema> {
+  const res = await api("GET", "/solutions", null, { member_id: memberId, page, size, ordering: ["-submitted_at"] });
+  return res;
+}
+
+function CardSection({ initData, memberId }: Props) {
+  const [solutions, setSolutions] = useState<SolutionSchema[]>(initData.items);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(initData.count == initData.size);
+
+  const { ref, inView } = useInView({
+    threshold: 0, // 요소가 0% 보이면 바로 감지
+    triggerOnce: false, // 여러 번 감지
+  });
+
+  const loadMoreSolutions = async () => {
+    const nextPage = page + 1;
+    const data = await fetchSolutions(memberId, nextPage);
+
+    if (data.count > 0) {
+      setSolutions((prev) => [...prev, ...data.items]);
+      setPage(nextPage);
+      setHasNextPage(data.count >= PAGE_SIZE);
+    } else {
+      setHasNextPage(false);
+    }
+  };
+
+  // inView가 true이고, 다음 페이지가 있을 때 실행
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      loadMoreSolutions();
+    }
+  }, [inView, hasNextPage]);
 
   return (
     <div>
-      {/* {data.count}개의 문제를 풀었어요. */}
-      {data.items.length > 0 ? data.items.map((solution) => <SolutionCard key={solution.id} {...solution} />) : <p>아직 푼 문제가 없어요.</p>}
+      {/* {initData.count}개의 문제를 풀었어요. */}
+      {solutions.length > 0 ? (
+        solutions.map((solution, index) => (
+          <div key={solution.id} ref={index === solutions.length - 1 ? ref : null}>
+            <SolutionCard {...solution} />
+          </div>
+        ))
+      ) : (
+        <p>아직 푼 문제가 없어요.</p>
+      )}
+
+      {hasNextPage && (
+        <div className="flex justify-center">
+          <Spinner zIndex={50} color="blue.200" size="lg" borderWidth="4px" />
+        </div>
+      )}
     </div>
   );
 }

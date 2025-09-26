@@ -31,9 +31,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
   const vacations = await getServerData("/vacations", { start_date: dayjs(startDay).format("YYYY-MM-DD"), end_date: dayjs(lastDay).format("YYYY-MM-DD") });
 
   //솔루션 데이터 (list)
-  const listPageNum = headers().get("x-list-page") || "1";
-  const listOrder = [headers().get("x-list-order") || "-submitted_at"] as PsNoteServerAppsCoreViewsV2SolutionGetOrderingEnum[];
-  const solutions = await getServerData("/solutions", { page: Number(listPageNum), size: 50, member_id: member.id, ordering: listOrder });
+  const solutions = await getServerData("/solutions", { page: 1, size: 30, member_id: member.id, ordering: ["-submitted_at"] });
 
   let totalPenalty = 0;
   penalties.forEach((item) => {
@@ -42,7 +40,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
 
   const CONTENT = {
     calendar: <MonthlySection memberId={id} initialDate={lastDay} data={penalties} holidays={holidays} vacations={loginUser.id != member.id ? undefined : vacations} />,
-    card: <CardSection data={solutions} />,
+    card: <CardSection initData={solutions} memberId={member.id} />,
   };
 
   return (

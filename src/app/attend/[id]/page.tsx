@@ -2,12 +2,10 @@ import { getServerData } from "@/utils/getServerData";
 import MetaTag from "@/components/MetaTag";
 import dayjs from "dayjs";
 import { headers } from "next/headers";
-import { BiMoneyWithdraw } from "react-icons/bi";
 import MonthlySection from "./_component/MonthlySection";
 import dynamic from "next/dynamic";
 import { GetType } from "@/types/api/get";
 import CardSection from "./_component/CardSection";
-import { PsNoteServerAppsCoreViewsV2SolutionGetOrderingEnum } from "../../../../models";
 
 const ViewTab = dynamic(() => import("./_component/ViewTab"), { ssr: false });
 
@@ -40,7 +38,8 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
 
   const CONTENT = {
     calendar: <MonthlySection memberId={id} initialDate={lastDay} data={penalties} holidays={holidays} vacations={loginUser.id != member.id ? undefined : vacations} />,
-    card: <CardSection initData={solutions} memberId={member.id} />,
+    card: <CardSection viewType="card" initData={solutions} memberId={member.id} />,
+    list: <CardSection viewType="list" initData={solutions} memberId={member.id} />,
   };
 
   return (

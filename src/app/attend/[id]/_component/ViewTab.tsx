@@ -28,6 +28,7 @@ function ViewTab({ content }: Props) {
       </Tabs.List>
       <Tabs.Content value="calendar">{content.calendar}</Tabs.Content>
       <Tabs.Content value="card">{content.card}</Tabs.Content>
+      <Tabs.Content value="list">{content.list}</Tabs.Content>
     </Tabs.Root>
   );
 }

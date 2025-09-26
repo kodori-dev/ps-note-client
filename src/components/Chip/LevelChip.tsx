@@ -22,7 +22,7 @@ function LevelChip({ level, style = "default" }: Props) {
   const step = levels[1];
 
   return (
-    <span className={"py-1 px-2 rounded-sm " + CHIP_STYLE[type] + (style === "mini" ? " text-12 py-0 w-fit" : "")}>
+    <span className={"py-1 px-2 rounded-[6px] " + CHIP_STYLE[type] + (style === "mini" ? " text-12 py-0 w-fit" : "")}>
       {type.charAt(0).toUpperCase()}
       {type.slice(1)} {step && STEP[step]}
     </span>

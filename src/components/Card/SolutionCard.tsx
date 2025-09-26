@@ -15,7 +15,7 @@ function SolutionCard(props: SolutionSchema) {
       onClick={() => {
         navigate.push(`/solution/${id}`);
       }}
-      className="group hover:cursor-pointer rounded-sm hover:bg-[#F2F4F6] p-5 flex flex-col gap-2"
+      className="group hover:cursor-pointer rounded-sm hover:bg-[#F2F4F6] p-4 flex flex-col gap-2"
     >
       <div className="text-14 text-[#8B95A1]">
         {OJ_TYPE_STRING[problem.oj_type]} · {problem.oj_id} · {<LevelChip level={problem.level} style="mini" />}

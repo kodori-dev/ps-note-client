@@ -6,10 +6,12 @@ import SolutionCard from "@/components/Card/SolutionCard";
 import { PaginatedSolutionSchema, SolutionSchema } from "../../../../../types/models/data-contracts";
 import { api } from "@/utils/api";
 import { Spinner } from "@chakra-ui/react";
+import SolutionListCard from "@/components/Card/SolutionListCard";
 
 interface Props {
   initData: PaginatedSolutionSchema;
   memberId: number;
+  viewType: "card" | "list";
 }
 
 const PAGE_SIZE = 30;
@@ -19,7 +21,7 @@ async function fetchSolutions(memberId: number, page: number, size: number = PAG
   return res;
 }
 
-function CardSection({ initData, memberId }: Props) {
+function CardSection({ viewType, initData, memberId }: Props) {
   const [solutions, setSolutions] = useState<SolutionSchema[]>(initData.items);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(initData.count == initData.size);
@@ -50,12 +52,13 @@ function CardSection({ initData, memberId }: Props) {
   }, [inView, hasNextPage]);
 
   return (
-    <div>
+    <section>
       {/* {initData.count}개의 문제를 풀었어요. */}
       {solutions.length > 0 ? (
         solutions.map((solution, index) => (
           <div key={solution.id} ref={index === solutions.length - 1 ? ref : null}>
-            <SolutionCard {...solution} />
+            {viewType === "card" && <SolutionCard {...solution} />}
+            {viewType === "list" && <SolutionListCard {...solution} />}
           </div>
         ))
       ) : (
@@ -67,7 +70,7 @@ function CardSection({ initData, memberId }: Props) {
           <Spinner zIndex={50} color="blue.200" size="lg" borderWidth="4px" />
         </div>
       )}
-    </div>
+    </section>
   );
 }
 

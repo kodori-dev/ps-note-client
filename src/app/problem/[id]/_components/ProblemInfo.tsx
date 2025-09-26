@@ -28,7 +28,7 @@ function ProblemInfo({ id, ojId, isSolved = null, title, level, isStar = false, 
     {
       icon: <LevelIcon fill="#ACACAC" />,
       head: "난이도",
-      body: <LevelChip type={level.split("_")[0] as LevelType} step={level === "unrated" ? undefined : (Number(level.split("_")[1]) as 1 | 2 | 3 | 4 | 5)} />,
+      body: <LevelChip level={level} />,
     },
     {
       icon: <ListIcon fill="#ACACAC" />,

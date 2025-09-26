@@ -51,7 +51,7 @@ function ProblemSection({ type }: Props) {
           <Field.HelperText>실제로 해당 문제를 제출한 날짜를 선택해 주세요.</Field.HelperText>
         </Field.Root>
 
-        <Field.Root required>
+        {/* <Field.Root required>
           <Field.Label>
             OJ 플랫폼
             <Field.RequiredIndicator />
@@ -79,7 +79,7 @@ function ProblemSection({ type }: Props) {
               </Select.Positioner>
             </Portal>
           </Select.Root>
-        </Field.Root>
+        </Field.Root> */}
 
         <div className="relative">
           <Field.Root required>

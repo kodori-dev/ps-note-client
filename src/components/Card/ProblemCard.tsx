@@ -76,7 +76,7 @@ function ProblemCard({
         </div>
         <p className="text-24 font-700 truncate group-hover:text-primary">{title}</p>
         <div className="flex gap-1 items-center text-12 text-gray-3">{DETAIL_INFO[type]}</div>
-        <LevelChip style="mini" type={level.split("_")[0] as LevelType} step={Number(level.split("_")[1]) as 1 | 2 | 3 | 4 | 5} />
+        <LevelChip style="mini" level={level} />
       </div>
       {/* {type === "problem" && (
         <Link target="_blank" href={url} className="text-12 text-gray-3 text-right hover:text-gray-1 z-10">

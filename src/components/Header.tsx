@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { useGetUserInfo } from "@/hooks/useGetUserInfo";
-// import Button from './Button';
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { Fragment, useEffect, useId, useState } from "react";
-import { Avatar, Button, Field, Icon, IconButton, Input, Spinner, useDisclosure } from "@chakra-ui/react";
-import ScreenLoading from "./Loading/ScreenLoading";
+import { Avatar, Button, ClientOnly, Field, Icon, IconButton, Input, Skeleton, Spinner, useDisclosure } from "@chakra-ui/react";
 import { getBojTime } from "@/utils/getBojTime";
 import { logout } from "@/utils/logout";
 import dayjs from "dayjs";
@@ -17,8 +15,9 @@ import { toaster } from "@/components/ui/toaster";
 import { MenuContent, MenuItem, MenuItemGroup, MenuRoot, MenuTrigger } from "./ui/menu";
 import { Tooltip } from "./ui/tooltip";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { IoMenu } from "react-icons/io5";
+import { useColorMode } from "./ui/color-mode";
+import { LuMoon, LuSun } from "react-icons/lu";
 
 function Header() {
   const [isUsed, setIsUsed] = useState(false);
@@ -119,9 +118,11 @@ function Header() {
     }
   };
 
+  const { toggleColorMode, colorMode } = useColorMode();
+
   return (
     <header className="relative flex items-center justify-between h-[60px]">
-      <Link href="/" className="text-14 font-bold">
+      <Link href="/" className="font-bold">
         PS-NOTE
       </Link>
 
@@ -229,6 +230,13 @@ function Header() {
             <Avatar.Fallback name={user.nickname} />
           </Avatar.Root>
         </Tooltip>
+
+        {/* 다크 모드 */}
+        <ClientOnly fallback={<Skeleton boxSize="8" />}>
+          <IconButton onClick={toggleColorMode} variant="ghost" size="sm">
+            {colorMode === "light" ? <LuSun /> : <LuMoon />}
+          </IconButton>
+        </ClientOnly>
       </div>
       {/* 면제 티켓 모달 */}
       <CustomDialog clickBtnFunc={handleCouponClick} title="정말 오늘 놀기를 스킵하시겠어요?" isOpen={open} onClose={onClose} leftBtn="고민할래요" rightBtn="스킵할래요">

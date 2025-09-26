@@ -10,6 +10,7 @@ export const LANGUAGE_LIST = createListCollection({
     { label: "Kotlin", value: "Kotlin" },
     { label: "Rust", value: "Rust" },
     { label: "Brainf**k", value: "Brainf**k" },
+    { label: "SQL", value: "SQL" },
   ],
 });
 
@@ -21,5 +22,5 @@ export const LANGUAGE_FOR_MD = {
   javascript: "js",
   python: "python",
   rust: "rust",
-  "Brainf**k": "brainfuck",
+  sql: "sql",
 };

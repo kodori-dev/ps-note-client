@@ -21,9 +21,9 @@ function ProblemSection({ type, number, title, problemId, isCorrectAnswer, answe
         <Chip type={isCorrectAnswer ? "AC" : "WA"}>{answerLabel}</Chip>
       </div>
       <h1 className="text-40 font-700">{title}</h1>
-      {/* <Link href={`/problem/${problemId}`} className="group relative w-fit hover:text-primary">
-        <h1 className="text-40 font-700">{title}</h1>
-      </Link> */}
+      <Link href={`/problem/${problemId}`} className="text-14 hover:cursor-pointer opacity-40 hover:opacity-100 border-b w-fit">
+        이 문제 솔루션 더보기
+      </Link>
     </section>
   );
 }

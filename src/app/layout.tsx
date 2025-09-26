@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import AuthProvider from "@/providers/AuthProvider";
-import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "@/components/ui/provider";
 import { PublicEnvScript } from "next-runtime-env";
+import ColorModeSync from "@/components/ColorModeSync";
 
 export const metadata: Metadata = {
   title: "$$합법 PS 놀이터$$",
@@ -34,6 +33,7 @@ export default async function RootLayout({
       </head>
       <body>
         <Provider>
+          <ColorModeSync />
           <ReactQueryProvider>
             <AuthProvider>
               <div className="max-w-[1024px] min-h-dvh mx-auto px-6 mb-24">

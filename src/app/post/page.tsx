@@ -30,8 +30,8 @@ function Post() {
 
   const methods = useForm({ mode: "onSubmit", defaultValues: DEFAULT_INPUT });
   const { watch, getValues, handleSubmit } = methods;
-  const { oj_type, pid, oj_id, is_correct_answer, source_lang, source_code, submitted_at } = watch();
-  const isSave = oj_type && submitted_at && pid && oj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
+  const { pid, oj_id, is_correct_answer, source_lang, source_code, submitted_at } = watch();
+  const isSave = submitted_at && pid && oj_id && is_correct_answer && source_lang !== DEFAULT_INPUT.source_lang && source_code;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckIn = async () => {

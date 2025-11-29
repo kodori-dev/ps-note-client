@@ -229,6 +229,10 @@ jobs:
             latest
             batch
 
+      - name: Extract tag
+        id: extract-tag
+        run: echo "TAG=$(echo '${{ steps.meta.outputs.tags }}' | head -n 1)" >> "$GITHUB_OUTPUT"
+
       - name: Setup kubeconfig
         shell: bash
         run: |

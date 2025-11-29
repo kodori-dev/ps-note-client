@@ -114,6 +114,7 @@ jobs:
         run: npm install
 
       - name: Create Sentry release
+        continue-on-error: true
         uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_RELEASE_AUTH_TOKEN }}

@@ -251,7 +251,6 @@ jobs:
 
       - name: Install kubectl
         run: |
-          apt-get update
           apt-get install -y curl coreutils
           curl -LO https://dl.k8s.io/release/v1.33.5/bin/linux/amd64/kubectl
           curl -LO "https://dl.k8s.io/v1.33.5/bin/linux/amd64/kubectl.sha256"

@@ -70,6 +70,9 @@ const sentryOptions = {
 
   authToken: process.env.SENTRY_AUTH_TOKEN,
   release: process.env.NEXT_PUBLIC_RELEASE,
+
+  disableServerWebpackPlugin: process.env.SENTRY_DISABLE,
+  disableClientWebpackPlugin: process.env.SENTRY_DISABLE,
 };
 
 export default withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions);

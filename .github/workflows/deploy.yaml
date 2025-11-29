@@ -136,8 +136,6 @@ jobs:
           SERVER_URL: ${{ env.SERVER_URL }}
           INTERNAL_SERVER_URL: ${{ env.INTERNAL_SERVER_URL }}
           API_BASE_PATH: ${{ env.API_BASE_PATH }}
-          # 임시
-          SENTRY_DISABLE: 1
         run: |
           npm run build
 

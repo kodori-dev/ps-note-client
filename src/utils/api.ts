@@ -28,7 +28,7 @@ export const api = async <M extends methodType, T extends keyof BodyType[M]>(
     if (query) {
       Object.keys(query).map((key) => (query[key] ? (queryString += `${key}=${query[key]}&`) : null));
     }
-    const res = await fetch(`/proxy${String(url)}${queryString}`, {
+    const res = await fetch(`${process.env.INTERNAL_SERVER_URL}}${String(url)}${queryString}`, {
       method: method,
       headers: {
         'content-type': 'application/json',

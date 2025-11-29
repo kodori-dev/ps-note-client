@@ -457,7 +457,7 @@ jobs:
           elif [[ "${{ needs.deploy.result }}" == "failure" ]]; then
             echo "MESSAGE=배포에 실패했습니다" >> "$GITHUB_OUTPUT"
           else
-            echo "MESSAGE=배포 준비가 완료되었습니다. 서버 레포 배포 트리거가 자동으로 이루어지니 확인해주세요." >> "$GITHUB_OUTPUT"
+            echo "MESSAGE=배포에 성공했습니다" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Notify Overall Result

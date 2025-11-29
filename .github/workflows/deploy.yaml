@@ -8,23 +8,24 @@ on:
 env:
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
   CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-  NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
-  NEXT_PUBLIC_FRONT_URL: "https://ps-note.kodori.dev"
-  SERVER_URL: "http://ps-note-server-svc.ps-note.svc.cluster.local"
-  INTERNAL_SERVER_URL: "http://ps-note-server-svc.ps-note.svc.cluster.local"
-  API_BASE_PATH: "/api/v2"
+
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
   DEPLOY_ALERT_CHANNEL: C07J1U691R6
+
   AWS_ROLE: ${{ secrets.AWS_ROLE }}
   AWS_REGION: 'ap-northeast-2'
+
   REGISTRY: "harbor.infra.svc.cluster.local"
   REPOSITORY: "tonynamy/ps-note/ps-note-client"
-  DEPLOYMENT_NAME: deployment/ps-note-client
+
   SENTRY_RELEASE_AUTH_TOKEN: ${{ secrets.SENTRY_RELEASE_AUTH_TOKEN }}
   SENTRY_ORG: "kodori"
   SENTRY_PROJECT: "ps-note-client"
-  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
   HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
   HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+
+  DEPLOYMENT_NAME: deployment/ps-note-client
 
 jobs:
   prepare:
@@ -127,15 +128,10 @@ jobs:
       - name: Run Build
         env:
           CI: false
+          NODE_ENV: production
           NEXT_PUBLIC_RELEASE: ${{ needs.prepare.outputs.version_name }}
           NEXT_TELEMETRY_DISABLED: 1
-          NODE_ENV: production
-          NEXT_PUBLIC_CDN_URL: ${{ env.NEXT_PUBLIC_CDN_URL }}
-          NEXT_PUBLIC_FRONT_URL: ${{ env.NEXT_PUBLIC_FRONT_URL }}
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_RELEASE_AUTH_TOKEN }}
-          SERVER_URL: ${{ env.SERVER_URL }}
-          INTERNAL_SERVER_URL: ${{ env.INTERNAL_SERVER_URL }}
-          API_BASE_PATH: ${{ env.API_BASE_PATH }}
         run: |
           npm run build
 

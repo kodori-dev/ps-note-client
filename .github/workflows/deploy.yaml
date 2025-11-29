@@ -27,7 +27,7 @@ env:
 
   NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
   NEXT_PUBLIC_FRONT_URL: "https://ps-note.kodori.dev"
-  NEXT_PUBLIC_SERVER_URL: "https://ps-note-server.kodori.dev/api/v2"
+  NEXT_PUBLIC_API_SERVER_URL: "https://ps-note-server.kodori.dev/api/v2"
 
   CLUSTER_URL: ${{ secrets.CLUSTER_URL }}
   CLUSTER_AUTHORITY_DATA: ${{ secrets.CLUSTER_AUTHORITY_DATA }}
@@ -146,7 +146,7 @@ jobs:
 
           NEXT_PUBLIC_CDN_URL: ${{ env.NEXT_PUBLIC_CDN_URL }}
           NEXT_PUBLIC_FRONT_URL: ${{ env.NEXT_PUBLIC_FRONT_URL }}
-          NEXT_PUBLIC_SERVER_URL: ${{ env.NEXT_PUBLIC_SERVER_URL }}
+          NEXT_PUBLIC_API_SERVER_URL: ${{ env.NEXT_PUBLIC_API_SERVER_URL }}
         run: |
           npm run build
 

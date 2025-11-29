@@ -12,7 +12,7 @@ export default async function Home() {
   const bojDay = getBojTime();
   const getHomePage = async () => {
     try {
-      const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/api-internal/v2/home-page?day=${bojDay}`, {
+      const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/home-page?day=${bojDay}`, {
         cache: "no-store",
       });
       if (res.ok) return await res.json();

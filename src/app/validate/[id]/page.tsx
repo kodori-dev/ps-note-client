@@ -10,7 +10,7 @@ async function Validate({params: {id}}: { params: { id: string } }) {
 
     const validateSolution = async () => {
         try {
-            const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/api-internal/v2/solutions/validate?solution_id=${id}`, {
+            const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/solutions/validate?solution_id=${id}`, {
                 method: 'POST',
                 headers: memberId ? {'X-Member-Id': memberId.toString()} : {},
                 cache: 'no-store',

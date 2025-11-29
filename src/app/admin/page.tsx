@@ -17,7 +17,7 @@ async function Admin() {
   const bojDay = getBojTime();
   const getAdminData = async () => {
     try {
-      const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/api-internal/v2/admin-page?day=${day || bojDay}`, {
+      const res = await fetch(`${process.env.INTERNAL_SERVER_URL}/admin-page?day=${day || bojDay}`, {
         headers: memberId ? { "X-Member-Id": memberId.toString() } : {},
         cache: "no-store",
       });

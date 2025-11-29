@@ -34,7 +34,7 @@ const sentryWebpackPluginOptions = {
   project: "ps-note-client",
 
   // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
+  silent: !process.env.CI || !!!process.env.SENTRY_DISABLE,
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -71,8 +71,8 @@ const sentryOptions = {
   authToken: process.env.SENTRY_AUTH_TOKEN,
   release: process.env.NEXT_PUBLIC_RELEASE,
 
-  disableServerWebpackPlugin: process.env.SENTRY_DISABLE,
-  disableClientWebpackPlugin: process.env.SENTRY_DISABLE,
+  disableServerWebpackPlugin: !!process.env.SENTRY_DISABLE,
+  disableClientWebpackPlugin: !!process.env.SENTRY_DISABLE,
 };
 
 export default withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions);

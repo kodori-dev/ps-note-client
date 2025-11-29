@@ -44,6 +44,8 @@ export interface PsNoteServerAppsCoreViewsV2SolutionGetRequest {
     member_id?: number | null;
     problem_id?: number | null;
     ordering?: Array<PsNoteServerAppsCoreViewsV2SolutionGetOrderingEnum>;
+    start_date?: string;
+    end_date?: string;
 }
 
 export interface PsNoteServerAppsCoreViewsV2SolutionGetSolutionRequest {

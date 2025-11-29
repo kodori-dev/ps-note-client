@@ -29,7 +29,7 @@ async function Attend({ params: { id } }: { params: { id: string } }) {
   const vacations = await getServerData("/vacations", { start_date: dayjs(startDay).format("YYYY-MM-DD"), end_date: dayjs(lastDay).format("YYYY-MM-DD") });
 
   //솔루션 데이터 (list)
-  const solutions = await getServerData("/solutions", { page: 1, size: 30, member_id: member.id, ordering: ["-submitted_at"] });
+  const solutions = await getServerData("/solutions", { page: 1, size: 1_000, member_id: member.id, start_date: dayjs(startDay).format("YYYY-MM-DD"), end_date: dayjs(lastDay).format("YYYY-MM-DD") , ordering: ["-submitted_at"] });
 
   let totalPenalty = 0;
   penalties.forEach((item) => {

@@ -28,6 +28,8 @@ env:
   DEPLOYMENT_NAME: deployment/ps-note-client
 
   NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
+  NEXT_PUBLIC_FRONT_URL: "https://ps-note.kodori.dev"
+  NEXT_PUBLIC_SERVER_URL: "http://ps-note-server.kodori.dev/api/v2"
 
 jobs:
   prepare:
@@ -133,8 +135,11 @@ jobs:
           NODE_ENV: production
           NEXT_PUBLIC_RELEASE: ${{ needs.prepare.outputs.version_name }}
           NEXT_TELEMETRY_DISABLED: 1
-          NEXT_PUBLIC_CDN_URL: ${{ env. NEXT_PUBLIC_CDN_URL }}
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_RELEASE_AUTH_TOKEN }}
+
+          NEXT_PUBLIC_CDN_URL: ${{ env.NEXT_PUBLIC_CDN_URL }}
+          NEXT_PUBLIC_FRONT_URL: ${{ env.NEXT_PUBLIC_FRONT_URL }}
+          NEXT_PUBLIC_SERVER_URL: ${{ env.NEXT_PUBLIC_SERVER_URL }}
         run: |
           npm run build
 

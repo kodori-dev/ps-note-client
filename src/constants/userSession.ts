@@ -9,7 +9,7 @@ export const defaultUserSession: UserSessionType = {
 };
 
 export const sessionOptions: SessionOptions = {
-  password: process.env.NEXT_PUBLIC_SESSION_PW as string,
+  password: process.env.SESSION_PW as string,
   cookieName: 'userInfo',
   cookieOptions: {
     secure: process.env.NODE_ENV === 'production',

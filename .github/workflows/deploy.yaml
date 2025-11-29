@@ -15,7 +15,7 @@ env:
   AWS_ROLE: ${{ secrets.AWS_ROLE }}
   AWS_REGION: 'ap-northeast-2'
 
-  REGISTRY: "harbor.infra.svc.cluster.local"
+  REGISTRY: "harbor.tonynamy.dev"
   REPOSITORY: "tonynamy/ps-note/ps-note-client"
 
   SENTRY_RELEASE_AUTH_TOKEN: ${{ secrets.SENTRY_RELEASE_AUTH_TOKEN }}
@@ -89,7 +89,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           buildkitd-config-inline: |
-            [registry."harbor.infra.svc.cluster.local"]
+            [registry."harbor.tonynamy.dev"]
               ca=["/usr/local/share/ca-certificates/ca.crt"]
 
       - name: Extract metadata (tags, labels) for Docker

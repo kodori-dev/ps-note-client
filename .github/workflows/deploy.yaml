@@ -192,6 +192,10 @@ jobs:
       id-token: write
 
     steps:
+      - name: Install utils
+        run: |
+          apt-get install -y curl coreutils
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -251,7 +255,6 @@ jobs:
 
       - name: Install kubectl
         run: |
-          apt-get install -y curl coreutils
           curl -LO https://dl.k8s.io/release/v1.33.5/bin/linux/amd64/kubectl
           curl -LO "https://dl.k8s.io/v1.33.5/bin/linux/amd64/kubectl.sha256"
           echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check

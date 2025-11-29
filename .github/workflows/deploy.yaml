@@ -25,11 +25,16 @@ env:
   HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
   HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
 
-  DEPLOYMENT_NAME: deployment/ps-note-client
-
   NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
   NEXT_PUBLIC_FRONT_URL: "https://ps-note.kodori.dev"
   NEXT_PUBLIC_SERVER_URL: "https://ps-note-server.kodori.dev/api/v2"
+
+  CLUSTER_URL: ${{ secrets.CLUSTER_URL }}
+  CLUSTER_AUTHORITY_DATA: ${{ secrets.CLUSTER_AUTHORITY_DATA }}
+  CLUSTER_TOKEN: ${{ secrets.CLUSTER_TOKEN }}
+  CLUSTER_NAMESPACE: "ps-note"
+  CLUSTER_DEPLOYMENT: "deployment/ps-note-client-deployment"
+  CLUSTER_CONTAINER: "ps-note-client"
 
 jobs:
   prepare:
@@ -93,7 +98,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
           tags: |
+            ${{ needs.prepare.outputs.version_name }}
             latest
+            batch
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -205,17 +212,60 @@ jobs:
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'
 
-      # - name: Trigger Server Deploy
-      #   uses: actions/github-script@v7
-      #   with:
-      #     github-token: ${{ secrets.PAT_TOKEN }}
-      #     script: |
-      #       await github.rest.actions.createWorkflowDispatch({
-      #         owner: "kodori-dev",
-      #         repo: "ps-note-server",
-      #         workflow_id: "deploy.yaml",
-      #         ref: "deploy",
-      #       });
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}
+          tags: |
+            ${{ needs.prepare.outputs.version_name }}
+            latest
+            batch
+
+      - name: Setup kubeconfig
+        shell: bash
+        run: |
+          mkdir -p ~/.kube
+          touch ~/.kube/config
+          cat > ~/.kube/config << EOF
+          apiVersion: v1
+          clusters:
+          - cluster:
+              server: ${{ env.CLUSTER_URL }}
+              certificate-authority-data: ${{ env.CLUSTER_AUTHORITY_DATA }}
+            name: tonynamy-cluster
+          contexts:
+          - context:
+              cluster: tonynamy-cluster
+              user: github-deploy-user
+              namespace: ${{ env.CLUSTER_NAMESPACE }}
+            name: default-context
+          current-context: default-context
+          kind: Config
+          preferences: {}
+          users:
+          - name: github-deploy-user
+            user:
+              token: ${{ env.CLUSTER_TOKEN }}
+          EOF
+
+      - name: Install kubectl
+        run: |
+          apt-get update
+          apt-get install -y curl coreutils
+          curl -LO https://dl.k8s.io/release/v1.33.5/bin/linux/amd64/kubectl
+          curl -LO "https://dl.k8s.io/v1.33.5/bin/linux/amd64/kubectl.sha256"
+          echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+          install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+          kubectl version --client
+
+      - name: Deploy to K8S
+        run: |
+          kubectl set image --namespace ${{ env.CLUSTER_NAMESPACE }} ${{ env.CLUSTER_DEPLOYMENT }} ${{ env.CLUSTER_CONTAINER }}=${{ steps.extract-tag.outputs.TAG }}
+
+      - name: Verify Deployment Status
+        run: |
+          kubectl rollout status --namespace ${{ env.CLUSTER_NAMESPACE }} --timeout 10m ${{ env.CLUSTER_DEPLOYMENT }}
 
   notify-start:
     needs: [prepare]

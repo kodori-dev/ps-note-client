@@ -27,6 +27,8 @@ env:
 
   DEPLOYMENT_NAME: deployment/ps-note-client
 
+  NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
+
 jobs:
   prepare:
     runs-on: kodori-dev-gha-runner-scale-set
@@ -131,6 +133,7 @@ jobs:
           NODE_ENV: production
           NEXT_PUBLIC_RELEASE: ${{ needs.prepare.outputs.version_name }}
           NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_CDN_URL: ${{ env. NEXT_PUBLIC_CDN_URL }}
           SENTRY_AUTH_TOKEN: ${{ env.SENTRY_RELEASE_AUTH_TOKEN }}
         run: |
           npm run build

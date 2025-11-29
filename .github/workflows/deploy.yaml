@@ -10,8 +10,8 @@ env:
   CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
   NEXT_PUBLIC_CDN_URL: "https://ps-note-cdn.kodori.dev"
   NEXT_PUBLIC_FRONT_URL: "https://ps-note.kodori.dev"
-  SERVER_URL: "http://ps-note-server:8000"
-  INTERNAL_SERVER_URL: "http://ps-note-server:8000"
+  SERVER_URL: "http://ps-note-server-svc.ps-note.svc.cluster.local"
+  INTERNAL_SERVER_URL: "http://ps-note-server-svc.ps-note.svc.cluster.local"
   API_BASE_PATH: "/api/v2"
   DEPLOY_ALERT_CHANNEL: C07J1U691R6
   AWS_ROLE: ${{ secrets.AWS_ROLE }}

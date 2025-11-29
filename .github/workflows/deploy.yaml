@@ -186,6 +186,8 @@ jobs:
   deploy:
     needs: [prepare, build-and-push]
     runs-on: kodori-dev-gha-runner-scale-set
+    container:
+      image: ubuntu:22.04
 
     permissions:
       contents: read

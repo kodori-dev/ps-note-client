@@ -197,7 +197,7 @@ jobs:
       - name: Install utils
         run: |
           apt-get update
-          apt-get install -y curl coreutils
+          apt-get install -y curl coreutils unzip
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
